@@ -1,268 +1,237 @@
-<!DOCTYPE html>
-<html>
-<head>
-	<!-- Basic Page Info -->
-	<meta charset="utf-8">
-	<title>ACMS Portal</title>
+<?php
+  require_once('process_post.php');
+  include('sidebar.php');
 
-	<!-- Site favicon -->
-	<link rel="apple-touch-icon" sizes="180x180" href="vendors/images/apple-touch-icon.png">
-	<link rel="icon" type="image/png" sizes="32x32" href="vendors/images/favicon-32x32.png">
-	<link rel="icon" type="image/png" sizes="16x16" href="vendors/images/favicon-16x16.png">
+  $protocol = ((!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off') || $_SERVER['SERVER_PORT'] == 443) ? "https://" : "http://";
+  $getURI = $protocol . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
+  $_SESSION['getURI'] = $getURI;
 
-	<!-- Mobile Specific Metas -->
-	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  $getOwnStatus = mysqli_query($mysqli, "SELECT u.id, u.firstname, u.lastname, up.user_post, up.user_status, up.user_location, up.date_added
+    FROM user_posts up
+    JOIN users u
+    ON u.id = up.user_id
+    WHERE up.user_id='$user_id'
+    ORDER BY date_added DESC
+    LIMIT 1");
 
-	<!-- Google Font -->
-	<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-	<!-- CSS -->
-	<link rel="stylesheet" type="text/css" href="vendors/styles/core.css">
-	<link rel="stylesheet" type="text/css" href="vendors/styles/icon-font.min.css">
-	<link rel="stylesheet" type="text/css" href="src/plugins/datatables/css/dataTables.bootstrap4.min.css">
-	<link rel="stylesheet" type="text/css" href="src/plugins/datatables/css/responsive.bootstrap4.min.css">
-	<link rel="stylesheet" type="text/css" href="vendors/styles/style.css">
+  //Get user suggestions
+  $getUsersSuggestion = mysqli_query($mysqli, "SELECT * FROM users
+    WHERE (id NOT IN (SELECT from_user_id FROM user_links WHERE from_user_id = '$user_id')
+    AND id NOT IN (SELECT to_user_id FROM user_links WHERE from_user_id = '$user_id'))
+    AND
+    (id NOT IN (SELECT from_user_id FROM user_links WHERE to_user_id = '$user_id')
+    AND id NOT IN (SELECT to_user_id FROM user_links WHERE to_user_id = '$user_id'))
+    AND id <> '$user_id'
+    LIMIT 10");
+  
+  //Get Friends Posts
+  $getFriendsPost = mysqli_query($mysqli, "SELECT * 
+    FROM user_posts up
+    JOIN users u
+    ON u.id = up.user_id
+    WHERE (up.user_id IN
+           (SELECT from_user_id FROM user_links WHERE to_user_id = '$user_id' AND linked = 'true')
+    OR up.user_id IN
+           (SELECT to_user_id FROM user_links WHERE from_user_id = '$user_id' AND linked = 'true'))
+    ORDER BY up.date_added DESC
+    LIMIT 10");
+  #print_r($getFriendsPost);
 
-	<!-- Global site tag (gtag.js) - Google Analytics -->
-	<script async src="https://www.googletagmanager.com/gtag/js?id=UA-119386393-1"></script>
-	<script>
-		window.dataLayer = window.dataLayer || [];
-		function gtag(){dataLayer.push(arguments);}
-		gtag('js', new Date());
+?>
+<title>Home</title>
+    <!-- Content Wrapper -->
+    <div id="content-wrapper" class="d-flex flex-column">
 
-		gtag('config', 'UA-119386393-1');
-	</script>
-</head>
-<body>
+      <!-- Main Content -->
+      <div id="content">
 
-	<?php include("header.php"); ?>
-	<?php include("sidebar.php"); ?>
+<?php require('topbar.php'); ?>
 
-	<div class="mobile-menu-overlay"></div>
+        <!-- Begin Page Content -->
+        <div class="container-fluid">
+        <?php
+        if(isset($_SESSION['message'])){?>
+          <div class="alert alert-<?=$_SESSION['msg_type']?> alert-dismissible">
+            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+            <?php
+            echo $_SESSION['message'];
+            unset($_SESSION['message']);
+            ?>
+          </div>
+          <?php } ?>
+          <!-- Page Heading -->
+          <div class="d-sm-flex align-items-center justify-content-between mb-4">
+            <h1 class="h3 mb-0 text-gray-800">News Feed</h1>
+          </div>
 
-	<div class="main-container">
-		<div class="pd-ltr-20">
-			<div class="card-box pd-20 height-100-p mb-30">
-				<div class="row align-items-center">
-					<div class="col-md-4">
-						<img src="vendors/images/banner-img.png" alt="">
-					</div>
-					<div class="col-md-8">
-						<h4 class="font-20 weight-500 mb-10 text-capitalize">
-							Welcome back <div class="weight-600 font-30 text-blue">Johnny Brown!</div>
-						</h4>
-						<p class="font-18 max-width-600">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Unde hic non repellendus debitis iure, doloremque assumenda. Autem modi, corrupti, nobis ea iure fugiat, veniam non quaerat mollitia animi error corporis.</p>
-					</div>
-				</div>
-			</div>
-			<div class="row">
-				<div class="col-xl-3 mb-30">
-					<div class="card-box height-100-p widget-style1">
-						<div class="d-flex flex-wrap align-items-center">
-							<div class="progress-data">
-								<div id="chart"></div>
-							</div>
-							<div class="widget-data">
-								<div class="h4 mb-0">2020</div>
-								<div class="weight-600 font-14">Contact</div>
-							</div>
-						</div>
-					</div>
-				</div>
-				<div class="col-xl-3 mb-30">
-					<div class="card-box height-100-p widget-style1">
-						<div class="d-flex flex-wrap align-items-center">
-							<div class="progress-data">
-								<div id="chart2"></div>
-							</div>
-							<div class="widget-data">
-								<div class="h4 mb-0">400</div>
-								<div class="weight-600 font-14">Deals</div>
-							</div>
-						</div>
-					</div>
-				</div>
-				<div class="col-xl-3 mb-30">
-					<div class="card-box height-100-p widget-style1">
-						<div class="d-flex flex-wrap align-items-center">
-							<div class="progress-data">
-								<div id="chart3"></div>
-							</div>
-							<div class="widget-data">
-								<div class="h4 mb-0">350</div>
-								<div class="weight-600 font-14">Campaign</div>
-							</div>
-						</div>
-					</div>
-				</div>
-				<div class="col-xl-3 mb-30">
-					<div class="card-box height-100-p widget-style1">
-						<div class="d-flex flex-wrap align-items-center">
-							<div class="progress-data">
-								<div id="chart4"></div>
-							</div>
-							<div class="widget-data">
-								<div class="h4 mb-0">$6060</div>
-								<div class="weight-600 font-14">Worth</div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-			<div class="row">
-				<div class="col-xl-8 mb-30">
-					<div class="card-box height-100-p pd-20">
-						<h2 class="h4 mb-20">Activity</h2>
-						<div id="chart5"></div>
-					</div>
-				</div>
-				<div class="col-xl-4 mb-30">
-					<div class="card-box height-100-p pd-20">
-						<h2 class="h4 mb-20">Lead Target</h2>
-						<div id="chart6"></div>
-					</div>
-				</div>
-			</div>
-			<div class="card-box mb-30">
-				<h2 class="h4 pd-20">Best Selling Products</h2>
-				<table class="data-table table nowrap">
-					<thead>
-						<tr>
-							<th class="table-plus datatable-nosort">Product</th>
-							<th>Name</th>
-							<th>Color</th>
-							<th>Size</th>
-							<th>Price</th>
-							<th>Oty</th>
-							<th class="datatable-nosort">Action</th>
-						</tr>
-					</thead>
-					<tbody>
-						<tr>
-							<td class="table-plus">
-								<img src="vendors/images/product-1.jpg" width="70" height="70" alt="">
-							</td>
-							<td>
-								<h5 class="font-16">Shirt</h5>
-								by John Doe
-							</td>
-							<td>Black</td>
-							<td>M</td>
-							<td>$1000</td>
-							<td>1</td>
-							<td>
-								<div class="dropdown">
-									<a class="btn btn-link font-24 p-0 line-height-1 no-arrow dropdown-toggle" href="#" role="button" data-toggle="dropdown">
-										<i class="dw dw-more"></i>
-									</a>
-									<div class="dropdown-menu dropdown-menu-right dropdown-menu-icon-list">
-										<a class="dropdown-item" href="#"><i class="dw dw-eye"></i> View</a>
-										<a class="dropdown-item" href="#"><i class="dw dw-edit2"></i> Edit</a>
-										<a class="dropdown-item" href="#"><i class="dw dw-delete-3"></i> Delete</a>
-									</div>
-								</div>
-							</td>
-						</tr>
-						<tr>
-							<td class="table-plus">
-								<img src="vendors/images/product-2.jpg" width="70" height="70" alt="">
-							</td>
-							<td>
-								<h5 class="font-16">Boots</h5>
-								by Lea R. Frith
-							</td>
-							<td>brown</td>
-							<td>9UK</td>
-							<td>$900</td>
-							<td>1</td>
-							<td>
-								<div class="dropdown">
-									<a class="btn btn-link font-24 p-0 line-height-1 no-arrow dropdown-toggle" href="#" role="button" data-toggle="dropdown">
-										<i class="dw dw-more"></i>
-									</a>
-									<div class="dropdown-menu dropdown-menu-right dropdown-menu-icon-list">
-										<a class="dropdown-item" href="#"><i class="dw dw-eye"></i> View</a>
-										<a class="dropdown-item" href="#"><i class="dw dw-edit2"></i> Edit</a>
-										<a class="dropdown-item" href="#"><i class="dw dw-delete-3"></i> Delete</a>
-									</div>
-								</div>
-							</td>
-						</tr>
-						<tr>
-							<td class="table-plus">
-								<img src="vendors/images/product-3.jpg" width="70" height="70" alt="">
-							</td>
-							<td>
-								<h5 class="font-16">Hat</h5>
-								by Erik L. Richards
-							</td>
-							<td>Orange</td>
-							<td>M</td>
-							<td>$100</td>
-							<td>4</td>
-							<td>
-								<div class="dropdown">
-									<a class="btn btn-link font-24 p-0 line-height-1 no-arrow dropdown-toggle" href="#" role="button" data-toggle="dropdown">
-										<i class="dw dw-more"></i>
-									</a>
-									<div class="dropdown-menu dropdown-menu-right dropdown-menu-icon-list">
-										<a class="dropdown-item" href="#"><i class="dw dw-eye"></i> View</a>
-										<a class="dropdown-item" href="#"><i class="dw dw-edit2"></i> Edit</a>
-										<a class="dropdown-item" href="#"><i class="dw dw-delete-3"></i> Delete</a>
-									</div>
-								</div>
-							</td>
-						</tr>
-						<tr>
-							<td class="table-plus">
-								<img src="vendors/images/product-4.jpg" width="70" height="70" alt="">
-							</td>
-							<td>
-								<h5 class="font-16">Long Dress</h5>
-								by Renee I. Hansen
-							</td>
-							<td>Gray</td>
-							<td>L</td>
-							<td>$1000</td>
-							<td>1</td>
-							<td>
-								<div class="dropdown">
-									<a class="btn btn-link font-24 p-0 line-height-1 no-arrow dropdown-toggle" href="#" role="button" data-toggle="dropdown">
-										<i class="dw dw-more"></i>
-									</a>
-									<div class="dropdown-menu dropdown-menu-right dropdown-menu-icon-list">
-										<a class="dropdown-item" href="#"><i class="dw dw-eye"></i> View</a>
-										<a class="dropdown-item" href="#"><i class="dw dw-edit2"></i> Edit</a>
-										<a class="dropdown-item" href="#"><i class="dw dw-delete-3"></i> Delete</a>
-									</div>
-								</div>
-							</td>
-						</tr>
-						<tr>
-							<td class="table-plus">
-								<img src="vendors/images/product-5.jpg" width="70" height="70" alt="">
-							</td>
-							<td>
-								<h5 class="font-16">Blazer</h5>
-								by Vicki M. Coleman
-							</td>
-							<td>Blue</td>
-							<td>M</td>
-							<td>$1000</td>
-							<td>1</td>
-							<td>
-								<div class="dropdown">
-									<a class="btn btn-link font-24 p-0 line-height-1 no-arrow dropdown-toggle" href="#" role="button" data-toggle="dropdown">
-										<i class="dw dw-more"></i>
-									</a>
-									<div class="dropdown-menu dropdown-menu-right dropdown-menu-icon-list">
-										<a class="dropdown-item" href="#"><i class="dw dw-eye"></i> View</a>
-										<a class="dropdown-item" href="#"><i class="dw dw-edit2"></i> Edit</a>
-										<a class="dropdown-item" href="#"><i class="dw dw-delete-3"></i> Delete</a>
-									</div>
-								</div>
-							</td>
-						</tr>
-					</tbody>
-				</table>
-			</div>
-			<?php include("footer.php"); ?>
+          <div class="row">
+            <div class="col-md-8" style="/* width: 70%;height:500px;background-color:green; */">
+              <!-- Feed Container -->
+              <div class="card shadow row mb-2" style="/*height:150px ; background-color: red;*/">
+                <div class="card shadow">
+                  <div class="card-header" style="background-color: #1b5b3a;  ">
+                    <h6 class="m-0 font-weight-bold" style="color: white;">Create Post</h6>
+                  </div>                   
+                 <div class="card-body">
+                  <div class="text-center">
+                  </div>
+                    <form accept-charset="UTF-8" action="process_post.php" method="post" id="form-status"
+                      onclick="navigator.geolocation.getCurrentPosition(showPosition);"
+                    >
+                      <textarea class="form-control" placeholder="Write something about your status" id="status_text" name="status_text" style="min-height: 100px; max-height: 100px;" required></textarea>
+                      <br/>
+                      <label class="font-weight-bold float-left" style="">Situation: </label>
+                      <select name="status_safety" class="btn btn-sm float-left" style="border: 1px solid #1b5b3a; margin-left: 1%;" required>
+                        <option disabled selected>Situtation</option>
+                        <option selected value="safe">Safe</option>
+                        <option value="danger">In Danger</option>
+                      </select>
+                      <input type="hidden" name="client_lng" value="" />
+                      <input type="hidden" name="client_lat" value="" />
+                      <input type="hidden" name="user_location" value="" />
+                      <button type="submit"
+                       class="btn btn-sm ml-auto float-right" 
+                       style="background-color: #1b5b3a; color: white;"
+                       name="status_post">POST</button>
+                      <span id="status-post-message" class="float-right" style="margin:5px;color:red;display:none;">You need to allow location to post</span>
+                      <br/>
+                    </form>
+                </div>
+                </div>
+              </div>
+<!-- Own Status always on on top -->
+<?php while($newOwnStatus=$getOwnStatus->fetch_assoc()){
+  $getDateAdded = date_create($newOwnStatus['date_added']);
+  $date_added = date_format($getDateAdded, 'F j, Y');
+  $time_added = date_format($getDateAdded, 'h:i A');
+  $newDateAdded = $date_added.' at '.$time_added;
+  ?>
+            <div class="card shadow row mb-2">
+              <div class="card shadow">
+                <div class="card-header" style="background-color: #bbf7d8;">
+                  <h6 class="m-0 font-weight-bold"><a href="<?php echo "link.php?linkid=".$newOwnStatus['id']; ?>" style="color: #1b5b3a;"><?php echo $newOwnStatus['firstname'].' '.$newOwnStatus['lastname'].' (Just You)';  ?></a>
+                    <span class="float-right font-weight-normal" style="font-size: 12px;"><?php echo $newDateAdded; ?></span></h6>
+                </div>
+                <div class="card-body">
+                <!--  <div class="text-center">
+                    <img class="img-fluid px-3 px-sm-4 mt-3 mb-4" style="width: 25rem;" src="img/undraw_posting_photo.svg" alt="">
+                  </div> -->
+                  <p>
+                    <?php echo $newOwnStatus['user_post'];?>
+                  </p>
+                  <span>
+                    <button class="btn btn-sm <?php  ?>"></button>
+                  </span>
+                  <span style="font-size: 10px;" class="float-right">
+                    <i class="far fa-compass"></i> <?php echo  $newOwnStatus['user_location'];?>
+                  </span>
+                </div>
+              </div>
+            </div>
+<?php } ?>
+<?php while($newFriendPost=$getFriendsPost->fetch_assoc()){
+  $getDateAdded = date_create($newFriendPost['date_added']);
+  $date_added = date_format($getDateAdded, 'F j, Y');
+  $time_added = date_format($getDateAdded, 'h:i A');
+  $newDateAdded = $date_added.' at '.$time_added;
+  $status = $newFriendPost['user_status'];
+  ?>
+            <div class="card shadow row mb-2">
+              <div class="card shadow">
+                <div class="card-header">
+                  <h6 class="m-0 font-weight-bold"><a href="<?php echo "link.php?linkid=".$newFriendPost['id']; ?>" style="color: #1b5b3a;">
+                    <img src="<?php echo $newFriendPost['profile_image']; ?>" style="width: 1.5rem; height: 1.5rem; border-radius: 50%; "> <?php echo $newFriendPost['firstname'].' '.$newFriendPost['lastname'];  ?></a>
+                    <button class="btn btn-sm <?php if($status=='danger'){echo 'btn-danger';}else{echo 'btn-success';} ?>" style="font-size: 10px; padding: 1px;"><?php echo strtoupper($status); ?>
+                    </button>
+                    <span class="float-right font-weight-normal" style="font-size: 12px;"><?php echo $newDateAdded; ?>
+                    </span>
+                  </h6>
+                </div>
+                <div class="card-body">
+                <!--  <div class="text-center">
+                    <img class="img-fluid px-3 px-sm-4 mt-3 mb-4" style="width: 25rem;" src="img/undraw_posting_photo.svg" alt="">
+                  </div> -->
+                  <p>
+                    <?php echo $newFriendPost['user_post'];?>
+                  </p>
+                  <span style="font-size: 10px;" class="float-right">
+                    <i class="far fa-compass"></i> <?php echo $newFriendPost['user_location'];?>
+                  </span>
+                </div>
+              </div>
+            </div>
+<?php } ?>              
+              <!-- End Feed Container -->
+            </div>
+
+            <div class="col-md-4">
+                <div class="card shadow">
+                <div class="card-header">
+                  <h6 class="m-0 font-weight-bold" style="color: green;">Suggestions</h6>
+                </div>
+                <div class="card-body">
+<?php while($newUsersSuggestion=$getUsersSuggestion->fetch_assoc()){ ?>                  
+                  <!-- Content Suggestions -->
+                  <?php include('suggestions.php'); ?>                                    
+                  <!-- End Content Suggestions -->
+<?php } ?>
+                 <center style="font-size: 11px;">--- NOTHING FOLLOWS ---</center>                   
+                </div>                
+                </div>
+            </div>
+          </div>
+        </div>
+        <!-- /.container-fluid -->
+
+      </div>
+      <!-- End of Main Content -->
+<?php
+  include('footer.php');
+?>
+
+<script>
+$(document).ready(function(){
+    $('[data-toggle="popover"]').popover();   
+
+    $("#form-status").on("submit",()=>{
+
+
+        var lat = $(this).find('input[name="client_lat"]');
+        var lng = $(this).find('input[name="client_lng"]');
+
+        if(lat.val().trim().length > 0 &&
+           lng.val().trim().length > 0){
+            return true;
+        }
+        
+      $("#status-post-message").css({"display":"block"});
+        return false; 
+    });
+});
+
+function showPosition(position){
+  
+  var lat = $("#form-status").find('input[name="client_lat"]');
+  var lng = $("#form-status").find('input[name="client_lng"]');
+  var loc = $("#form-status").find('input[name="user_location"]');
+
+  lat.val(position.coords.latitude);
+  lng.val(position.coords.longitude);
+
+  var geocoding_url="https://maps.googleapis.com/maps/api/geocode/json?";
+  geocoding_url += "latlng=";
+  geocoding_url += position.coords.latitude + ","
+  geocoding_url += position.coords.longitude + "&"
+  geocoding_url += "key=AIzaSyArrxFTbz_rmzdZg68nNyMmWkTARS_hfrY"
+
+  loc.val("Unknown Location");
+  $.get(geocoding_url,(data,status)=>{
+    if(status == "success"){
+      if(data.results.length > 0){
+        loc.val(data.results[0].formatted_address);
+      }
+    }
+  });
+}
+
+</script>
