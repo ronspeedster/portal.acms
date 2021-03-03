@@ -6,9 +6,9 @@ if(!isset($_SESSION))
     }
     
 	$host = 'localhost';
-	$username = 'root';
-	$password = '';
-	$database = 'acms';
+	$username = 'acmsorgp_admin';
+	$password = 'UUd=!l,1ZZK{';
+	$database = 'acmsorgp_acms';
 
 	$mysqli = new mysqli($host,$username,$password,$database) or die(mysql_error($mysqli));
 
