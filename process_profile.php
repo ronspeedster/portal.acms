@@ -9,7 +9,7 @@
 		$currentDate = date_default_timezone_set('Asia/Manila');
 		$currentDate = date('Y-m-d-H-i-s');
 
-		$newName = 'PhotoID-'.$user_id.$currentDate;
+		$newName = 'PhotoID-'.$user_id.'-'.$currentDate;
 
 		// get details of the uploaded file
 		$fileTmpPath = $_FILES['profile_image']['tmp_name'];
