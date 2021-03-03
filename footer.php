@@ -3,7 +3,11 @@
       <footer class="sticky-footer bg-white">
         <div class="container my-auto">
           <div class="copyright text-center my-auto">
-            <span>Copyright &copy; Libyan National Tracking & Disaster Monitoring Portal 2019</span>
+            <span>Copyright &copy; Angeles City Medical Society - 2021</span>
+              <br/>
+              <br/>
+              <img src="img/logo/acms.png" width="50px">
+              <img src="img/logo/pma.png" width="50px">
           </div>
         </div>
       </footer>

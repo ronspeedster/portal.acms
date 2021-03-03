@@ -50,7 +50,7 @@
 		$email = mysqli_real_escape_string($mysqli, $_POST['email']);
 		$checkUser = $mysqli->query("SELECT * FROM users WHERE email='$email' ");
 		if(mysqli_num_rows($checkUser)==0){
-			$_SESSION['registerError'] = "No email registered. Please create an account";
+			$_SESSION['registerError'] = "No email registered. Please contact ACMS support.";
 			header("location: forgot-password.php");
 		}
 		else{
@@ -59,10 +59,10 @@
 			$mysqli->query(" INSERT INTO password_reset ( email, token ) VALUES('$email','$token') ") or die ($mysqli->error());
 
 			$to = $email;
-			$subject = "Reset your password on LNTDMP";
-			$msg = "Hi there, to reset your password kindly click the ffg: https://lntdmp.ausmxgp.com/password-reset.php?token=".$token;
+			$subject = "Reset your password on ACMS Portal";
+			$msg = "Hi there, to reset your password kindly click the ffg: https://member.acms.com/password-reset.php?token=".$token;
 			$msg = wordwrap($msg,70);
-			$headers = "From: akheala22@gmail.com";
+			$headers = "From: ronieB03@gmail.com";
 			mail($to, $subject, $msg, $headers);
 
 			$_SESSION['loginError'] = "Password instruction sent to your email account. Please check you inbox or spam folder.";

@@ -8,7 +8,7 @@ if(!isset($_SESSION))
 	$host = 'localhost';
 	$username = 'root';
 	$password = '';
-	$database = 'lntdmp';
+	$database = 'acms';
 
 	$mysqli = new mysqli($host,$username,$password,$database) or die(mysql_error($mysqli));
 
