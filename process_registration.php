@@ -39,7 +39,7 @@
 			$newCheckUser = $checkUser->fetch_array();
 			 $_SESSION['level_access'] = $newCheckUser['level_access'];
 			 $_SESSION['email'] = $newCheckUser['email'];
-			 $_SESSION['full_name'] = $newCheckUser['firstname'].' '.$newCheckUser['lastname'];
+			 $_SESSION['full_name'] = $newCheckUser['first_name'].' '.$newCheckUser['last_name'];
 			 $_SESSION['user_id'] = $newCheckUser['id'];
 			 $_SESSION['profile_image'] = $newCheckUser['profile_image'];
 			header("location: index.php");

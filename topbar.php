@@ -1,15 +1,4 @@
 <?php
-$getLinkRequest = mysqli_query($mysqli, "SELECT u.firstname, u.profile_image, u.lastname, u.id, ul.date_added
-FROM user_links ul
-JOIN users u
-ON u.id = ul.from_user_id
-WHERE ul.to_user_id = '$user_id' AND ul.linked = 'false'
-LIMIT 3 ");
-$noRequest=false;
-//print_r($getLinkRequest);
-if(mysqli_num_rows($getLinkRequest)==0){
-  $noRequest=true;
-}
 
 ?>
 <!-- Topbar -->

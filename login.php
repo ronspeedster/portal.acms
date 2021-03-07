@@ -71,7 +71,7 @@
                   <form class="user" method="post" action="process_registration.php">
                     <div class="form-group">
                       <!-- IMPORTANT: Change text to email later -->
-                      <input type="text" class="form-control form-control" id="exampleInputEmail" aria-describedby="emailHelp" placeholder="Enter Email Address..." name="email" value="<?php if(isset($_GET['email'])){echo $_GET['email'];} ?>" required>
+                      <input type="text" class="form-control form-control" id="exampleInputEmail" aria-describedby="emailHelp" placeholder="Enter Username..." name="email" value="<?php if(isset($_GET['email'])){echo $_GET['email'];} ?>" required>
                     </div>
                     <div class="form-group">
                       <input type="password" class="form-control form-control" id="exampleInputPassword" placeholder="Password" name="password" required>

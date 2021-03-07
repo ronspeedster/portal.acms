@@ -1,10 +1,10 @@
 <?php
-  require_once('process_post.php');
-  include('sidebar.php');
+    include('dbh.php');
+    include('sidebar.php');
 
-  $protocol = ((!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off') || $_SERVER['SERVER_PORT'] == 443) ? "https://" : "http://";
-  $getURI = $protocol . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
-  $_SESSION['getURI'] = $getURI;
+    $protocol = ((!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off') || $_SERVER['SERVER_PORT'] == 443) ? "https://" : "http://";
+    $getURI = $protocol . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
+    $_SESSION['getURI'] = $getURI;
 
 ?>
 <title>Home</title>

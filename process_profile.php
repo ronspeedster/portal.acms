@@ -35,7 +35,7 @@
 			header("location: ".$getURI);
 		}
 		else{
-			$_SESSION['message'] = "There was an error uploading the image receipt!";
+			$_SESSION['message'] = "There was an error uploading the image!";
 			$_SESSION['msg_type'] = "danger";
 		}
 	}

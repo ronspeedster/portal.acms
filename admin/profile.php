@@ -1,19 +1,13 @@
 <?php
-  require_once('process_post.php');
-  include('sidebar.php');
+    include('dbh.php');
+    include('sidebar.php');
 
-  $protocol = ((!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off') || $_SERVER['SERVER_PORT'] == 443) ? "https://" : "http://";
-  $getURI = $protocol . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
-  $_SESSION['getURI'] = $getURI;
-
-
-  #Get User Information
-  $getUserInformation = mysqli_query($mysqli, " SELECT * FROM users WHERE id = '$user_id' ");
-  $newUserInformation = $getUserInformation->fetch_array();
-
+    $protocol = ((!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off') || $_SERVER['SERVER_PORT'] == 443) ? "https://" : "http://";
+    $getURI = $protocol . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
+    $_SESSION['getURI'] = $getURI;
 
 ?>
-<title><?php echo $newUserInformation['first_name'].' '.$newUserInformation['last_name']; ?></title>
+<title>Add User Doctors</title>
     <!-- Content Wrapper -->
     <div id="content-wrapper" class="d-flex flex-column">
 
@@ -38,7 +32,7 @@
           <!-- Page Heading -->
             <div class="align-items-center mb-4">
               <p style="text-align:center;">
-                <button class="btn" id="asd" data-toggle="modal" data-target="#ModalChangeDP" aria-haspopup="true" aria-expanded="false"><img style="width: 10rem; height: 10rem; border-radius: 50%; border: 3px solid #17A673;" src="<?php echo  $newUserInformation['profile_image']; ?>"></button>
+
                 <!-- Modal For Request Here -->
                 <div class="modal fade" id="ModalChangeDP" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
                   <div class="modal-dialog modal-dialog-centered" role="document">
@@ -62,8 +56,7 @@
                     </div>
                   </div>
                 </div>
-                    <!-- End Modal For PC Equipments -->                 
-                <h3 class="m-0 font-weight-bold" style="color: #1b5b3a; text-align:center;"><?php echo $newUserInformation['first_name'].' '.$newUserInformation['last_name'];?></h3>
+
               </p>
             </div>
 
