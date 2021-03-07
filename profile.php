@@ -86,7 +86,7 @@
                                  <input class="form-control" type="text" placeholder="First Name" name="fname" value="<?php echo $newUserInformation['first_name']; ?>" required>
                                  <br/>
                                  Middle Name
-                                 <input class="form-control" type="text" placeholder="Middle Name" name="mname" value="<?php $newUserInformation['middle_name']; ?>" required>
+                                 <input class="form-control" type="text" placeholder="Middle Name" name="mname" value="<?php echo $newUserInformation['middle_name']; ?>" required>
                                  <br/>
                              </div>
                              <br/>

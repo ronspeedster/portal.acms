@@ -33,7 +33,7 @@
 
         $mysqli->query(" INSERT INTO users (first_name, middle_name, last_name, mailing_address, contact_num, email, birthday, pma_number, prc_number, expiration_date, field_of_practice, username, password) VALUES ('$first_name', '$middle_name', '$last_name', '$mailing_address', '$contact_num', '$email', '$birthday', '$pma_number', '$prc_number', '$expiration_date', '$field_of_practice', '$prc_number', '$password') ") or die ($mysqli->error);
 
-        $_SESSION['message'] = "User added!";
+        $_SESSION['message'] = "User ".$first_name." added!";
         $_SESSION['msg_type'] = "success";
 
         header("location: manage_users.php");

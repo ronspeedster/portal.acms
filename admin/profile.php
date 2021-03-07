@@ -1,13 +1,19 @@
 <?php
-    include('dbh.php');
-    include('sidebar.php');
+  require_once('process_profile.php');
+  include('sidebar.php');
 
-    $protocol = ((!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off') || $_SERVER['SERVER_PORT'] == 443) ? "https://" : "http://";
-    $getURI = $protocol . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
-    $_SESSION['getURI'] = $getURI;
+  $protocol = ((!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off') || $_SERVER['SERVER_PORT'] == 443) ? "https://" : "http://";
+  $getURI = $protocol . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
+  $_SESSION['getURI'] = $getURI;
+
+
+  #Get User Information
+  $getUserInformation = mysqli_query($mysqli, " SELECT * FROM users WHERE id = '$user_id' ");
+  $newUserInformation = $getUserInformation->fetch_array();
+
 
 ?>
-<title>Add User Doctors</title>
+<title><?php echo $newUserInformation['first_name'].' '.$newUserInformation['last_name']; ?></title>
     <!-- Content Wrapper -->
     <div id="content-wrapper" class="d-flex flex-column">
 
@@ -32,7 +38,7 @@
           <!-- Page Heading -->
             <div class="align-items-center mb-4">
               <p style="text-align:center;">
-
+                <button class="btn" id="asd" data-toggle="modal" data-target="#ModalChangeDP" aria-haspopup="true" aria-expanded="false"><img style="width: 10rem; height: 10rem; border-radius: 50%; border: 3px solid #17A673;" src="<?php echo '../'.$newUserInformation['profile_image']; ?>"></button>
                 <!-- Modal For Request Here -->
                 <div class="modal fade" id="ModalChangeDP" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
                   <div class="modal-dialog modal-dialog-centered" role="document">
@@ -56,7 +62,8 @@
                     </div>
                   </div>
                 </div>
-
+                    <!-- End Modal For PC Equipments -->                 
+                <h3 class="m-0 font-weight-bold" style="color: #1b5b3a; text-align:center;"><?php echo $newUserInformation['first_name'].' '.$newUserInformation['last_name'];?></h3>
               </p>
             </div>
 
@@ -71,44 +78,78 @@
                  <div class="card-body">
                   <div class="text-center">
                   </div>
-                    <form accept-charset="UTF-8" action="process_post.php" method="post" id="form-status"
-                      onclick="navigator.geolocation.getCurrentPosition(showPosition);"
-                    >
-                        Personal Information:
-                        <div class="row">
-                            <div class="col-md-6">
-                                <input class="form-control" type="text" placeholder="First Name">
-                                <br/>
-                                <input class="form-control" type="text" placeholder="Middle Name">
-                                <br/>
-                            </div>
-                            <br/>
-                            <div class="col-md-6">
-                                <input class="form-control" type="text" placeholder="Last Name">
-                                <br/>
-                            </div>
-                        </div>
+                     <form accept-charset="UTF-8" action="process_profile.php" method="post" id="form-status">
+                         <label style="margin-bottom: 15px !important;" class="font-weight-bold">Personal Information:</label>
+                         <div class="row">
+                             <div class="col-md-6">
+                                 First Name
+                                 <input class="form-control" type="text" placeholder="First Name" name="fname" value="<?php echo $newUserInformation['first_name']; ?>" required>
+                                 <br/>
+                                 Middle Name
+                                 <input class="form-control" type="text" placeholder="Middle Name" name="mname" value="<?php echo $newUserInformation['middle_name']; ?>" required>
+                                 <br/>
+                             </div>
+                             <br/>
+                             <div class="col-md-6">
+                                 Last Name
+                                 <input class="form-control" type="text" placeholder="Last Name" name="lname" value="<?php echo $newUserInformation['last_name']; ?>" required>
+                                 <br/>
+                             </div>
+                         </div>
+                         <!-- Additional Information -->
+                         <div class="row">
+                             <div class="col-md-6">
+                                 Mailing Address
+                                 <input class="form-control" type="text" placeholder="Mailing Address" name="mailing_address" value="<?php echo $newUserInformation['mailing_address']; ?>" required>
+                                 <br/>
+                                 Contact Number
+                                 <input class="form-control" type="text" placeholder="Contact Number" name="contact_num" value="<?php echo $newUserInformation['contact_num'];?>" required>
+                                 <br/>
+                             </div>
+                             <br/>
+                             <div class="col-md-6">
+                                 Email Address
+                                 <input class="form-control" type="email" placeholder="Email address" name="email" value="<?php echo $newUserInformation['email']; ?>" required>
+                                 <br/>
+                                 Birthday
+                                 <input class="form-control" type="date" placeholder="Birthday" name="birthday" value="<?php echo $newUserInformation['birthday']; ?>" required>
+                                 <br/>
+                             </div>
+                         </div>
 
-                        License Information:
-                        <div class="row">
-                            <div class="col-md-6">
-                                <input class="form-control" type="text" placeholder="PMA Number">
-                                <br/>
-                            </div>
-                            <br/>
-                            <div class="col-md-6">
-                                <input class="form-control" type="text" placeholder="PRC Number">
-                                <br/>
-                            </div>
-                        </div>
+                         <label style="margin-bottom: 15px !important;" class="font-weight-bold">License Information:</label>
+                         <div class="row">
+                             <div class="col-md-6">
+                                 PMA number
+                                 <input class="form-control" type="text" placeholder="PMA Number" name="pma_number" value="<?php echo $newUserInformation['pma_number']; ?>" required>
+                                 <br/>
+                             </div>
+                             <br/>
+                             <div class="col-md-6">
+                                 PRC Number
+                                 <input class="form-control" type="text" placeholder="PRC Number" name="prc_number" value="<?php echo $newUserInformation['prc_number']; ?>" required>
+                                 <br/>
+                             </div>
+                             <div class="col-md-6">
+                                 Expiration Date
+                                 <input class="form-control" type="date" placeholder="Expiration Date" name="expiration_date" value="<?php echo $newUserInformation['expiration_date']; ?>" required>
+                                 <br/>
+                             </div>
+                             <br/>
+                             <div class="col-md-6">
+                                 Field of Practice
+                                 <input class="form-control" type="text" placeholder="Field of Practice" name="field_of_practice" value="<?php echo $newUserInformation['field_of_practice']; ?>" required>
+                                 <br/>
+                             </div>
+                         </div>
 
-                      <br/>
-                      <button type="submit" class="btn btn-sm ml-auto float-right" style="background-color: #1b5b3a; color: white;" name="status_post">
-                          <i class="far fa-save"></i> Update
-                      </button>
-                      <span id="status-post-message" class="float-right" style="margin:5px;color:red;display:none;">You need to allow location to post</span>
-                      <br/>
-                    </form>
+                         <br/>
+                             <input type="text" name="user_id" style="visibility: hidden;" value="<?php echo $newUserInformation['id'];  ?>">
+                             <button type="submit" class="btn btn-sm ml-auto float-right" style="background-color: #1b5b3a; color: white;" name="update_profile">
+                                 <i class="far fa-save"></i>
+                                 Update
+                             </button>
+                     </form>
                 </div>
                 </div>
               </div>

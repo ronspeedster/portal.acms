@@ -24,10 +24,15 @@
               <!-- Dropdown - User Information -->
               <div class="dropdown-list dropdown-menu dropdown-menu-right shadow-lg animated--grow-in" aria-labelledby="userDropdown" style="background-color: #1B5B3A;">
                 <h6 class="dropdown-header" style="background-color: white; border-color: white; color: #1B5B3A;">
-                  Information
+<!--                  Information-->
                 </h6>
                 <div style="background-color: white;">
-                  <div style="text-align: center;"><a href="profile.php" class="text-gray-800"><?php echo strtoupper($_SESSION['email']); ?></a></div>
+                  <div style="text-align: center;">
+                      <a href="profile.php" class="text-gray-800">
+                          Profile
+<!--                          --><?php //echo strtoupper($_SESSION['email']); ?>
+                      </a>
+                  </div>
                   <div style="text-align: center;"><hr/>
                     <a style="color: #5D4037;" class="btn btn-sm btn-warning" href="#" data-toggle="modal" data-target="#logoutModal">
                     <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2"></i>
@@ -40,8 +45,8 @@
               </div>
             </li>
 
-            <!--<div class="topbar-divider d-none d-sm-block"></div>
-            
+            <div class="topbar-divider d-none d-sm-block"></div>
+
               <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
                 <span>
                 <center><?php echo $_SESSION['email']; ?></center><br/>
@@ -51,8 +56,7 @@
                 </a>
                 </center>
                 </span>
-              </div>
-            -->
+
             </li>
 
           </ul>
