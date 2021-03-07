@@ -40,4 +40,47 @@
 		}
 	}
 
+	if(isset($_POST['update_profile'])){
+        $user_id = mysqli_real_escape_string($mysqli, $_POST['user_id']);
+        $first_name = mysqli_real_escape_string($mysqli, $_POST['fname']);
+        $middle_name = mysqli_real_escape_string($mysqli, $_POST['mname']);
+        $last_name = mysqli_real_escape_string($mysqli, $_POST['lname']);
+        $mailing_address = mysqli_real_escape_string($mysqli, $_POST['mailing_address']);
+        $contact_num = mysqli_real_escape_string($mysqli, $_POST['contact_num']);
+        $email = mysqli_real_escape_string($mysqli, $_POST['email']);
+        $birthday = mysqli_real_escape_string($mysqli, $_POST['birthday']);
+        $pma_number = mysqli_real_escape_string($mysqli, $_POST['pma_number']);
+        $prc_number= mysqli_real_escape_string($mysqli, $_POST['prc_number']);
+        $expiration_date = mysqli_real_escape_string($mysqli, $_POST['expiration_date']);
+        $field_of_practice = mysqli_real_escape_string($mysqli, $_POST['field_of_practice']);
+
+        $password = substr($prc_number, -4);
+
+        $date = date_create($birthday);
+        $birthday =  date_format($date,"Y-m-d");
+
+        $date = date_create($expiration_date);
+        $expiration_date =  date_format($date,"Y-m-d");
+
+        $mysqli->query(" UPDATE users SET
+        first_name = '$first_name',
+        middle_name = '$middle_name',
+        last_name = '$last_name',
+        mailing_address = '$mailing_address',
+        contact_num = '$contact_num',
+        email = '$email',
+        birthday = '$birthday',
+        pma_number = '$pma_number',
+        prc_number = '$prc_number',
+        expiration_date = '$expiration_date',
+        field_of_practice = '$field_of_practice',
+        is_update = '1'
+        WHERE id = '$user_id' ") or die ($mysqli->error);
+
+        $_SESSION['message'] = "User has been updated!";
+        $_SESSION['msg_type'] = "success";
+
+        header("location: profile.php");
+    }
+
 ?>

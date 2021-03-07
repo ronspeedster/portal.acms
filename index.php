@@ -34,16 +34,7 @@
           </div>
 
           <div class="row">
-          <div class="col-md-4">
-              <div class="card shadow">
-                  <div class="card-header">
-                      <h6 class="m-0 font-weight-bold" style="color: green;">Suggestions</h6>
-                  </div>
-                  <div class="card-body">
 
-                  </div>
-              </div>
-          </div>
             <div class="col-md-8" style="/* width: 70%;height:500px;background-color:green; */">
               <!-- Feed Container -->
               <div class="card shadow row mb-2" style="/*height:150px ; background-color: red;*/">
@@ -58,10 +49,18 @@
                 </div>
                 </div>
               </div>
-
-              <!-- End Feed Container -->
             </div>
 
+          <div class="col-md-4">
+              <div class="card shadow">
+                  <div class="card-header">
+                      <h6 class="m-0 font-weight-bold" style="color: green;">Suggestions</h6>
+                  </div>
+                  <div class="card-body">
+                      <div>Please update your profile <a href="profile.php">here. Link to profile page. </a> </div>
+                  </div>
+              </div>
+          </div>
           </div>
         </div>
         <!-- /.container-fluid -->

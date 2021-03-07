@@ -27,13 +27,14 @@
 
 	// Login Details for users
 	if(isset($_POST['login'])){
-		 $email = strtolower($_POST['email']);
+//		 $email = strtolower($_POST['email']);
+		 $username = strtolower($_POST['username']);
 		 $password = $_POST['password'];
-		 $checkUser = $mysqli->query("SELECT * FROM users WHERE email='$email' AND password='$password' ");
+		 $checkUser = $mysqli->query("SELECT * FROM users WHERE username='$username' AND password='$password' ");
 
 		if(mysqli_num_rows($checkUser)==0){
 			$_SESSION['loginError'] = "Login error. Please try again";
-			header("location: login.php?email=".$email);
+			header("location: login.php?email=".$username);
 		}
 		else{
 			$newCheckUser = $checkUser->fetch_array();
@@ -46,6 +47,8 @@
 		}
 	}
 
+
+	// Reset Password
 	if(isset($_POST['reset_password'])){
 		$email = mysqli_real_escape_string($mysqli, $_POST['email']);
 		$checkUser = $mysqli->query("SELECT * FROM users WHERE email='$email' ");
