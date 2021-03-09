@@ -109,6 +109,15 @@ a:visited {
                 <span>Users</span>
             </a>
         </li>
+
+        <!-- Nav Item - Dashboard -->
+        <li class="nav-item active" id="nav-item-home">
+            <a class="nav-link" href="status_users.php">
+                <i class="far fa-folder-open"></i>
+                <span>Status</span>
+            </a>
+        </li>
+
       <!-- Nav Item - Pages Collapse Menu -->
 <!--      <li class="nav-item">-->
 <!--        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#buildings" aria-expanded="true" aria-controls="buildings">-->
