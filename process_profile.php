@@ -51,8 +51,11 @@
         $birthday = mysqli_real_escape_string($mysqli, $_POST['birthday']);
         $pma_number = mysqli_real_escape_string($mysqli, $_POST['pma_number']);
         $prc_number= mysqli_real_escape_string($mysqli, $_POST['prc_number']);
+        $expiration_month = mysqli_real_escape_string($mysqli, $_POST['expiration_month']);
         $expiration_date = mysqli_real_escape_string($mysqli, $_POST['expiration_date']);
         $field_of_practice = mysqli_real_escape_string($mysqli, $_POST['field_of_practice']);
+
+        $expiration_date = $expiration_month.'-'.$expiration_date;
 
         $password = substr($prc_number, -4);
 

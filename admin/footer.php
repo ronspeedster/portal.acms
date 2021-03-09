@@ -6,8 +6,8 @@
             <span>Copyright &copy; Angeles City Medical Society - 2021</span>
               <br/>
               <br/>
-              <img src="../img/logo/acms.png" width="50px">
               <img src="../img/logo/pma.png" width="50px">
+              <img src="../img/logo/acms.png" width="50px">
           </div>
         </div>
       </footer>

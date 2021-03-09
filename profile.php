@@ -11,7 +11,9 @@
   $getUserInformation = mysqli_query($mysqli, " SELECT * FROM users WHERE id = '$user_id' ");
   $newUserInformation = $getUserInformation->fetch_array();
 
-
+  $date = date_create($newUserInformation['expiration_date']);
+  $expiration_month =  date_format($date,"Y-m");
+$expiration_date = date_format($date,"d");
 ?>
 <title><?php echo $newUserInformation['first_name'].' '.$newUserInformation['last_name']; ?></title>
     <!-- Content Wrapper -->
@@ -112,7 +114,7 @@
                                  <input class="form-control" type="email" placeholder="Email address" name="email" value="<?php echo $newUserInformation['email']; ?>" required>
                                  <br/>
                                  Birthday
-                                 <input class="form-control" type="date" placeholder="Birthday" name="birthday" value="<?php echo $newUserInformation['birthday']; ?>" required>
+                                 <input class="form-control" type="date" placeholder="Birthday" name="birthday" data-date-format="MM-DD-YYYY" value="<?php echo $newUserInformation['birthday']; ?>" required>
                                  <br/>
                              </div>
                          </div>
@@ -130,11 +132,17 @@
                                  <input class="form-control" type="text" placeholder="PRC Number" name="prc_number" value="<?php echo $newUserInformation['prc_number']; ?>" required>
                                  <br/>
                              </div>
-                             <div class="col-md-6">
-                                 Expiration Date
-                                 <input class="form-control" type="date" placeholder="Expiration Date" name="expiration_date" value="<?php echo $newUserInformation['expiration_date']; ?>" required>
+                             <div class="col-md-3">
+                                 Expiration Month
+                                 <input class="form-control" type="month" placeholder="Expiration Date" name="expiration_month" value="<?php echo $expiration_month; ?>" required>
                                  <br/>
                              </div>
+                             <div class="col-md-3">
+                                 Expiration Day (Specific)
+                                 <input class="form-control" type="number" maxlength="31" minlength="1" placeholder="Expiration Date" name="expiration_date" value="<?php echo $expiration_date; ?>" required>
+                                 <br/>
+                             </div>
+
                              <br/>
                              <div class="col-md-6">
                                  Field of Practice
@@ -164,6 +172,12 @@
 <?php
   include('footer.php');
 ?>
+<!--<script src="js/bootstrap-datepicker.js"></script>-->
 <script>
-
+    // $(document).ready(function() {
+    //     $('#input_date').datepicker({
+    //         format: 'M dd yyyy'
+    //     });
+    // } );
 </script>
+
