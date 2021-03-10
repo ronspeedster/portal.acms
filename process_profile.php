@@ -80,10 +80,27 @@
         is_update = '1'
         WHERE id = '$user_id' ") or die ($mysqli->error);
 
-        $_SESSION['message'] = "User has been updated!";
+        $_SESSION['message'] = "Profile has been updated!";
         $_SESSION['msg_type'] = "success";
 
         header("location: profile.php");
     }
+
+	//Update Password
+    if(isset($_POST['update_password'])){
+        $user_id =  mysqli_real_escape_string($mysqli, $_POST['user_id']);
+        $password1 = mysqli_real_escape_string($mysqli, $_POST['password1']);
+//        $password2 = mysqli_real_escape_string($mysqli, $_POST['password2']);
+
+        $mysqli->query(" UPDATE users SET
+            password = '$password1'
+            WHERE id = '$user_id' ") or die ($mysqli->error);
+
+        $_SESSION['message'] = "Passsword has been updated!";
+        $_SESSION['msg_type'] = "success";
+
+        header("location: profile.php");
+    }
+
 
 ?>

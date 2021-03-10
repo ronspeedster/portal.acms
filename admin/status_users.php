@@ -106,7 +106,7 @@
                                   <tbody>
                                   <?php
                                   while($newUserInformation = $getAllUserInformationNotUpdated->fetch_assoc()){
-                                      ?>
+                                  ?>
                                       <tr>
                                           <td><?php echo $newUserInformation['id']; ?></td>
                                           <td><?php echo $newUserInformation['first_name'].' '.$newUserInformation['last_name']; ?></td>

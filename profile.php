@@ -13,7 +13,7 @@
 
   $date = date_create($newUserInformation['expiration_date']);
   $expiration_month =  date_format($date,"Y-m");
-$expiration_date = date_format($date,"d");
+  $expiration_date = date_format($date,"d");
 ?>
 <title><?php echo $newUserInformation['first_name'].' '.$newUserInformation['last_name']; ?></title>
     <!-- Content Wrapper -->
@@ -70,6 +70,7 @@ $expiration_date = date_format($date,"d");
             </div>
 
           <div class="row">
+
             <div class="col-md-12" style="/* width: 70%;height:500px;background-color:green; */">
               <!-- Feed Container -->
               <div class="card shadow row mb-2" style="/*height:150px ; background-color: red;*/">
@@ -163,6 +164,46 @@ $expiration_date = date_format($date,"d");
               </div>
             </div>
 
+            <!-- Update Password -->
+            <div class="col-md-12" style="/* width: 70%;height:500px;background-color:green; */">
+                  <!-- Feed Container -->
+                  <div class="card shadow row mb-2" style="/*height:150px ; background-color: red;*/">
+                      <div class="card shadow">
+                          <div class="card-header" style="background-color: #1b5b3a;  ">
+                              <h6 class="m-0 font-weight-bold" style="color: white;">Update Password</h6>
+                          </div>
+                          <div class="card-body">
+                              <div class="text-center">
+                              </div>
+                              <form accept-charset="UTF-8" action="process_profile.php" method="post" id="form-status">
+                                  <label style="margin-bottom: 15px !important;" class="font-weight-bold">Personal Information:</label>
+                                  <div class="row">
+
+                                      <div class="col-md-12">
+                                          Password
+                                          <input class="form-control" type="password" placeholder="Type Password" name="password1" id="password1" required>
+                                          <br/>
+                                          Confirm Password
+                                          <input class="form-control" type="password" placeholder="Confirm Password" name="password2" id="password2" required>
+                                          <span id='message'></span>
+                                          <br/>
+                                      </div>
+                                      <br/>
+
+                                  </div>
+
+                                  <br/>
+                                  <input type="text" name="user_id" style="visibility: hidden;" value="<?php echo $newUserInformation['id'];  ?>">
+                                  <button type="submit" class="btn btn-sm ml-auto float-right" style="background-color: #1b5b3a; color: white;" name="update_password" id="update_password">
+                                      <i class="far fa-save"></i>
+                                      Update
+                                  </button>
+                              </form>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+
           </div>
         </div>
         <!-- /.container-fluid -->
@@ -179,5 +220,14 @@ $expiration_date = date_format($date,"d");
     //         format: 'M dd yyyy'
     //     });
     // } );
+    $('#password1, #password2').on('keyup', function () {
+        if ($('#password1').val() == $('#password2').val()) {
+            $('#message').html('Password Matched').css('color', 'green');
+            $('#update_password').css('display', 'block');
+        } else{
+            $('#message').html('Password Not Matching').css('color', 'red');
+            $('#update_password').css('display', 'none');
+        }
+    });
 </script>
 
