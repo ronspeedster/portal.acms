@@ -40,7 +40,7 @@
               <div class="card shadow row mb-2" style="/*height:150px ; background-color: red;*/">
                 <div class="card shadow">
                   <div class="card-header" style="background-color: #1b5b3a;  ">
-                    <h6 class="m-0 font-weight-bold" style="color: white;">ACMS Election Day - 2021.</h6>
+                    <h6 class="m-0 font-weight-bold" style="color: white;">ACMS Local Elections</h6>
                   </div>                   
                  <div class="card-body">
                      <!-- Election Day 2021 Form Here -->
@@ -75,7 +75,7 @@
                      <!-- End Get Summary of Votes-->
                      <form method="post" action="process_election.php" style="<?php if($voteRecord>=1){echo 'display: none;';} ?>">
                              <center>
-                                <h4>Election Day in March 14, 2021</h4>
+                                <h4>Local Elections<br>March 14, 2021</h4>
                                 <h6>Please cast your votes</h6>
                              </center>
                              <table class="table table-bordered" id="candidateTable" width="100%" cellspacing="0">
