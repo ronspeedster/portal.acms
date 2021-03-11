@@ -96,7 +96,7 @@ a:visited {
 
         <!-- Nav Item - Dashboard -->
         <li class="nav-item active" id="nav-item-home">
-            <a class="nav-link" href="index.php">
+            <a class="nav-link" href="../index.php">
                 <i class="fas fa-home"></i>
                 <span>Home</span>
             </a>
