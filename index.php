@@ -106,7 +106,7 @@
                              <br>
                             <?php if($_SESSION['is_update']==1){ ?>
                             <!-- Start Drop down Delete here -->
-                            <button class="float-right btn btn-warning dropdown-toggle mb-1 text-dark" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <button class="float-right btn btn-warning dropdown-toggle mb-1 text-dark" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" disabled>
                                 <i class="fas fa-upload"></i> Cast Votes
                             </button>
                             <div class="dropdown-menu p-1" aria-labelledby="dropdownMenuButton btn-sm">
