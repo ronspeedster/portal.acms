@@ -119,20 +119,20 @@ a:visited {
         </li>
 
       <!-- Nav Item - Pages Collapse Menu -->
-<!--      <li class="nav-item">-->
-<!--        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#buildings" aria-expanded="true" aria-controls="buildings">-->
-<!--          <i class="fas fa-search-location"></i>-->
-<!--          <span>Find Relatives</span>-->
-<!--        </a>-->
-<!--        <div id="buildings" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">-->
-<!--          <div class="bg-white py-2 collapse-inner rounded">-->
-<!--            <h6 class="collapse-header">Customize Buildings:</h6>-->
-<!--            <a class="collapse-item" href="view_links.php"><i class="fas fa-link"></i> View All Links</a>-->
-<!--            <a class="collapse-item" href="view_pending_request.php"><i class="fas fa-clock"></i> View Pending Request</a>-->
-<!--             <a class="collapse-item" href="view_sent_request.php"><i class="fas fa-share"></i> View Sent Request</a>-->
-<!--          </div>-->
-<!--        </div>-->
-<!--      </li>-->
+      <li class="nav-item active">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#buildings" aria-expanded="true" aria-controls="buildings">
+          <i class="fas fa-search-location"></i>
+          <span>2021 Election</span>
+        </a>
+        <div id="buildings" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+          <div class="bg-white py-2 collapse-inner rounded">
+            <h6 class="collapse-header">Manage 2021 Election</h6>
+            <a class="collapse-item" href="manage_candidates.php"><i class="fas fa-plus"></i> Add / Edit Candidate</a>
+            <a class="collapse-item" href="#"><i class="fas fa-eye"></i> View Voter's Status</a>
+            <a class="collapse-item" href="#"><i class="fas fa-eye"></i> View Election status</a>
+          </div>
+        </div>
+      </li>
 
 <!--      <li class="nav-item" id = "nav-item-safelocation">-->
 <!--        <a class="nav-link" href="safelocation.php">-->
