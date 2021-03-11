@@ -2,7 +2,7 @@
   include('dbh.php');
   
   if(!isset($_SESSION['email'])){
-    header("Location: login.php");
+    header("Location: ../login.php");
   }
 
   if($_SESSION['level_access'] == 'user'){
