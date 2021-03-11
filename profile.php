@@ -1,6 +1,7 @@
 <?php
-  require_once('process_post.php');
+//  require_once('process_post.php');
   include('sidebar.php');
+  $user_id = $_SESSION['user_id'];
 
   $protocol = ((!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off') || $_SERVER['SERVER_PORT'] == 443) ? "https://" : "http://";
   $getURI = $protocol . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];

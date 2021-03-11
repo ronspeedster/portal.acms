@@ -1,6 +1,6 @@
 <?php
 	include('dbh.php');
-	$user_id =  $_SESSION['user_id'];
+//	$user_id =  $_SESSION['user_id'];
 
 	if(isset($_SESSION['getURI'])){
 		$getURI = $_SESSION['getURI'];

@@ -82,7 +82,7 @@
 
         $_SESSION['message'] = "Profile has been updated!";
         $_SESSION['msg_type'] = "success";
-
+        $_SESSION['is_update'] = 1;
         header("location: profile.php");
     }
 

@@ -63,13 +63,13 @@
                                       while($newUserInformation = $getAllUserInformationUpdated->fetch_assoc()){
                                           ?>
                                       <tr>
-                                          <td><?php echo $newUserInformation['id']; ?></td>
-                                          <td><?php echo $newUserInformation['first_name'].' '.$newUserInformation['last_name']; ?></td>
-                                          <td><?php echo $newUserInformation['mailing_address']; ?></td>
-                                          <td><?php echo $newUserInformation['contact_num']; ?></td>
-                                          <td><?php echo $newUserInformation['email']; ?></td>
-                                          <td><?php echo $newUserInformation['pma_number']; ?></td>
-                                          <td><?php echo $newUserInformation['prc_number']; ?></td>
+                                          <td><?php echo strtoupper($newUserInformation['id']); ?></td>
+                                          <td><?php echo strtoupper($newUserInformation['first_name'].' '.$newUserInformation['last_name']); ?></td>
+                                          <td><?php echo strtoupper($newUserInformation['mailing_address']) ?></td>
+                                          <td><?php echo strtoupper($newUserInformation['contact_num']); ?></td>
+                                          <td><?php echo strtoupper($newUserInformation['email']); ?></td>
+                                          <td><?php echo strtoupper($newUserInformation['pma_number']); ?></td>
+                                          <td><?php echo strtoupper($newUserInformation['prc_number']); ?></td>
                                       </tr>
                                       <?php } ?>
                                       </tbody>
@@ -108,13 +108,13 @@
                                   while($newUserInformation = $getAllUserInformationNotUpdated->fetch_assoc()){
                                   ?>
                                       <tr>
-                                          <td><?php echo $newUserInformation['id']; ?></td>
-                                          <td><?php echo $newUserInformation['first_name'].' '.$newUserInformation['last_name']; ?></td>
-                                          <td><?php echo $newUserInformation['mailing_address']; ?></td>
-                                          <td><?php echo $newUserInformation['contact_num']; ?></td>
-                                          <td><?php echo $newUserInformation['email']; ?></td>
-                                          <td><?php echo $newUserInformation['pma_number']; ?></td>
-                                          <td><?php echo $newUserInformation['prc_number']; ?></td>
+                                          <td><?php echo strtoupper($newUserInformation['id']); ?></td>
+                                          <td><?php echo strtoupper($newUserInformation['first_name'].' '.$newUserInformation['last_name']); ?></td>
+                                          <td><?php echo strtoupper($newUserInformation['mailing_address']); ?></td>
+                                          <td><?php echo strtoupper($newUserInformation['contact_num']); ?></td>
+                                          <td><?php echo strtoupper($newUserInformation['email']); ?></td>
+                                          <td><?php echo strtoupper($newUserInformation['pma_number']); ?></td>
+                                          <td><?php echo strtoupper($newUserInformation['prc_number']); ?></td>
                                       </tr>
                                   <?php } ?>
                                   </tbody>

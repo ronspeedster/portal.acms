@@ -128,8 +128,8 @@ a:visited {
           <div class="bg-white py-2 collapse-inner rounded">
             <h6 class="collapse-header">Manage 2021 Election</h6>
             <a class="collapse-item" href="manage_candidates.php"><i class="fas fa-plus"></i> Add / Edit Candidate</a>
-            <a class="collapse-item" href="#"><i class="fas fa-eye"></i> View Voter's Status</a>
-            <a class="collapse-item" href="#"><i class="fas fa-eye"></i> View Election status</a>
+            <a class="collapse-item" href="view_voter_status.php"><i class="fas fa-eye"></i> View Voter's Status</a>
+            <a class="collapse-item" href="view_election_status.php"><i class="fas fa-eye"></i> View Election status</a>
           </div>
         </div>
       </li>

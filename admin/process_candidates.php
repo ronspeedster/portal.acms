@@ -15,7 +15,7 @@
         $middle_name = mysqli_real_escape_string($mysqli, $_POST['mname']);
         $last_name = mysqli_real_escape_string($mysqli, $_POST['lname']);
         $last_name = $last_name. ' M.D';
-        
+
         $mysqli->query(" INSERT INTO candidates (first_name, middle_name, last_name) VALUES ('$first_name', '$middle_name', '$last_name') ") or die ($mysqli->error);
 
         $_SESSION['message'] = "Candidate ".$first_name." added!";
