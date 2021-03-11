@@ -76,7 +76,7 @@
                      <form method="post" action="process_election.php" style="<?php if($voteRecord>=1){echo 'display: none;';} ?>">
                              <center>
                                 <h4>Election Day in March 14, 2021</h4>
-                                <h6>Plese cast your votes</h6>
+                                <h6>Please cast your votes</h6>
                              </center>
                              <table class="table table-bordered" id="candidateTable" width="100%" cellspacing="0">
                                  <thead>
@@ -106,7 +106,7 @@
                              <br>
                             <?php if($_SESSION['is_update']==1){ ?>
                             <!-- Start Drop down Delete here -->
-                            <button class="float-right btn btn-warning dropdown-toggle mb-1 text-dark" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" disabled>
+                            <button class="float-right btn btn-warning dropdown-toggle mb-1 text-dark" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <i class="fas fa-upload"></i> Cast Votes
                             </button>
                             <div class="dropdown-menu p-1" aria-labelledby="dropdownMenuButton btn-sm">
