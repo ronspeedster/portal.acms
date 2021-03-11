@@ -94,7 +94,7 @@
                                             </div>
                                         </td>
                                         <td>
-                                            <?php echo $newCandidate['first_name'].' '.$newCandidate['last_name']; ?>
+                                            <?php echo strtoupper($newCandidate['first_name'].' '.$newCandidate['last_name']); ?>
                                         </td>
                                     </tr>
                                  <?php
