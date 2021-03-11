@@ -37,7 +37,7 @@
 
             <div class="col-md-8" style="/* width: 70%;height:500px;background-color:green; */">
               <!-- Feed Container -->
-              <div class="card shadow row mb-2" style="/*height:150px ; background-color: red;*/">
+              <div class="card shadow row mb-2" style="/*height:150px ; background-color: red;*/ display: none;">
                 <div class="card shadow">
                   <div class="card-header" style="background-color: #1b5b3a;  ">
                     <h6 class="m-0 font-weight-bold" style="color: white;">ACMS Local Elections</h6>
