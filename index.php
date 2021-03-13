@@ -37,7 +37,7 @@
 
             <div class="col-md-8" style="/* width: 70%;height:500px;background-color:green; */">
               <!-- Feed Container -->
-              <div class="card shadow row mb-2" style="/*height:150px ; background-color: red;*/ display: none;">
+              <div class="card shadow row mb-2" style="/*height:150px ; background-color: red; display: none;*/">
                 <div class="card shadow">
                   <div class="card-header" style="background-color: #1b5b3a;  ">
                     <h6 class="m-0 font-weight-bold" style="color: white;">ACMS Local Elections</h6>
@@ -106,7 +106,7 @@
                              <br>
                             <?php if($_SESSION['is_update']==1){ ?>
                             <!-- Start Drop down Delete here -->
-                            <button class="float-right btn btn-warning dropdown-toggle mb-1 text-dark" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" disabled>
+                            <button class="float-right btn btn-warning dropdown-toggle mb-1 text-dark" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <i class="fas fa-upload"></i> Cast Votes
                             </button>
                             <div class="dropdown-menu p-1" aria-labelledby="dropdownMenuButton btn-sm">
