@@ -43,6 +43,9 @@
                     <h6 class="m-0 font-weight-bold" style="color: white;">ACMS Local Elections</h6>
                   </div>                   
                  <div class="card-body">
+                     <div style="text-align: center;">
+                         ACMS Local Elections 2021 is now close. Thank you
+                     </div>
                      <!-- Election Day 2021 Form Here -->
                      <?php
                         $user_id = $_SESSION['user_id'];
@@ -55,10 +58,10 @@
                      <?php if($voteRecord>=1){
                          $getYourVotes = mysqli_query($mysqli, "SELECT * FROM tally t JOIN candidates c ON c.id = t.candidate_id WHERE t.voter_id = '$user_id' ");
                          ?>
-                        <div style="text-align: center;">
+                        <div style="text-align: center;" style="display: none;">
                             Your vote has been uploaded. Here is the summary of your ballot.
                         </div>
-                         <table class="table">
+                         <table class="table" style="display: none;">
                              <thead>
                                 <th style="text-align: center;">Candidate's Name</th>
                              </thead>
@@ -75,9 +78,9 @@
 
                      <?php }
                      else {?>
-                         <div style="text-align: center;">
-                             ACMS Local Elections 2021 is now close. Thank you
-                         </div>
+<!--                         <div style="text-align: center;">-->
+<!--                             ACMS Local Elections 2021 is now close. Thank you-->
+<!--                         </div>-->
                      <?php } ?>
                      <!-- End Get Summary of Votes-->
                      <form method="post" action="process_election.php" style="<?php if($voteRecord>=1){echo 'display: none;';} ?> display: none;" >

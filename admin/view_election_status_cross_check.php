@@ -93,7 +93,7 @@ $getElectionLiquidation = mysqli_query($mysqli, "SELECT u.first_name AS v_first_
         <script>
             $(document).ready(function() {
                 $('#liquidationTable').DataTable( {
-                    "pageLength": 500,
+                    "pageLength": -1,
                     "order": [[ 2, "desc" ]],
                     "lengthMenu": [[50, 100, 500, -1], [50, 100, 500, "All"]]
                 } );
