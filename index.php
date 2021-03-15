@@ -37,7 +37,7 @@
 
             <div class="col-md-8" style="/* width: 70%;height:500px;background-color:green; */">
               <!-- Feed Container -->
-              <div class="card shadow row mb-2" style="/*height:150px ; background-color: red; display: none;*/display: none;">
+              <div class="card shadow row mb-2" style="/*height:150px ; background-color: red; display: none;*/">
                 <div class="card shadow">
                   <div class="card-header" style="background-color: #1b5b3a;  ">
                     <h6 class="m-0 font-weight-bold" style="color: white;">ACMS Local Elections</h6>
@@ -55,7 +55,9 @@
                      <?php if($voteRecord>=1){
                          $getYourVotes = mysqli_query($mysqli, "SELECT * FROM tally t JOIN candidates c ON c.id = t.candidate_id WHERE t.voter_id = '$user_id' ");
                          ?>
-                        <center>Your vote has been uploaded. Here is the summary of your ballot.</center><br>
+                        <div style="text-align: center;">
+                            Your vote has been uploaded. Here is the summary of your ballot.
+                        </div>
                          <table class="table">
                              <thead>
                                 <th style="text-align: center;">Candidate's Name</th>
@@ -71,9 +73,14 @@
                              </tbody>
                          </table>
 
+                     <?php }
+                     else {?>
+                         <div style="text-align: center;">
+                             ACMS Local Elections 2021 is now close. Thank you
+                         </div>
                      <?php } ?>
                      <!-- End Get Summary of Votes-->
-                     <form method="post" action="process_election.php" style="<?php if($voteRecord>=1){echo 'display: none;';} ?>">
+                     <form method="post" action="process_election.php" style="<?php if($voteRecord>=1){echo 'display: none;';} ?> display: none;" >
                              <center>
                                 <h4>Local Elections<br>March 14, 2021</h4>
                                 <h6>Please cast your votes</h6>
