@@ -15,7 +15,7 @@ $getElectionLiquidation = mysqli_query($mysqli, "SELECT u.first_name AS v_first_
                                                         JOIN candidates c
                                                         ON c.id = t.candidate_id");
 ?>
-<title>Add Users / Doctors</title>
+<title>View Voters Liquidation</title>
 <!-- Content Wrapper -->
 <div id="content-wrapper" class="d-flex flex-column">
 
