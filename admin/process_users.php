@@ -85,7 +85,16 @@
         header("location: manage_users.php");
     }
 
+    //Delete User
+    if(isset($_GET['delete'])){
+        $id = $_GET['delete'];
+        mysqli_query($mysqli, "DELETE FROM users WHERE id = '$id' ");
 
+        $_SESSION['message'] = "User has been deleted!";
+        $_SESSION['msg_type'] = "danger";
+
+        header("location: manage_users.php");
+    }
     // Get user information when the URI is in edit mode
     if(isset($_GET['edit'])){
         $isEdit = true;
