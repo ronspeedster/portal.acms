@@ -2,27 +2,49 @@
 	include('dbh.php');
 	
 	if(isset($_POST['register'])){
-		$fname = ucfirst($_POST['fname']);
-		$lname = ucfirst($_POST['lname']);
-		$email = strtolower($_POST['email']);
-		$password1 = $_POST['password1'];
-		$password2 = $_POST['password2'];
+
+		$errors = 0;
+
+		$firstName        = strtoupper($_POST['firstName']);
+		$middleName       = strtoupper($_POST['middleName']);
+		$lastName         = strtoupper($_POST['lastName']);
+		$birthDate        = $_POST['birthDate'];
+		$mailingAddress   = $_POST['mailingAddress'];
+		$contactNumber    = $_POST['contactNumber'];
+		$email            = $_POST['email'];
+		$pmaNumber        = $_POST['pmaNumber'];
+		$prcNumber        = $_POST['prcNumber'];
+		$expirationDate   = $_POST['expirationDate'];
+		$field            = $_POST['field'];
+		$username         = $_POST['username'];
+		$password         = $_POST['password'];
+		$confirm_password = $_POST['confirm_password'];
 
 		$checkUser = $mysqli->query("SELECT * FROM users WHERE email='$email' ");
-		if(mysqli_num_rows($checkUser)>0){
-			$_SESSION['registerError'] = "Email already taken. Please try another.";
-			header("location: register.php?fname=".$fname."&lname=".$lname);
-		}
-		else if($password1!=$password2){
-			$_SESSION['registerError'] = "Password not match. Please try again.";
-			header("location: register.php?fname=".$fname."&lname=".$lname."&email=".$email);
-		}
-		else{
-			$mysqli->query(" INSERT INTO users ( firstname, lastname, email, password) VALUES('$fname','$lname','$email','$password1') ") or die ($mysqli->error());
 
-			$_SESSION['loginError'] = "User Account Creation Successful!";
-			header("location: login.php");
+		if(mysqli_num_rows($checkUser)>0)
+		{
+			$_SESSION['errors']['email'] = "Email already taken. Please try another.";
+			$errors++; 
 		}
+
+		if($password != $confirm_password)
+		{
+			$_SESSION['errors']['password'] = "Passwords do not match. Please try again.";
+			$errors++; 
+		}
+		
+		if($errors > 0)
+		{
+			$urlString	=	"firstName={$firstName}&email={$email}&lastName={$lastName}&middleName={$middleName}&birthDate={$birthDate}&mailingAddress={$mailingAddress}&contactNumber={$contactNumber}&email={$email}&pmaNumber={$pmaNumber}&prcNumber={$prcNumber}&expirationDate={$expirationDate}&field={$field}&username={$username}";
+			header("location: register.php?{$urlString}");
+		}
+
+		$mysqli->query(" INSERT INTO users ( firstname, lastname, email, password) VALUES('$fname','$lname','$email','$password1') ") or die ($mysqli->error);
+
+		$_SESSION['loginError'] = "User Account Creation Successful!";
+		header("location: login.php");
+		
 	}
 
 	// Login Details for users
