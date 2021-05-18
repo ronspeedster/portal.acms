@@ -1,49 +1,59 @@
 <?php
 	include('dbh.php');
+	include('check_registration_errors.php');
 	
 	if(isset($_POST['register'])){
 
-		$errors = 0;
+		$firstName        = trim(strtoupper($_POST['firstName']));
+		$middleName       = trim(strtoupper($_POST['middleName']));
+		$lastName         = trim(strtoupper($_POST['lastName']));
+		$birthDate        = trim($_POST['birthDate']);
+		$mailingAddress   = trim(strtoupper($_POST['mailingAddress']));
+		$contactNumber    = trim($_POST['contactNumber']);
+		$email            = trim($_POST['email']);
+		$pmaNumber        = trim($_POST['pmaNumber']);
+		$prcNumber        = trim($_POST['prcNumber']);
+		$expirationDate   = trim($_POST['expirationDate']);
+		$field            = trim(strtoupper($_POST['field']));
+		$username         = trim($_POST['username']);
+		$password         = trim($_POST['password']);
+		$confirm_password = trim($_POST['confirm_password']);
 
-		$firstName        = strtoupper($_POST['firstName']);
-		$middleName       = strtoupper($_POST['middleName']);
-		$lastName         = strtoupper($_POST['lastName']);
-		$birthDate        = $_POST['birthDate'];
-		$mailingAddress   = $_POST['mailingAddress'];
-		$contactNumber    = $_POST['contactNumber'];
-		$email            = $_POST['email'];
-		$pmaNumber        = $_POST['pmaNumber'];
-		$prcNumber        = $_POST['prcNumber'];
-		$expirationDate   = $_POST['expirationDate'];
-		$field            = $_POST['field'];
-		$username         = $_POST['username'];
-		$password         = $_POST['password'];
-		$confirm_password = $_POST['confirm_password'];
-
-		$checkUser = $mysqli->query("SELECT * FROM users WHERE email='$email' ");
-
-		if(mysqli_num_rows($checkUser)>0)
-		{
-			$_SESSION['errors']['email'] = "Email already taken. Please try another.";
-			$errors++; 
-		}
-
-		if($password != $confirm_password)
-		{
-			$_SESSION['errors']['password'] = "Passwords do not match. Please try again.";
-			$errors++; 
-		}
-		
+		$checkUser 		  = $mysqli->query("SELECT * FROM users WHERE email='$email' ");
+	
+		$errors 		  = checkRegistrationErrors(
+								[
+									"checkUser"		   => $checkUser, 
+									"firstName"        => $firstName,
+									"middleName"       => $middleName,
+									"lastName"         => $lastName,
+									"birthDate"        => $birthDate,
+									"mailingAddress"   => $mailingAddress,
+									"contactNumber"    => $contactNumber,
+									"email"            => $email,
+									"pmaNumber"        => $pmaNumber,
+									"prcNumber"        => $prcNumber,
+									"expirationDate"   => $expirationDate,
+									"field"            => $field,
+									"username"         => $username,
+									"password"         => $password,
+									"confirm_password" => $confirm_password,
+								]
+							);
+				
 		if($errors > 0)
 		{
 			$urlString	=	"firstName={$firstName}&email={$email}&lastName={$lastName}&middleName={$middleName}&birthDate={$birthDate}&mailingAddress={$mailingAddress}&contactNumber={$contactNumber}&email={$email}&pmaNumber={$pmaNumber}&prcNumber={$prcNumber}&expirationDate={$expirationDate}&field={$field}&username={$username}";
 			header("location: register.php?{$urlString}");
 		}
+		else 
+		{
+			$mysqli->query("INSERT INTO users ( first_name, middle_name, last_name, mailing_address, contact_num, email, birthday, pma_number, prc_number, expiration_date, field_of_practice, username, password, level_access) VALUES('$firstName','$middleName','$lastName','$mailingAddress', '$contactNumber', '$email', '$birthDate', '$pmaNumber', '$prcNumber', '$expirationDate', '$field', '$username', '$password', 'temporary') ") or die ($mysqli->error);
+	
+			$_SESSION['loginError'] = "User Account Creation Successful!";
+			header("location: login.php");
+		}
 
-		$mysqli->query(" INSERT INTO users ( firstname, lastname, email, password) VALUES('$fname','$lname','$email','$password1') ") or die ($mysqli->error);
-
-		$_SESSION['loginError'] = "User Account Creation Successful!";
-		header("location: login.php");
 		
 	}
 

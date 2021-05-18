@@ -42,12 +42,12 @@
       <div class="col-md-12">
         <!-- Alert Here -->
         <?php if(isset($_SESSION['errors'])): ?> 
-          <div class="alert alert-danger alert-dismissible">
-            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-            <?php foreach($_SESSION["errors"] as $key => $value): ?>  
-              <?=$value?> 
+          <?php foreach($_SESSION["errors"] as $key => $value): ?>  
+            <div class="alert alert-danger alert-dismissible">
+              <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                <?=$value?> 
+            </div>
             <?php endforeach ?> 
-          </div>
           <?php unset($_SESSION['errors']); ?> 
         <?php endif ?> 
         <!-- End Alert Here -->
@@ -171,9 +171,11 @@
                   </button>
               </form>
               <hr>
+              <!--
               <div class="text-center my-1">
                 <a class="small" href="forgot-password.php">Forgot Password?</a>
               </div>
+              -->
               <div class="text-center my-1 pb-3">
                 <a class="small" href="login.php">Already have an account? Login!</a>
               </div>
