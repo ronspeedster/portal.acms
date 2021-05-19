@@ -14,19 +14,15 @@
       <div id="content">
 
 <?php require('topbar.php'); ?>
-
         <!-- Begin Page Content -->
         <div class="container-fluid">
-        <?php
-        if(isset($_SESSION['message'])){?>
-          <div class="alert alert-<?=$_SESSION['msg_type']?> alert-dismissible">
+        <?php if(isset($_SESSION['message'])): ?> 
+            <div class="alert alert-<?=$_SESSION['msg_type']?> alert-dismissible">
             <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-            <?php
-            echo $_SESSION['message'];
-            unset($_SESSION['message']);
-            ?>
-          </div>
-          <?php } ?>
+                <?=$_SESSION['message']?> 
+                <?php unset($_SESSION['message']);?>
+            </div>
+        <?php endif ?> 
           <!-- Page Heading -->
           <div class="d-sm-flex align-items-center justify-content-between mb-4">
             <h1 class="h3 mb-0 text-gray-800">Dashboard</h1>
