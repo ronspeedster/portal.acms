@@ -25,7 +25,7 @@
                             My Payments                        
                         </div>
                         <div class="card-body">
-                            <table class="table">
+                            <table id="table_payments" class="table">
                                 <thead>
                                     <tr>
                                         <th>#</th>
@@ -64,18 +64,11 @@
 
 <script>
     $(document).ready(function() {
-   /*      
-        $('#candidateTable').DataTable( {
-            "pageLength": 50,
-            "order": [[ 1, "asc" ]]
-        } );
-
-        $("input:checkbox").click(function() {
-            var bol = $("input:checkbox:checked").length >= 16;
-            $("input:checkbox").not(":checked").attr("disabled",bol);
-        }); 
-    */
+        $('#table_payments').DataTable(
+            {
+                "pageLength": 50,
+                "order": [[ 1, "asc" ]]
+            }
+        ); 
     } );
-
-
 </script>

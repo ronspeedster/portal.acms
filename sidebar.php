@@ -48,8 +48,8 @@ a:visited {
 .page-item.active .page-link {
   z-index: 1;
   color: #fff;
-  background-color: #0f1e5d !important;
-  border-color: #0f1e5d !important;
+  background-color: #1b5b3a  !important;
+  border-color: #1b5b3a  !important;
 }
 .container-fluid{
   background-color: white;
