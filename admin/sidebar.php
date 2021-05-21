@@ -125,7 +125,8 @@ a:visited {
         <div id="payments" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
           <div class="bg-white py-2 collapse-inner rounded">
             <h6 class="collapse-header">Manage Payments</h6>
-            <a class="collapse-item" href="payment_list.php"><i class="fas fa-plus"></i> Payment List</a>
+            <a class="collapse-item" href="payment_list.php"><i class="fas fa-eye"></i> Payment List</a>
+            <a class="collapse-item" href="payment_archives.php"><i class="fas fa-eye"></i> Payment Archives</a>
             <a class="collapse-item" href="#"><i class="fas fa-eye"></i> Check User Payments </a>
           </div>
         </div>

@@ -6,60 +6,57 @@ $currentDate = date('Y-m-d H:i:s');
 
 function check_errors($data) 
 {
-    $errors     =   0; 
+    global $mysqli; 
 
-    /*
-    if(isset($_POST['update_payment']))
+    $errors     =   0; 
+    
+    if(empty($data['user_id']))
     {
-        if(empty($data['id']))
+        $_SESSION['errors']['user']     =   "User is required"; 
+        $errors++; 
+    }
+
+    if(empty($data['payment_id']))
+    {
+        $_SESSION['errors']['payment']  =   "Payment is required"; 
+        $errors++; 
+    }
+
+    // ! Check if user and payment combination exists 
+    if($errors == 0)
+    {
+        $statement  =   $mysqli->prepare("SELECT * FROM user_payments WHERE user_id=? AND payment_id=?"); 
+        $statement->bind_param('ii', $data['user_id'], $data['payment_id']);
+        $statement->execute(); 
+    
+        $result     =   $statement->get_result();
+                
+        if(mysqli_num_rows($result) >= 1)
         {
-            $_SESSION['errors']['id']    = 'ID is required'; 
+            $_SESSION['errors']['exists']  =   "User is already assigned to this payment"; 
             $errors++; 
         }
     }
-
-    if(empty($data['title']))
-    {
-        $_SESSION['errors']['title']    = 'Title is required'; 
-        $errors++; 
-    }
-
-    if(empty($data['category']))
-    {
-        $_SESSION['errors']['category'] = 'Category is required'; 
-        $errors++; 
-    }
-
-    if(empty($data['amount']))
-    {
-        $_SESSION['errors']['amount']   = 'Amount is required'; 
-        $errors++; 
-    }
-    else if(!is_numeric($data['amount']))
-    {
-        $_SESSION['errors']['amount']   = 'Amount is should be a number'; 
-        $errors++; 
-    } 
-
+        
     return $errors; 
-    */
 }
 
 //Assign Payment to user 
 if(isset($_POST['assign_user_payment']))
 {
-     $user_id    =   $_POST['user_id'];  
+    $user_id    =   $_POST['user'];  
     $payment_id =   $_POST['payment_id'];
+    $errors     =   check_errors(compact('user_id', 'payment_id')); 
 
-    echo $user_id;
-    echo $payment_id;
+    // ! Insert to user_payments Table 
+    if($errors == 0)
+    {
+        $statement  =   $mysqli->prepare("INSERT INTO user_payments (user_id, payment_id) VALUES(?, ?)") or die($mysqli->error); 
+        $statement->bind_param('ii', $user_id, $payment_id);
+        $statement->execute();
 
-    $statement  =   $mysqli->prepare("INSERT INTO user_payments (user_id, payment_id) VALUES(?, ?)") or die($mysqli->error); 
-    $statement->bind_param('ii', $user_id, $payment_id);
-    $statement->execute();
-
-    echo "test";
-
-    //header("location : payment_view.php"); 
-
+        $_SESSION['message'] = "User successfully assigned to this payment";
+    }
+    
+    header("location: payment_view.php?payment_id={$payment_id}"); 
 }

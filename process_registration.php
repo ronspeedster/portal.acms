@@ -22,23 +22,23 @@
 		$checkUser 		  = $mysqli->query("SELECT * FROM users WHERE email='$email' ");
 	
 		$errors 		  = checkRegistrationErrors(
-								[
-									"checkUser"		   => $checkUser, 
-									"firstName"        => $firstName,
-									"middleName"       => $middleName,
-									"lastName"         => $lastName,
-									"birthDate"        => $birthDate,
-									"mailingAddress"   => $mailingAddress,
-									"contactNumber"    => $contactNumber,
-									"email"            => $email,
-									"pmaNumber"        => $pmaNumber,
-									"prcNumber"        => $prcNumber,
-									"expirationDate"   => $expirationDate,
-									"field"            => $field,
-									"username"         => $username,
-									"password"         => $password,
-									"confirm_password" => $confirm_password,
-								]
+								compact(
+									"checkUser",		   
+									"firstName",       
+									"middleName",      
+									"lastName",       
+									"birthDate",       
+									"mailingAddress",
+									"contactNumber",
+									"email",       
+									"pmaNumber",       
+									"prcNumber",      
+									"expirationDate",
+									"field",       
+									"username",       
+									"password",       
+									"confirm_password",
+								)
 							);
 				
 		if($errors > 0)
@@ -49,12 +49,45 @@
 		else 
 		{
 
-			//! Todo: Add auto assigned Payments to Usesrs 
-
-			//! Todo: Transition to Prepared Statements
+			
+			// Todo: Transition to Prepared Statements
 			$default_access = "temporary"; 
-			$mysqli->query("INSERT INTO users ( first_name, middle_name, last_name, mailing_address, contact_num, email, birthday, pma_number, prc_number, expiration_date, field_of_practice, username, password, level_access) VALUES('$firstName','$middleName','$lastName','$mailingAddress', '$contactNumber', '$email', '$birthDate', '$pmaNumber', '$prcNumber', '$expirationDate', '$field', '$username', '$password', '$default_access') ") or die ($mysqli->error);
+			$statement 	=	$mysqli->prepare("INSERT INTO users( 
+												first_name, 
+												middle_name, 
+												last_name, 
+												mailing_address, 
+												contact_num, 
+												email, 
+												birthday, 
+												pma_number, 
+												prc_number, 
+												expiration_date, 
+												field_of_practice, 
+												username, 
+												password, 
+												level_access) VALUES() ") or die ($mysqli->error);
 	
+			$statement->bind_param('ssssssssssssss', 
+			$firstName, 
+									$middleName, 
+									$lastName, 
+									$mailingAddress, 
+									$contactNumber, 
+									$email, 
+									$birthDate, 
+									$pmaNumber, 
+									$prcNumber, 
+									$expirationDate, 
+									$field, 
+									$username, 
+									$password, 
+									$default_access);
+									
+									$statement->execute(); 
+									
+			// Todo: Add auto assigned Payments to Users 
+
 			$_SESSION['loginError'] = "User Account Creation Successful!";
 			header("location: login.php");
 		}

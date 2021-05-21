@@ -45,7 +45,7 @@ function check_errors($data)
 }
 
 
-//Payment Creation 
+//! Payment Creation 
 if(isset($_POST['create_payment']))
 {
     $title      =   trim(strtoupper($_POST['title'])); 
@@ -71,7 +71,7 @@ if(isset($_POST['create_payment']))
     } 
 }
 
-//Payment Update
+//! Payment Update
 if(isset($_POST['update_payment']))
 {
     $id         =   $_GET['id'] ?? null; 
@@ -106,7 +106,7 @@ if(isset($_POST['update_payment']))
     } 
 }
 
-//Payment Archive 
+//! Payment Archive 
 if(isset($_POST['archive_payment']))
 {
     $password   =   $_POST['password'];
@@ -116,10 +116,12 @@ if(isset($_POST['archive_payment']))
     {
         // ! Perform Query Here; 
         $statement = $mysqli->prepare("UPDATE payments SET 
+                                        auto_assign=?,
                                         deleted_at=? 
                                         WHERE id=?") or die ($mysqli->error);
 
-        $statement->bind_param('si', $currentDate, $id); 
+        $auto_assign    =   false; 
+        $statement->bind_param('isi', $auto_assign, $currentDate, $id); 
         $statement->execute(); 
 
         $_SESSION['message']  =   "Payment successfully archived, see archived list"; 
@@ -131,3 +133,81 @@ if(isset($_POST['archive_payment']))
         header("location: payment_view.php?payment_id={$id}");
     }
 }
+
+//! Payment Restore 
+if(isset($_POST['restore_payment']))
+{    
+    $id         =   $_GET['payment_id']; 
+    $errors     =   0; 
+    
+    if(empty($id))
+    {
+        $_SESSION['errors'] = "Payment Id is required"; 
+        $errors++;
+    }
+
+    if($errors == 0)
+    {
+        $statement = $mysqli->prepare("UPDATE payments SET 
+                                        deleted_at=? 
+                                        WHERE id=?") or die ($mysqli->error);
+
+        $deleted_at    =   null; 
+        $statement->bind_param('ii', $deleted_at, $id); 
+        $statement->execute(); 
+
+        $_SESSION['message'] = "Payment Restored, See Payment List"; 
+    }
+    else 
+    {
+        $_SESSION['errors']['restore'] = "Something went wrong! Payment cannot be restored"; 
+    }
+
+    header("location: payment_archives.php");
+}
+
+//! Payment Delete 
+if(isset($_POST['delete_payment']))
+{
+    $id         =   $_GET['payment_id']; 
+    $errors     =   0; 
+    
+    if(empty($id))
+    {
+        $_SESSION['errors'] = "Payment Id is required"; 
+        $errors++;
+    }
+
+    if($errors == 0)
+    {
+        $statement = $mysqli->prepare("SELECT * FROM user_payments WHERE payment_id=?") or die ($mysqli->error);
+
+        $statement->bind_param('i', $id); 
+        $statement->execute(); 
+
+        $result     =   $statement->get_result();
+        $rows       =   mysqli_num_rows($result);  
+
+        if($rows >= 1)
+        {
+            $_SESSION['errors']['delete'] = "Payment cannot be deleted. There are currently {$rows} users assigned."; 
+        }
+        else 
+        {
+            $statement = $mysqli->prepare("DELETE FROM user_payments WHERE payment_id=?") or die ($mysqli->error);
+
+            $statement->bind_param('i', $id); 
+            $statement->execute(); 
+
+            $statement = $mysqli->prepare("DELETE FROM payments WHERE id=?") or die ($mysqli->error);
+
+            $statement->bind_param('i', $id); 
+            $statement->execute(); 
+    
+            $_SESSION['errors']['delete'] = "Payment successfully deleted"; 
+        }
+    }
+
+    header("location: payment_archives.php");
+}
+

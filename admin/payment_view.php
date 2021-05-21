@@ -5,12 +5,13 @@
     }
 
     include('sidebar.php');
+
+    $payment            =  mysqli_fetch_assoc($mysqli->query("SELECT * FROM payments WHERE id={$_GET['payment_id']}"));
        
     $protocol           = ((!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off') || $_SERVER['SERVER_PORT'] == 443) ? "https://" : "http://";
     $getURI             = $protocol . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
     $_SESSION['getURI'] = $getURI;
 
-    $payment            =  mysqli_fetch_assoc($mysqli->query("SELECT * FROM payments WHERE id={$_GET['payment_id']}"));
     $users              =  ($mysqli->query("SELECT * FROM users WHERE level_access!='admin'"));
  
     $payment_status     = ["AWAITING VERIFICATION", "PENDING", "VERIFIED"];
@@ -127,7 +128,10 @@
               </div>
 
               <?php 
-                
+                $statement = $mysqli->prepare("SELECT * FROM user_payments JOIN users ON users.id=user_payments.user_id WHERE payment_id=?");
+                $statement->bind_param('i', $payment['id']); 
+                $statement->execute(); 
+                $user_payments = $statement->get_result(); 
               ?> 
               <div class="row my-2">
                 <div class="col-md-12">
@@ -142,35 +146,38 @@
                             <tr>
                               <th>#</th>
                               <th>FULL NAME</th>
-                              <th>EMAIL</th>
                               <th>STATUS</th>
                               <th></th>
                             </tr>
                           </thead>
                           <tbody>
-                              <tr>
-                                <td>
-                                1
-                                </td>
-                                <td>
-                                JOHN DOE, JUSTIN
-                                </td>
-                                <td>
-                                johndoe@gmail.com
-                                </td>
-                                <td>
-                                AWAITING VERIFICATION
-                                </td>
-                                <td>
-                                  <a href="#" class="btn btn-sm bg-gradient-primary text-white">
-                                    <i class='fas fa-eye mr-2'></i>View
-                                  </a>
-                                </td>
-                              </tr>
+                            <?php $i=1; ?> 
+                            <?php foreach($user_payments as $user_payment):?> 
+                            <tr>
+                              <td>
+                                <?=$i?> 
+                              </td>
+                              <td>
+                                <?php 
+                                  $fullname = strtoupper($user_payment['last_name']) . ', ' . strtoupper($user_payment['first_name']) . ' ' . strtoupper($user_payment['middle_name']);
+                                ?> 
+                                <?=$fullname?>
+                              </td>
+                              <td>
+                                <?=$user_payment['status']?>
+                              </td>
+                              <td>
+                                <a href="view_user_payment.php?user_payment_id=<?=$user_payment['id']?>" class="btn btn-sm bg-gradient-primary text-white">
+                                  <i class='fas fa-eye mr-2'></i>View
+                                </a>
+                              </td>
+                            </tr>
+                            <?php $i++; ?>
+                            <?php endforeach ?>
                           </tbody>
                           <tfoot>
                             <tr>
-                              <td colspan='4'></td>
+                              <td colspan='3'></td>
                               <td>
                                 <button class="btn btn-sm bg-gradient-primary text-white" data-toggle="modal" data-target="#modal_add_user_payment">
                                   <i class='fas fa-plus mr-2'></i>Add
@@ -217,7 +224,7 @@
                   </div>
                   <div class="col-md-6">
                     <label for="amount">Amount</label>
-                    <input type="number" class="form-control" name="amount" placeholder="Amount" step="0.01" id="amount"  value="<?=number_format($payment['amount'], 2)?>" required>
+                    <input type="number" class="form-control" name="amount" placeholder="Amount" step="0.01" id="amount"  value="<?=$payment['amount']?>" required>
                   </div>
                 </div>
                 <div class="row my-3">
@@ -238,7 +245,7 @@
         </div>
       </div>
       <!-- End Payment Edit Modal-->
-       <!-- Payment Archive Modal-->
+      <!-- Payment Archive Modal-->
       <div class="modal fade" id="modal_archive_payment" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
           <div class="modal-content">
@@ -286,7 +293,7 @@
                       <?php foreach($users as $user): ?> 
                       <option value="<?=$user['id']?>">
                         <?php 
-                          $fullname = strtoupper($user['last_name']) . ' ' . strtoupper($user['first_name']) . ' ' . strtoupper($user['middle_name']);
+                          $fullname = strtoupper($user['last_name']) . ', ' . strtoupper($user['first_name']) . ' ' . strtoupper($user['middle_name']);
                         ?>
                         <?=$fullname?> 
                       </option>
