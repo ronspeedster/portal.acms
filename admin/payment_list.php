@@ -6,7 +6,7 @@
     $getURI = $protocol . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
     $_SESSION['getURI'] = $getURI;
 
-    $payments   =   $mysqli->query("SELECT * FROM payments");
+    $payments   =   $mysqli->query("SELECT * FROM payments WHERE deleted_at is null");
 ?>
 <title>Payment List</title>
     <!-- Content Wrapper -->

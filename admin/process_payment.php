@@ -1,5 +1,6 @@
 <?php 
 require_once('dbh.php'); 
+require_once('authenticate_user.php');
 
 $currentDate = date_default_timezone_set('Asia/Manila');
 $currentDate = date('Y-m-d H:i:s');
@@ -103,4 +104,30 @@ if(isset($_POST['update_payment']))
         $_SESSION['message'] = "Payment Successfully Updated"; 
         header("location: payment_view.php?payment_id={$id}");
     } 
+}
+
+//Payment Archive 
+if(isset($_POST['archive_payment']))
+{
+    $password   =   $_POST['password'];
+    $id         =   $_GET['id'] ?? null; 
+
+    if(authenticate_user(compact('password')))
+    {
+        // ! Perform Query Here; 
+        $statement = $mysqli->prepare("UPDATE payments SET 
+                                        deleted_at=? 
+                                        WHERE id=?") or die ($mysqli->error);
+
+        $statement->bind_param('si', $currentDate, $id); 
+        $statement->execute(); 
+
+        $_SESSION['message']  =   "Payment successfully archived, see archived list"; 
+        header("location: payment_list.php");
+    }
+    else 
+    {
+        $_SESSION['errors']['auth'] = "User Authentication Failed"; 
+        header("location: payment_view.php?payment_id={$id}");
+    }
 }

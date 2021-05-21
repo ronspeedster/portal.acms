@@ -84,6 +84,9 @@
                           </table>
                         </div>
                         <div class="card-footer bg-white text-right">
+                          <button class="btn btn-sm btn-danger  text-white" data-toggle="modal" data-target="#modal_archive_payment">
+                            Archive
+                          </button>
                           <button class="btn btn-sm bg-gradient-primary text-white" data-toggle="modal" data-target="#modal_edit_payment">
                             Edit
                           </button>
@@ -147,16 +150,16 @@
                           <tbody>
                               <tr>
                                 <td>
-                                d
+                                1
                                 </td>
                                 <td>
-                                d
+                                JOHN DOE, JUSTIN
                                 </td>
                                 <td>
-                                d
+                                johndoe@gmail.com
                                 </td>
                                 <td>
-                                d
+                                AWAITING VERIFICATION
                                 </td>
                                 <td>
                                   <a href="#" class="btn btn-sm bg-gradient-primary text-white">
@@ -214,7 +217,7 @@
                   </div>
                   <div class="col-md-6">
                     <label for="amount">Amount</label>
-                    <input type="number" class="form-control" name="amount" placeholder="Amount" step="0.01" id="amount"  value="<?=$payment['amount']?>" required>
+                    <input type="number" class="form-control" name="amount" placeholder="Amount" step="0.01" id="amount"  value="<?=number_format($payment['amount'], 2)?>" required>
                   </div>
                 </div>
                 <div class="row my-3">
@@ -235,6 +238,34 @@
         </div>
       </div>
       <!-- End Payment Edit Modal-->
+       <!-- Payment Archive Modal-->
+      <div class="modal fade" id="modal_archive_payment" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLabel">Archive Payment</h5>
+              <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">×</span>
+              </button>
+            </div>
+            <form action="process_payment.php?id=<?=$payment['id']?>" method="POST">
+              <div class="modal-body">
+                <div class="row mt-2 mb-3">
+                  <div class="col-md-12">
+                    <label for="title">Please Enter your password to continue:</label>
+                    <input type="password" class="form-control" name="password" placeholder="Password" id="password" required>
+                  </div>
+                </div>
+              </div>
+              <div class="modal-footer">
+                <button class="btn btn-secondary btn-sm" type="button" data-dismiss="modal">Cancel</button>
+                <button type="submit" class="btn btn-danger btn-sm text-white" name="archive_payment">Archive</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+      <!-- End Payment Edit Modal-->
       <!-- Add User Modal-->
       <div class="modal fade" id="modal_add_user_payment" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
@@ -245,10 +276,10 @@
                 <span aria-hidden="true">×</span>
               </button>
             </div>
-            <form action="process_add_user_payment.php" method="POST">
+            <form action="process_user_payment.php" method="POST">
               <div class="modal-body">
                 <div class="row mt-2 mb-3">
-                  <input type="hidden" class="form-control" name="id" placeholder="Title" id="title" value="<?=$payment['id']?>">
+                  <input type="hidden" class="form-control" name="payment_id" value="<?=$payment['id']?>">
                   <div class="col-md-12">
                     <label for="users">Users</label>
                     <select class="custom-select" name="user" id="users">
@@ -266,7 +297,7 @@
               </div>
               <div class="modal-footer">
                 <button class="btn btn-secondary btn-sm" type="button" data-dismiss="modal">Cancel</button>
-                <button class="btn bg-gradient-primary btn-sm text-white" name="add_user_payment">Assign</button>
+                <button class="btn bg-gradient-primary btn-sm text-white" name="assign_user_payment">Assign</button>
               </div>
             </form>
           </div>
