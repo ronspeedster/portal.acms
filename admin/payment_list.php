@@ -120,7 +120,7 @@
                 <span aria-hidden="true">×</span>
               </button>
             </div>
-            <form action="process_create_payment.php" method="POST">
+            <form action="process_payment.php" method="POST">
               <div class="modal-body">
                 <div class="row mt-2 mb-3">
                   <div class="col-md-12">

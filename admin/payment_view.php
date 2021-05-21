@@ -27,12 +27,23 @@
         <!-- Begin Page Content -->
         <div class="container-fluid">
         <?php if(isset($_SESSION['message'])): ?> 
-            <div class="alert alert-<?=$_SESSION['msg_type']?> alert-dismissible">
+            <div class="alert alert-success alert-dismissible">
             <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
                 <?=$_SESSION['message']?> 
                 <?php unset($_SESSION['message']);?>
             </div>
         <?php endif ?> 
+        <!-- Alert Here -->
+        <?php if(isset($_SESSION['errors'])): ?> 
+          <?php foreach($_SESSION["errors"] as $key => $value): ?>  
+            <div class="alert alert-danger alert-dismissible">
+              <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                <?=$value?> 
+            </div>
+            <?php endforeach ?> 
+          <?php unset($_SESSION['errors']); ?> 
+        <?php endif ?> 
+        <!-- End Alert Here -->
           <!-- Page Heading -->
           <div class="d-sm-flex align-items-center justify-content-between mb-4">
             <h1 class="h3 mb-0 text-gray-800">Payment Summary</h1>
@@ -51,7 +62,7 @@
                             <tbody>
                             <?php foreach($payment_fields as $field): ?> 
                             <tr class='text-center'>
-                              <td>
+                              <td class="font-weight-bold">
                                 <?php if($field == "auto_assign"): ?> 
                                   Auto Assign to New Members?
                                 <?php else: ?> 
@@ -61,6 +72,8 @@
                               <td>
                                 <?php if($field == "auto_assign"): ?> 
                                   <?=$payment['auto_assign'] == 1 ? "YES": "NO"?> 
+                                <?php elseif($field == "amount"): ?> 
+                                  <?=number_format($payment['amount'], 2)?> 
                                 <?php else: ?> 
                                   <?=$payment[$field]?> 
                                 <?php endif ?> 
@@ -94,7 +107,7 @@
                           <tbody>
                             <?php foreach($payment_status as $status): ?> 
                               <tr>
-                                <td>
+                                <td class="font-weight-bold">
                                   <?=$status?> 
                                 </td>
                                 <td>
@@ -109,6 +122,10 @@
                   </div>
                 </div>
               </div>
+
+              <?php 
+                
+              ?> 
               <div class="row my-2">
                 <div class="col-md-12">
                   <div class="card shadow row mb-2">
@@ -117,7 +134,7 @@
                         <h6 class="m-0 font-weight-bold" style="color: white;">Users Assigned</h6>
                       </div>                   
                       <div class="card-body">
-                        <table class='table table-hover overflow-auto'>
+                        <table id="table_user_assigned" class='table table-hover overflow-auto'>
                           <thead>
                             <tr>
                               <th>#</th>
@@ -130,12 +147,16 @@
                           <tbody>
                               <tr>
                                 <td>
+                                d
                                 </td>
                                 <td>
+                                d
                                 </td>
                                 <td>
+                                d
                                 </td>
                                 <td>
+                                d
                                 </td>
                                 <td>
                                   <a href="#" class="btn btn-sm bg-gradient-primary text-white">
@@ -178,9 +199,8 @@
                 <span aria-hidden="true">×</span>
               </button>
             </div>
-            <form action="process_update_payment.php" method="POST">
+            <form action="process_payment.php?id=<?=$payment['id']?>" method="POST">
               <div class="modal-body">
-                <input type="hidden" class="form-control" name="id" placeholder="Title" id="title" value="<?=$payment['id']?>">
                 <div class="row mt-2 mb-3">
                   <div class="col-md-12">
                     <label for="title">Title</label>
@@ -208,7 +228,7 @@
               </div>
               <div class="modal-footer">
                 <button class="btn btn-secondary btn-sm" type="button" data-dismiss="modal">Cancel</button>
-                <button class="btn bg-gradient-primary btn-sm text-white" name="update_payment">Update</button>
+                <button type="submit" class="btn bg-gradient-primary btn-sm text-white" name="update_payment">Update</button>
               </div>
             </form>
           </div>
@@ -253,8 +273,18 @@
         </div>
       </div>
        <!-- End Add User Modal-->
+
 <?php
   include('footer.php');
-?>
+  ?>
+  <script>
+   $(document).ready(function() {
+       $('#table_user_assigned').DataTable(
+           {
+               "pageLength": 50,
+           }
+       ); 
+   } );
+ </script>
       </div>
       <!-- End of Main Content -->

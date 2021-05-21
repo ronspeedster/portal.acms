@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: May 20, 2021 at 07:46 AM
+-- Generation Time: May 20, 2021 at 01:18 PM
 -- Server version: 10.4.11-MariaDB
 -- PHP Version: 7.4.2
 
@@ -87,8 +87,8 @@ CREATE TABLE `payments` (
   `category` varchar(255) NOT NULL,
   `amount` float NOT NULL DEFAULT 0,
   `auto_assign` tinyint(1) NOT NULL DEFAULT 1,
-  `created_at` date NOT NULL DEFAULT current_timestamp(),
-  `updated_at` date NOT NULL DEFAULT current_timestamp()
+  `created_at` datetime NOT NULL DEFAULT current_timestamp(),
+  `updated_at` datetime NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
@@ -1994,9 +1994,9 @@ CREATE TABLE `user_payments` (
   `proof_of_payment` varchar(255) DEFAULT NULL,
   `date_of_payment` date DEFAULT NULL,
   `status` enum('PENDING','VERIFIED','AWAITING VERIFICATION','') NOT NULL DEFAULT 'PENDING',
-  `created_at` date NOT NULL DEFAULT current_timestamp(),
-  `updated_at` date NOT NULL DEFAULT current_timestamp(),
-  `deleted_at` date DEFAULT NULL
+  `created_at` datetime NOT NULL DEFAULT current_timestamp(),
+  `updated_at` datetime NOT NULL DEFAULT current_timestamp(),
+  `deleted_at` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------

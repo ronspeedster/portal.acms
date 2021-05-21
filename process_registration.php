@@ -48,6 +48,10 @@
 		}
 		else 
 		{
+
+			//! Todo: Add auto assigned Payments to Usesrs 
+
+			//! Todo: Transition to Prepared Statements
 			$default_access = "temporary"; 
 			$mysqli->query("INSERT INTO users ( first_name, middle_name, last_name, mailing_address, contact_num, email, birthday, pma_number, prc_number, expiration_date, field_of_practice, username, password, level_access) VALUES('$firstName','$middleName','$lastName','$mailingAddress', '$contactNumber', '$email', '$birthDate', '$pmaNumber', '$prcNumber', '$expirationDate', '$field', '$username', '$password', '$default_access') ") or die ($mysqli->error);
 	
