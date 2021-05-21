@@ -10,7 +10,7 @@
 		$birthDate        = trim($_POST['birthDate']);
 		$mailingAddress   = trim(strtoupper($_POST['mailingAddress']));
 		$contactNumber    = trim($_POST['contactNumber']);
-		$email            = trim($_POST['email']);
+		$email            = trim(strtolower($_POST['email']));
 		$pmaNumber        = trim($_POST['pmaNumber']);
 		$prcNumber        = trim($_POST['prcNumber']);
 		$expirationDate   = trim($_POST['expirationDate']);
@@ -48,9 +48,7 @@
 		}
 		else 
 		{
-
-			
-			// Todo: Transition to Prepared Statements
+			// !Transition to Prepared Statements
 			$default_access = "temporary"; 
 			$statement 	=	$mysqli->prepare("INSERT INTO users( 
 												first_name, 
@@ -66,10 +64,10 @@
 												field_of_practice, 
 												username, 
 												password, 
-												level_access) VALUES() ") or die ($mysqli->error);
+												level_access) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ") or die ($mysqli->error);
 	
 			$statement->bind_param('ssssssssssssss', 
-			$firstName, 
+									$firstName, 
 									$middleName, 
 									$lastName, 
 									$mailingAddress, 
@@ -84,9 +82,19 @@
 									$password, 
 									$default_access);
 									
-									$statement->execute(); 
-									
-			// Todo: Add auto assigned Payments to Users 
+			$statement->execute(); 
+			
+			$user_id	=	$statement->insert_id; 
+			
+			// !Add auto assigned Payments to Users 
+			$auto_payments = $mysqli->query('SELECT * FROM payments WHERE deleted_at is NULL AND auto_assign=1');
+
+			foreach($auto_payments as $payment)
+			{
+				$statement = $mysqli->prepare("INSERT INTO user_payments (user_id, payment_id) VALUES (?, ?)"); 
+				$statement->bind_param("ii", $user_id, $payment['id']); 
+				$statement->execute(); 
+			} 
 
 			$_SESSION['loginError'] = "User Account Creation Successful!";
 			header("location: login.php");
