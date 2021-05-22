@@ -128,10 +128,18 @@
               </div>
 
               <?php 
-                $statement = $mysqli->prepare("SELECT * FROM user_payments JOIN users ON users.id=user_payments.user_id WHERE payment_id=?");
+                $statement = $mysqli->prepare("SELECT 
+                                                user_payments.id as user_payment_id, 
+                                                user_payments.user_id,
+                                                user_payments.status, 
+                                                CONCAT(users.last_name, ', ' ,users.first_name , ' ' ,users.middle_name) AS fullname  
+                                                FROM user_payments 
+                                                JOIN users ON users.id=user_payments.user_id 
+                                                WHERE payment_id=?");
                 $statement->bind_param('i', $payment['id']); 
                 $statement->execute(); 
                 $user_payments = $statement->get_result(); 
+
               ?> 
               <div class="row my-2">
                 <div class="col-md-12">
@@ -158,10 +166,7 @@
                                 <?=$i?> 
                               </td>
                               <td>
-                                <?php 
-                                  $fullname = strtoupper($user_payment['last_name']) . ', ' . strtoupper($user_payment['first_name']) . ' ' . strtoupper($user_payment['middle_name']);
-                                ?> 
-                                <?=$fullname?>
+                                <?=$user_payment["fullname"]?>
                               </td>
                               <?php 
                                 $textColor = null; 
@@ -185,7 +190,7 @@
                                 <?=$user_payment['status']?>
                               </td>
                               <td>
-                                <a href="view_user_payment.php?user_payment_id=<?=$user_payment['id']?>" class="btn btn-sm bg-gradient-primary text-white">
+                                <a href="payment_user_view.php?user_payment_id=<?=$user_payment['user_payment_id']?>" class="btn btn-sm bg-gradient-primary text-white">
                                   <i class='fas fa-eye mr-2'></i>View
                                 </a>
                               </td>
@@ -304,7 +309,7 @@
             <form action="process_user_payment.php" method="POST">
               <div class="modal-body">
                 <div class="row mt-2 mb-3">
-                  <input type="hidden" class="form-control" name="payment_id" value="<?=$payment['id']?>">
+                  <input type="hidden" class="form-control" name="payment" value="<?=$payment['id']?>">
                   <div class="col-md-12">
                     <label for="users">Users</label>
                     <select class="custom-select" name="user" id="users">

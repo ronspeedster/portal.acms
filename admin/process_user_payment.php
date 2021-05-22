@@ -45,7 +45,8 @@ function check_errors($data)
 if(isset($_POST['assign_user_payment']))
 {
     $user_id    =   $_POST['user'];  
-    $payment_id =   $_POST['payment_id'];
+    $payment_id =   $_POST['payment'];
+    $route      =   $_POST['route'] ?? null;
     $errors     =   check_errors(compact('user_id', 'payment_id')); 
 
     // ! Insert to user_payments Table 
@@ -58,5 +59,12 @@ if(isset($_POST['assign_user_payment']))
         $_SESSION['message'] = "User successfully assigned to this payment";
     }
     
-    header("location: payment_view.php?payment_id={$payment_id}"); 
+    if(isset($route))
+    {
+        header("location: payment_user_list.php"); 
+    }
+    else 
+    {
+        header("location: payment_view.php?payment_id={$payment_id}"); 
+    }
 }

@@ -211,3 +211,52 @@ if(isset($_POST['delete_payment']))
     header("location: payment_archives.php");
 }
 
+//! Payment Verify 
+if(isset($_POST['verify_payment'])) 
+{
+    $id     =   $_GET['id']; 
+    $amount =   $_POST['amount_paid'];
+    $status =   $_POST['status'];  
+
+    $errors =   0;
+
+    if(empty($id))
+    {
+        $_SESSION['errors']['id']   =   "ID is required";
+        $errors++; 
+    }
+
+    if(empty($amount))
+    {
+        $_SESSION['errors']['amount']   =   "Amount is required";
+        $errors++; 
+    }
+
+    if(empty($status))
+    {
+        $_SESSION['errors']['status']   =   "Payment Status is required";
+        $errors++; 
+    }
+    else if(!in_array($status, ['AWAITING VERIFICATION', 'VERIFIED']))
+    {
+        $_SESSION['errors']['status']   =   "Payment Status is invalid";
+        $errors++; 
+    }
+
+    if($errors == 0)
+    {
+        $statement = $mysqli->prepare("UPDATE user_payments SET
+                                        status=?,
+                                        amount_paid=?, 
+                                        updated_at=?
+                                        WHERE id=?"
+                                    );
+
+        $statement->bind_param('sssi', $status, $amount,  $currentDate, $id); 
+        $statement->execute();  
+
+        $_SESSION['message'] = "Payment Status Modified. Please Notify the user"; 
+    }
+
+    header("location: payment_user_view.php?user_payment_id={$id}");
+}

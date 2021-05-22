@@ -6,7 +6,20 @@
     }
     else 
     {
-        $statement = $mysqli->prepare("SELECT user_payments.id, user_payments.status, user_payments.user_id, user_payments.amount_paid, user_payments.proof_of_payment, user_payments.date_of_payment, payments.title, payments.category, payments.amount FROM user_payments JOIN payments ON user_payments.payment_id=payments.id WHERE user_payments.id=?"); 
+        $statement = $mysqli->prepare("SELECT 
+                                        user_payments.id, 
+                                        user_payments.status, 
+                                        user_payments.user_id, 
+                                        user_payments.amount_paid, 
+                                        user_payments.proof_of_payment, 
+                                        user_payments.date_of_payment, 
+                                        user_payments.updated_at,
+                                        payments.title, payments.category, 
+                                        payments.amount 
+                                        FROM user_payments 
+                                        JOIN payments ON user_payments.payment_id=payments.id 
+                                        WHERE user_payments.id=?"
+                                    ); 
         $statement->bind_param("i", $_GET["user_payment_id"]); 
         $statement->execute(); 
 
@@ -34,7 +47,7 @@
     $_SESSION['getURI'] = $getURI;
 
 ?>
-<title>Payment Show</title>
+<title><?=$user_payment['title']?></title>
 <style>
     .custom-file-input.selected:lang(en)::after {
       content: "" !important;
@@ -162,17 +175,27 @@
                                 </div>
                                 <div class="col-md-6 text-center">
                                     <span class="bg-success text-white rounded px-2 py-1">
-                                        <?=$user_payment['date_of_payment']?> 
+                                       <?=$user_payment['date_of_payment'] ?? 'N/A'?> 
                                     </span>
                                 </div>
                             </div>
-                            <div class="row py-3">
+                            <div class="row border-bottom py-3">
                                 <div class="col-md-6 text-center">
                                     Status 
                                 </div>
                                 <div class="col-md-6 text-center">
                                     <span class="bg-success text-white rounded px-2 py-1">
                                         <?=$user_payment['status']?> 
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="row py-3">
+                                <div class="col-md-6 text-center">
+                                    Last Update
+                                </div>
+                                <div class="col-md-6 text-center">
+                                    <span class="bg-success text-white rounded px-2 py-1">
+                                        <?=$user_payment['updated_at']?> 
                                     </span>
                                 </div>
                             </div>

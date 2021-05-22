@@ -1,5 +1,6 @@
 <?php
     require_once('dbh.php');
+    require_once('authenticate_user.php');
 
     if(isset($_SESSION['getURI'])){
         $getURI = $_SESSION['getURI'];
@@ -102,5 +103,34 @@
         $getUserInformation = mysqli_query($mysqli, "SELECT * FROM users WHERE id = '$id' ");
         $newUserInformation = $getUserInformation->fetch_array();
     }
+
+    //! Update User level Access 
+    if(isset($_POST['verify_user']))
+    {
+        $id         =   $_GET['id'] ?? null; 
+        $password   =   $_POST['password'];
+    
+        if(authenticate_user(compact('password')))
+        {
+            // ! Perform Query Here; 
+            $statement = $mysqli->prepare("UPDATE users SET 
+                                            level_access=?
+                                            WHERE id=?") or die ($mysqli->error);
+    
+            $access    =   "user"; 
+            $statement->bind_param('si',  $access, $id); 
+            $statement->execute(); 
+    
+            $_SESSION['msg_type'] =   'success';
+            $_SESSION['message']  =   "User Access Level Changed to 'User'"; 
+        }
+        else 
+        {
+            $_SESSION['msg_type'] = 'danger'; 
+            $_SESSION['errors']['auth'] = "User Authentication Failed"; 
+        }
+
+        header("location: manage_users.php?edit={$id}");
+    } 
 
 ?>
