@@ -5,7 +5,7 @@
     header("Location: ../login.php");
   }
 
-  if($_SESSION['level_access'] == 'user'){
+  if($_SESSION['level_access'] != 'admin'){
       header("Location: ../index.php");
   }
 ?>

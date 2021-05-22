@@ -6,7 +6,7 @@
     $getURI = $protocol . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
     $_SESSION['getURI'] = $getURI;
 
-    $my_payments    =   $mysqli->query("SELECT * from user_payments JOIN payments ON user_payments.payment_id=payments.id WHERE payments.deleted_at is NULL and user_id={$_SESSION['user_id']}"); 
+    $my_payments    =   $mysqli->query("SELECT user_payments.id, user_payments.status, payments.title, payments.category, payments.amount FROM user_payments JOIN payments ON payments.id=user_payments.payment_id WHERE payments.deleted_at is NULL and user_id={$_SESSION['user_id']}"); 
 ?>
 <title>My Payments</title>
     <!-- Content Wrapper -->
@@ -19,6 +19,24 @@
 
         <!-- Begin Page Content -->
         <div class="container-fluid">
+            <?php if(isset($_SESSION['message'])): ?> 
+                <div class="alert alert-success alert-dismissible">
+                <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                    <?=$_SESSION['message']?> 
+                    <?php unset($_SESSION['message']);?>
+                </div>
+            <?php endif ?> 
+            <!-- Alert Here -->
+            <?php if(isset($_SESSION['errors'])): ?> 
+            <?php foreach($_SESSION["errors"] as $key => $value): ?>  
+                <div class="alert alert-danger alert-dismissible">
+                <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                    <?=$value?> 
+                </div>
+                <?php endforeach ?> 
+            <?php unset($_SESSION['errors']); ?> 
+            <?php endif ?> 
+            <!-- End Alert Here -->
             <div class="row">
                 <div class="col-md-12">
                     <div class="card shadow overflow-auto">
