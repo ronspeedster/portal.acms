@@ -163,7 +163,25 @@
                                 ?> 
                                 <?=$fullname?>
                               </td>
-                              <td>
+                              <?php 
+                                $textColor = null; 
+                                
+                                switch($user_payment['status'])
+                                {
+                                    case "AWAITING VERIFICATION": 
+                                        $textColor = "text-info"; 
+                                        break; 
+
+                                    case "PENDING": 
+                                        $textColor = "text-danger"; 
+                                        break; 
+                                    
+                                    case "VERIFIED": 
+                                        $textColor = "text-success"; 
+                                        break; 
+                                }
+                              ?> 
+                              <td class='font-weight-bold <?=$textColor?>'>
                                 <?=$user_payment['status']?>
                               </td>
                               <td>

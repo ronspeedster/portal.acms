@@ -6,8 +6,9 @@
     $getURI = $protocol . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
     $_SESSION['getURI'] = $getURI;
 
+    $my_payments    =   $mysqli->query("SELECT * from user_payments JOIN payments ON user_payments.payment_id=payments.id WHERE payments.deleted_at is NULL and user_id={$_SESSION['user_id']}"); 
 ?>
-<title>Home</title>
+<title>My Payments</title>
     <!-- Content Wrapper -->
     <div id="content-wrapper" class="d-flex flex-column">
 
@@ -33,20 +34,53 @@
                                         <th>CATEGORY</th>
                                         <th>AMOUNT DUE</th>
                                         <th>STATUS</th>
+                                        <th></th>
                                     </tr>
                                 </thead>
                                 <tbody>
+                                    <?php $i=1;?>
+                                    <?php foreach($my_payments as $payment): ?> 
                                     <tr class="cursor-pointer">
-                                        <td>1</td>
+                                        <td><?=$i?></td>
                                         <td>
-                                            <a href="payment_show.php" class="cursor-pointer">
-                                                ACMS MEMBERSHIP
+                                            <?=$payment['title']?> 
+                                        </td>
+                                        <td>
+                                            <?=$payment['category']?> 
+                                        </td>
+                                        <td>
+                                            <?=number_format($payment['amount'], 2)?> 
+                                        </td>
+                                        <?php 
+                                            $textColor = null; 
+                                            
+                                            switch($payment['status'])
+                                            {
+                                                case "AWAITING VERIFICATION": 
+                                                    $textColor = "text-info"; 
+                                                    break; 
+
+                                                case "PENDING": 
+                                                    $textColor = "text-danger"; 
+                                                    break; 
+                                                
+                                                case "VERIFIED": 
+                                                    $textColor = "text-success"; 
+                                                    break; 
+
+                                            }
+                                        ?> 
+                                        <td class='font-weight-bold <?=$textColor?>'>
+                                            <?=$payment['status']?> 
+                                        </td>
+                                        <td>
+                                            <a href="payment_show.php?user_payment_id=<?=$payment['id']?>" class="btn btn-sm bg-gradient-primary text-white">
+                                                <i class='fas fa-eye mr-2'></i>View
                                             </a>
                                         </td>
-                                        <td>MEMBERSHIP FEE</td>
-                                        <td>100</td>
-                                        <td>TO BE PAYED</td>
                                     </tr>
+                                    <?php $i++; ?> 
+                                    <?php endforeach ?> 
                                 </tbody>
                             </table>
                         </div>
@@ -67,7 +101,6 @@
         $('#table_payments').DataTable(
             {
                 "pageLength": 50,
-                "order": [[ 1, "asc" ]]
             }
         ); 
     } );
