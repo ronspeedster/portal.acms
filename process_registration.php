@@ -1,28 +1,98 @@
 <?php
 	include('dbh.php');
+	include('check_registration_errors.php');
 	
 	if(isset($_POST['register'])){
-		$fname = ucfirst($_POST['fname']);
-		$lname = ucfirst($_POST['lname']);
-		$email = strtolower($_POST['email']);
-		$password1 = $_POST['password1'];
-		$password2 = $_POST['password2'];
 
-		$checkUser = $mysqli->query("SELECT * FROM users WHERE email='$email' ");
-		if(mysqli_num_rows($checkUser)>0){
-			$_SESSION['registerError'] = "Email already taken. Please try another.";
-			header("location: register.php?fname=".$fname."&lname=".$lname);
+		$firstName        = trim(strtoupper($_POST['firstName']));
+		$middleName       = trim(strtoupper($_POST['middleName']));
+		$lastName         = trim(strtoupper($_POST['lastName']));
+		$birthDate        = trim($_POST['birthDate']);
+		$mailingAddress   = trim(strtoupper($_POST['mailingAddress']));
+		$contactNumber    = trim($_POST['contactNumber']);
+		$email            = trim($_POST['email']);
+		$pmaNumber        = trim($_POST['pmaNumber']);
+		$prcNumber        = trim($_POST['prcNumber']);
+		$expirationDate   = trim($_POST['expirationDate']);
+		$field            = trim(strtoupper($_POST['field']));
+		$username         = trim($_POST['username']);
+		$password         = trim($_POST['password']);
+		$confirm_password = trim($_POST['confirm_password']);
+
+		$checkUser 		  = $mysqli->query("SELECT * FROM users WHERE email='$email' ");
+	
+		$errors 		  = checkRegistrationErrors(
+								compact(
+									"checkUser",		   
+									"firstName",       
+									"middleName",      
+									"lastName",       
+									"birthDate",       
+									"mailingAddress",
+									"contactNumber",
+									"email",       
+									"pmaNumber",       
+									"prcNumber",      
+									"expirationDate",
+									"field",       
+									"username",       
+									"password",       
+									"confirm_password",
+								)
+							);
+				
+		if($errors > 0)
+		{
+			$urlString	=	"firstName={$firstName}&email={$email}&lastName={$lastName}&middleName={$middleName}&birthDate={$birthDate}&mailingAddress={$mailingAddress}&contactNumber={$contactNumber}&email={$email}&pmaNumber={$pmaNumber}&prcNumber={$prcNumber}&expirationDate={$expirationDate}&field={$field}&username={$username}";
+			header("location: register.php?{$urlString}");
 		}
-		else if($password1!=$password2){
-			$_SESSION['registerError'] = "Password not match. Please try again.";
-			header("location: register.php?fname=".$fname."&lname=".$lname."&email=".$email);
-		}
-		else{
-			$mysqli->query(" INSERT INTO users ( firstname, lastname, email, password) VALUES('$fname','$lname','$email','$password1') ") or die ($mysqli->error());
+		else 
+		{
+
+			
+			// Todo: Transition to Prepared Statements
+			$default_access = "temporary"; 
+			$statement 	=	$mysqli->prepare("INSERT INTO users( 
+												first_name, 
+												middle_name, 
+												last_name, 
+												mailing_address, 
+												contact_num, 
+												email, 
+												birthday, 
+												pma_number, 
+												prc_number, 
+												expiration_date, 
+												field_of_practice, 
+												username, 
+												password, 
+												level_access) VALUES() ") or die ($mysqli->error);
+	
+			$statement->bind_param('ssssssssssssss', 
+			$firstName, 
+									$middleName, 
+									$lastName, 
+									$mailingAddress, 
+									$contactNumber, 
+									$email, 
+									$birthDate, 
+									$pmaNumber, 
+									$prcNumber, 
+									$expirationDate, 
+									$field, 
+									$username, 
+									$password, 
+									$default_access);
+									
+									$statement->execute(); 
+									
+			// Todo: Add auto assigned Payments to Users 
 
 			$_SESSION['loginError'] = "User Account Creation Successful!";
 			header("location: login.php");
 		}
+
+		
 	}
 
 	// Login Details for users

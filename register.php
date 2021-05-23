@@ -38,66 +38,150 @@
 
   <div class="container">
 
-    <div class="card o-hidden border-0 shadow-lg my-5">
-          <!-- Alert Here -->
-          <?php
-            if(isset($_SESSION['registerError'])){
-          ?>
-          <div class="alert alert-danger alert-dismissible">
-            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-            <?php
-              echo $_SESSION['registerError'];
-              unset($_SESSION['registerError']);
-            ?>
-          </div>
-          <?php
-            }
-          ?>
-          <!-- End Alert Here -->
-      <div class="card-body p-0">
-        <!-- Nested Row within Card Body -->
-        <div class="row">
-          <div class="col-lg-5 d-none d-lg-block bg-register-image"></div>
-          <div class="col-lg-7">
-            <div class="p-5">
-              <div class="text-center">
-                <h1 class="h4 text-gray-900 mb-4">Create an Account!</h1>
-              </div>
-              <form class="user" method="post" action="process_registration.php">
-                <div class="form-group row">
-                  <div class="col-sm-6 mb-3 mb-sm-0">
-                    <input type="text" class="form-control form-control" id="exampleFirstName" placeholder="First Name" name="fname" value="<?php if(isset($_GET['fname'])){echo $_GET['fname'];} ?>" required>
+    <div class="row py-5">
+      <div class="col-md-12">
+        <!-- Alert Here -->
+        <?php if(isset($_SESSION['errors'])): ?> 
+          <?php foreach($_SESSION["errors"] as $key => $value): ?>  
+            <div class="alert alert-danger alert-dismissible">
+              <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                <?=$value?> 
+            </div>
+            <?php endforeach ?> 
+          <?php unset($_SESSION['errors']); ?> 
+        <?php endif ?> 
+        <!-- End Alert Here -->
+          <div class="card shadow">
+            <div class="card-header bg-white p-4">
+              <h5 class="m-0 font-weight-bold text-center">Create An Account!</h5>
+            </div>
+            <div class="card-body px-5">
+              <form accept-charset="UTF-8" method="post" action="process_registration.php">
+                <h5 class="font-weight-bold my-3 pb-3 border-bottom">
+                  Personal Information:
+                </h5>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="row">
+                          <div class="col-md-12 my-2">
+                            <label for="firstName">First Name</label>
+                            <input class="form-control" id="firstName" type="text" placeholder="First Name" name="firstName" value="<?=$_GET['firstName'] ?? null ?>" required>
+                          </div>
+                          <div class="col-md-12 my-2">
+                            <label for="middleName">Middle Name</label>
+                            <input class="form-control" id="middleName" type="text" placeholder="Middle Name" name="middleName" value="<?=$_GET['middleName'] ?? null ?>" required>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="row">
+                          <div class="col-md-12 my-2">
+                            <label for="lastName">Last Name</label>
+                            <input class="form-control" id="lastName" type="text" placeholder="Last Name" name="lastName" value="<?=$_GET['lastName'] ?? null ?>" required>
+                          </div>
+                          <div class="col-md-12 my-2">
+                            <label for="birthDate">Date of Birth</label>
+                            <input class="form-control" id="birthDate" type="date" placeholder="Birth Date" name="birthDate" value="<?=$_GET['birthDate'] ?? null ?>" required>
+                          </div>
+                        </div>
+                      </div>
                   </div>
-                  <div class="col-sm-6">
-                    <input type="text" class="form-control form-control" id="exampleLastName" placeholder="Last Name" name='lname' value="<?php if(isset($_GET['lname'])){echo $_GET['lname'];} ?>" required>
+                  <h5 class="font-weight-bold my-3 pb-3 border-bottom">
+                    Contact Information:
+                  </h5>
+                  <div class="row">
+                    <div class="col-md-6">
+                      <div class="row">
+                        <div class="col-md-12 my-2">
+                          <label for="mailingAddress">Mailing Address</label>
+                          <input class="form-control" id="mailingAddress" type="text" placeholder="Mailing Address" name="mailingAddress" value="<?=$_GET['mailingAddress'] ?? null ?>" required>
+                        </div>
+                        <div class="col-md-12 my-2">
+                          <label for="contactNumber">Contact Number</label>
+                          <input class="form-control" id="contactNumber" type="text" placeholder="Contact Number" name="contactNumber" value="<?=$_GET['contactNumber'] ?? null ?>" required>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="row">
+                        <div class="col-md-12 my-2">
+                          <label for="email">Email</label>
+                          <input class="form-control" id="email" tyemail" placeholder="Email Address" name="email" value="<?=$_GET['email'] ?? null ?>" required>
+                        </div>
+                      </div>
+                    </div>
                   </div>
-                </div>
-                <div class="form-group">
-                  <input type="email" class="form-control form-control" id="exampleInputEmail" placeholder="Email Address" name="email" value="<?php if(isset($_GET['email'])){echo $_GET['email'];} ?>" required>
-                </div>
-                <div class="form-group row">
-                  <div class="col-sm-6 mb-3 mb-sm-0">
-                    <input type="password" class="form-control form-control" id="exampleInputPassword" placeholder="Password" name="password1" required>
+                  <h5 class="font-weight-bold my-3 pb-3 border-bottom">
+                    License Information:
+                  </h5>
+                  <div class="row">
+                    <div class="col-md-6">
+                      <div class="row">
+                        <div class="col-md-12 my-2">
+                          <label for="pmaNumber">PMA Number</label>
+                          <input class="form-control" id="pmaNumber" type="text" placeholder="PMA Number" name="pmaNumber" value="<?=$_GET['pmaNumber'] ?? null ?>" required>
+                        </div>
+                        <div class="col-md-12 my-2">
+                          <label for="expirationDate">Expiration Date</label>
+                          <input class="form-control" id="expirationDate" type="date" placeholder="Expiration Date" name="expirationDate" value="<?=$_GET['expirationDate'] ?? null ?>" required>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="row">
+                        <div class="col-md-12 my-2">
+                          <label for="prcNumber">PRC Number</label>
+                          <input class="form-control" id="prcNumber" type="text" placeholder="PRC Number" name="prcNumber" value="<?=$_GET['prcNumber'] ?? null ?>" required>
+                        </div>
+                        <div class="col-md-12 my-2">
+                          <label for="field">Field of Practice</label>
+                          <input class="form-control" id="field" type="text" placeholder="Field of Practice" name="field" value="<?=$_GET['field'] ?? null ?>" required>
+                        </div>
+                      </div>
+                    </div>  
                   </div>
-                  <div class="col-sm-6">
-                    <input type="password" class="form-control form-control" id="exampleRepeatPassword" placeholder="Repeat Password" name="password2" required>
+                  <h5 class="font-weight-bold my-3 pb-3 border-bottom">
+                    Account Information:
+                  </h5>
+                  <div class="row">
+                    <div class="col-md-6">
+                      <div class="row">
+                        <div class="col-md-12 my-2">
+                          <label for="username">Username</label>
+                          <input class="form-control" id="username" type="text" placeholder="Username" name="username" value="<?=$_GET['username'] ?? null ?>" required>
+                        </div>
+                    
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="row">
+                        <div class="col-md-12 my-2">
+                          <label for="password">Password</label>
+                          <input class="form-control" id="password" type="password" placeholder="Password" name="password" value="<?=$_GET['password'] ?? null ?>" required>
+                        </div>
+                        <div class="col-md-12 my-2">
+                          <label for="confirm_password">Confirm Password</label>
+                          <input class="form-control" id="confirm_password" type="password" placeholder="Confirm Password" name="confirm_password" value="<?=$_GET['confirm_password'] ?? null ?>" required>
+                        </div>
+                      </div>
+                    </div>  
                   </div>
-                </div>
-                <button type="submit" class="btn btn-success btn-block" name="register">
-                  Register Account
-                </button>
+                  <button type="submit" class="btn btn-success btn-block mt-3" name="register">
+                    Register Account
+                  </button>
               </form>
               <hr>
-              <div class="text-center">
+              <!--
+              <div class="text-center my-1">
                 <a class="small" href="forgot-password.php">Forgot Password?</a>
               </div>
-              <div class="text-center">
+              -->
+              <div class="text-center my-1 pb-3">
                 <a class="small" href="login.php">Already have an account? Login!</a>
               </div>
             </div>
           </div>
         </div>
-      </div>
     </div>
 
   </div>
