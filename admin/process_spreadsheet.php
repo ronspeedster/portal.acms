@@ -139,16 +139,20 @@ if(isset($_POST['excel_user_payment_list']))
 
 }    
 
-if(isset($_POST['excel_payment_list']))
+if(isset($_POST['excel_payment_view']))
 {
     $format     =   $_POST['format']; 
     $route      =   $_POST['route'];
+    $payment_id =   $_GET['payment_id'];
 
     $errors     =   check_errors(compact('format', 'route'));
 
     if($errors == 0)
     {
         //! Query 
+
+        $payment          =  mysqli_fetch_assoc($mysqli->query("SELECT * FROM payments WHERE id={$payment_id}"));
+
         $user_payments    =   $mysqli->query("SELECT 
                                     user_payments.id, 
                                     user_payments.status,
@@ -163,7 +167,8 @@ if(isset($_POST['excel_payment_list']))
                                     FROM user_payments 
                                     JOIN payments ON payments.id=user_payments.payment_id 
                                     JOIN users ON users.id=user_payments.user_id 
-                                    WHERE payments.deleted_at is NULL"
+                                    WHERE payments.deleted_at is NULL
+                                    AND payments.id={$payment_id}"
                                 ) or die(mysqli_error($mysqli)); 
 
         $spreadsheet = new Spreadsheet();
@@ -208,7 +213,7 @@ if(isset($_POST['excel_payment_list']))
         $writer         =   get_excel_type($spreadsheet, $format);
 
         $currentDate    =   str_replace(' ', '-', $currentDate);
-        $fileName       =   "USERS_PAYMENTS_LIST-{$currentDate}.{$format}"; 
+        $fileName       =   "{$payment['title']}_PAYMENTS_LIST-{$currentDate}.{$format}"; 
 
         header('Content-Type: application/vnd.openxmlformats-officedoument.spreadsheetml.sheet');
         header('Content-Disposition: attachment; filename="' . urlencode($fileName) . '"');

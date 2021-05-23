@@ -60,9 +60,9 @@
                         </div>
                         <div class="card-body">
                             <div class="d-flex justify-content-end mt-2 mb-4">
-                                <a href="process_spreadsheet.php" class="btn btn-success"  data-toggle="modal" data-target="#modal_generate_excel">
+                                <button type="button "class="btn btn-success"  data-toggle="modal" data-target="#modal_generate_excel">
                                     Generate Excel
-                                </a>
+                                </button>
                             </div>
                             <table id="table_user_payments" class="table table-hover">
                                 <thead>
