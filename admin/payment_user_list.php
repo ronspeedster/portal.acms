@@ -23,7 +23,7 @@
     $users             =    $mysqli->query("SELECT * FROM users"); 
 
 ?>
-<title>User user_payments List</title>
+<title>User Payments List</title>
     <!-- Content Wrapper -->
     <div id="content-wrapper" class="d-flex flex-column">
 
@@ -59,7 +59,12 @@
                             User Payments                        
                         </div>
                         <div class="card-body">
-                            <table id="table_user_payments" class="table">
+                            <div class="d-flex justify-content-end mt-2 mb-4">
+                                <a href="process_spreadsheet.php" class="btn btn-success"  data-toggle="modal" data-target="#modal_generate_excel">
+                                    Generate Excel
+                                </a>
+                            </div>
+                            <table id="table_user_payments" class="table table-hover">
                                 <thead>
                                     <tr>
                                         <th>#</th>
@@ -184,6 +189,45 @@
         </div>
       </div>
        <!-- End Add User Modal-->
+
+    <!-- Excel Modal-->
+    <div class="modal fade" id="modal_generate_excel" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLabel">Generate Excel</h5>
+              <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">×</span>
+              </button>
+            </div>
+            <form action="process_spreadsheet.php" method="POST">
+                <div class="modal-body">
+                    <div class="row mt-2 mb-3">
+                        <input type="hidden" name="route" value="payment_user_list.php">
+                        <div class="col-md-12 my-2">
+                            <label for="formats">File Format</label>
+                            <select class="custom-select" name="format" id="formats">
+                            <?php 
+                                $formats = ['csv', 'ods', 'xls', 'xlsx'];
+                            ?> 
+                            <?php foreach($formats as $format): ?> 
+                            <option value="<?=$format?>">
+                                <?=$format?> 
+                            </option>
+                            <?php endforeach ?> 
+                            </select>
+                        </div>
+                    </div>
+                </div>
+              <div class="modal-footer">
+                <button class="btn btn-secondary btn-sm" type="button" data-dismiss="modal">Cancel</button>
+                <button class="btn bg-gradient-primary btn-sm text-white" name="excel_user_payment_list">Generate</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+       <!-- End Excel Modal-->
 <?php
   include('footer.php');
 ?>
