@@ -48,8 +48,8 @@ a:visited {
 .page-item.active .page-link {
   z-index: 1;
   color: #fff;
-  background-color: #0f1e5d !important;
-  border-color: #0f1e5d !important;
+  background-color: #1b5b3a  !important;
+  border-color: #1b5b3a  !important;
 }
 .container-fluid{
   background-color: white;
@@ -106,7 +106,15 @@ a:visited {
             </a>
         </li>
 
-        <?php if($_SESSION['level_access'] == 'admin'){ ?>
+          <!-- Nav Item - Dashboard -->
+        <li class="nav-item active" id="nav-item-home">
+            <a class="nav-link" href="payment_index.php">
+                <i class="fa fa-credit-card"></i>
+                <span>My Payments</span>
+            </a>
+        </li>
+
+        <?php if($_SESSION['level_access'] == 'admin'): ?>
         <!-- Nav Item - Dashboard -->
         <li class="nav-item active" id="nav-item-home">
             <a class="nav-link" href="admin/">
@@ -114,7 +122,8 @@ a:visited {
                 <span>Admin</span>
             </a>
         </li>
-        <?php }  ?>
+        <?php endif ?>
+
       <!-- Nav Item - Pages Collapse Menu -->
 <!--      <li class="nav-item">-->
 <!--        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#buildings" aria-expanded="true" aria-controls="buildings">-->
