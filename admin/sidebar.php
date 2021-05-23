@@ -5,7 +5,7 @@
     header("Location: ../login.php");
   }
 
-  if($_SESSION['level_access'] == 'user'){
+  if($_SESSION['level_access'] != 'admin'){
       header("Location: ../index.php");
   }
 ?>
@@ -52,8 +52,8 @@ a:visited {
 .page-item.active .page-link {
   z-index: 1;
   color: #fff;
-  background-color: #0f1e5d !important;
-  border-color: #0f1e5d !important;
+  background-color:  #1b5b3a !important;
+  border-color:  #1b5b3a !important;
 }
 .container-fluid{
   background-color: white;
@@ -117,6 +117,21 @@ a:visited {
                 <span>Status</span>
             </a>
         </li>
+      <li class="nav-item active">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#payments" aria-expanded="true" aria-controls="buildings">
+          <i class="fa fa-credit-card"></i>
+          <span>Payments</span>
+        </a>
+        <div id="payments" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+          <div class="bg-white py-2 collapse-inner rounded">
+            <h6 class="collapse-header">Manage Payments</h6>
+            <a class="collapse-item" href="payment_list.php"><i class="fas fa-eye"></i> Payment List</a>
+            <a class="collapse-item" href="payment_archives.php"><i class="fas fa-eye"></i> Payment Archives</a>
+            <a class="collapse-item" href="payment_user_list.php"><i class="fas fa-eye"></i> Check User Payments </a>
+          </div>
+        </div>
+      </li>
+      <!-- Divider -->
 
       <!-- Nav Item - Pages Collapse Menu -->
       <li class="nav-item active">
@@ -135,14 +150,13 @@ a:visited {
         </div>
       </li>
 
+      <hr class="sidebar-divider d-none d-md-block">
 <!--      <li class="nav-item" id = "nav-item-safelocation">-->
 <!--        <a class="nav-link" href="safelocation.php">-->
 <!--          <i class="fas fa-street-view"></i><i class="fas fa-street-view"></i>-->
 <!--          <span>Safe Location</span></a>-->
 <!--      </li>-->
 
-      <!-- Divider -->
-      <hr class="sidebar-divider d-none d-md-block">
 
       <!-- Heading -->
 <!--      <div class="sidebar-heading">-->
