@@ -1,3 +1,4 @@
 admin/dbh.php
 dbh.php
-/storage/proof_of_payment/*
+storage/proof_of_payment/*
+!storage/proof_of_payment/index.html
