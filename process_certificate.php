@@ -8,29 +8,32 @@ use Dompdf\Dompdf;
 use Dompdf\Options;
 
 if(isset($_POST['generate_certificate']))
-{
+{    
     //* GET USER
+    $statement  =   $mysqli->prepare("SELECT 
+                        CONCAT(last_name, ', ' ,first_name , ' ' ,middle_name) AS fullname, 
+                        pma_number 
+                        FROM users 
+                        WHERE id=?"
+                    ); 
 
-    $statement  =       $mysqli->prepare("SELECT 
-                            CONCAT(last_name, ', ' ,first_name , ' ' ,middle_name) AS fullname, 
-                            pma_number 
-                            FROM users 
-                            WHERE id=?"
-                        ); 
+    $query      =   $mysqli->query("SELECT * from certificates WHERE name='GOOD STANDING'") or die ($mysqli->error); 
+    $cert       =   $query->fetch_assoc(); 
+    $cert       =   $cert['signature'];
 
-    $id         =       $_SESSION["user_id"];
+    $id         =   $_SESSION["user_id"];
 
     $statement->bind_param("i", $id); 
     $statement->execute(); 
 
     $user       = $statement->get_result()->fetch_assoc();
-    
+
     // instantiate and use the dompdf class
-    $options = new Options();
-    $options->setChroot(realpath(__DIR__));
-    $options->setIsHtml5ParserEnabled(true);
-    $options->isRemoteEnabled(true);
-    $dompdf = new Dompdf($options);
+    // $options = new Options();
+    // $options->setChroot(realpath(__DIR__));
+    // $options->setIsHtml5ParserEnabled(true);
+    // $options->isRemoteEnabled(true);
+    // $dompdf = new Dompdf($options);
 
     $html   =       "<!DOCTYPE html>
                         <html lang='en'>
@@ -42,8 +45,8 @@ if(isset($_POST['generate_certificate']))
                             <title>CERTIFICATE OF GOOD STANDING</title>
                         </head>
                         <body>
-                        <div class='m-4'>
-                            <header class='h-25 border-bottom'>
+                        <div class='m-4 p-2'>
+                            <header class='h-25 mb-2'>
                                 <div class='d-flex justify-content-between'>
                                     <span>
                                         <img src='./pdf/acms.png' width='150px' height='150px'>
@@ -58,40 +61,44 @@ if(isset($_POST['generate_certificate']))
                                     </span>
                                 </div>
                             </header>
+                            <hr>
                             <main class='my-5'>
-                                <h2 class='text-center font-weight-bold mb-2'>CERTIFICATE OF GOOD STANDING</h2>
+                                <h2 class='text-center font-weight-bold mb-4'>CERTIFICATE OF GOOD STANDING</h2>
                                 <p class='text-justify text-height-5 mt-4'>
-                                    This is to certify that <strong class='font-weight-bold'>{$user['fullname']} </strong> of the Angeles City Medical Society, 
-                                    a component of the <strong class='font-weight-bold'>PHILIPPINE MEDICAL ASSOCIATION</strong>
-                                    , with PMA No. <strong class='font-weight-bold'>{$user['pma_number']}</strong> is a bonafide 
-                                    <strong class='font-weight-bold'>MEMBER IN GOOD STANDING</strong> and is entitled 
-                                    to all the rights and privileges appertaining thereof. 
+                                    This is to certify that 
+                                    <strong class='font-weight-bold'>{$user['fullname']} </strong> 
+                                    of the Angeles City Medical Society, a component of the 
+                                    <strong class='font-weight-bold'>PHILIPPINE MEDICAL ASSOCIATION</strong>, with PMA No. 
+                                    <strong class='font-weight-bold'>{$user['pma_number']}</strong> 
+                                    is a bonafide 
+                                    <strong class='font-weight-bold'>MEMBER IN GOOD STANDING</strong> 
+                                    and is entitled to all the rights and privileges appertaining thereof.  
                                 </p>
                                 <p class='text-justify text-height-5'>
                                     Membership dues for 2021-2022 have been settled and this certification is valid until  <strong class='font-weight-bold'>May 31, 2022</strong>.
                                 </p>
                             </main>
-                            <br>
-                            <footer class='mt-5'>
+                            <footer class='mt-1'>
                                 <div class='text-center'>
-                                    <strong>MICHAEL J. DIZON, MD.</strong>
-                                    <p>President</p>
+                                    <img src='storage/certificate/{$cert}' width='150px' height='150px'>
                                 </div>
                             </footer>
                         </div>
                     </body>
                     </html>";
 
-    $dompdf->loadHtml($html);
+    //$dompdf->loadHtml($html);
     //$dompdf->loadHtmlFile(realpath(__DIR__) . "/pdf/index.html");
     
     // (Optional) Setup the paper size and orientation
-    $dompdf->setPaper('A4', 'landscape');
+    //$dompdf->setPaper('A4', 'landscape');
     
     // Render the HTML as PDF
-    $dompdf->render();
+    //$dompdf->render();
     
     // Output the generated PDF to Browser
-    $dompdf->stream();
+    //$dompdf->stream();
+
+    echo $html;
     
 }

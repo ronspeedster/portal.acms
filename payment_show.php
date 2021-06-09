@@ -110,7 +110,7 @@
                             }
                         ?> 
                         <?php if($user_payment['status'] == "VERIFIED"): ?>
-                        <form action="process_certificate.php"" method="POST">
+                        <form action="process_certificate.php"" method="POST" target="_blank">
                             <div class="card-body">
                                 <img src="<?=$filePath?>" id="preview_image" alt="" class="img-fluid w-100">
                             </div>
