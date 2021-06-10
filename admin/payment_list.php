@@ -146,6 +146,14 @@
                     </div>
                   </div>
                 </div>
+                <div class="row mt-3">
+                  <div class="col-md-12">
+                    <div class="custom-control custom-checkbox">
+                      <input type="checkbox" name="assign_all" class="custom-control-input" id="assign_all">
+                      <label class="custom-control-label" for="assign_all">Assign Payment to all current members?</label>
+                    </div>
+                  </div>
+                </div>
               </div>
               <div class="modal-footer">
                 <button class="btn btn-secondary btn-sm" type="button" data-dismiss="modal">Cancel</button>

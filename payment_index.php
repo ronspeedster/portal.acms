@@ -16,6 +16,7 @@
                                         JOIN payments ON payments.id=user_payments.payment_id 
                                         WHERE payments.deleted_at is NULL AND user_id={$_SESSION['user_id']}"
                                         ); 
+
 ?>
 <title>My Payments</title>
     <!-- Content Wrapper -->
