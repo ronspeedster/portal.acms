@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 4.9.5
+-- version 5.0.1
 -- https://www.phpmyadmin.net/
 --
--- Host: localhost:3306
--- Generation Time: Jun 08, 2021 at 04:16 AM
--- Server version: 10.2.38-MariaDB-cll-lve
--- PHP Version: 7.3.28
+-- Host: localhost
+-- Generation Time: Jun 09, 2021 at 10:36 AM
+-- Server version: 10.4.11-MariaDB
+-- PHP Version: 7.4.2
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
@@ -59,6 +59,25 @@ INSERT INTO `candidates` (`id`, `last_name`, `first_name`, `middle_name`) VALUES
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `certificates`
+--
+
+CREATE TABLE `certificates` (
+  `id` int(11) NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `signature` varchar(255) DEFAULT NULL COMMENT 'Certificate Signature with Name'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `certificates`
+--
+
+INSERT INTO `certificates` (`id`, `name`, `signature`) VALUES
+(1, 'GOOD STANDING', '178508f370d24f196dfed54d7efdb2e4-2021-06-09-15:53:42.png');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `password_reset`
 --
 
@@ -97,7 +116,8 @@ CREATE TABLE `payments` (
 --
 
 INSERT INTO `payments` (`id`, `title`, `category`, `amount`, `auto_assign`, `created_at`, `updated_at`, `deleted_at`) VALUES
-(2, 'TEST ENTRY', 'PMA/ACMS DUES 2021', 100, 0, '2021-05-28 13:10:35', '2021-05-28 05:10:35', '2021-05-28 13:13:44');
+(2, 'TEST ENTRY', 'PMA/ACMS DUES 2021', 100, 0, '2021-05-28 13:10:35', '2021-05-28 05:10:35', '2021-05-28 13:13:44'),
+(3, 'ACMS MEMBERSHIP', 'FEES', 2000, 1, '2021-06-08 12:22:25', '2021-06-08 12:22:25', NULL);
 
 -- --------------------------------------------------------
 
@@ -1961,7 +1981,8 @@ INSERT INTO `users` (`id`, `first_name`, `middle_name`, `last_name`, `mailing_ad
 (766, 'JULIE', 'TAN', 'PANTIG', '668 San Pablo St. San Ignacio Subd.  Pandan, AC', '09173228592', 'jtpantigmd@yahoo.com', '1956-03-20', 'C-8 308', '0053895', '2022-03-20', 'Pediatrics', '0053098', '3228592ABCD', 1, 'user', 'img/default_profile.png'),
 (767, ' VEREDIGNA', 'Soliman', 'Santos', '1-7 Shanghai beauty st., Phase 1 Punta Verde Subd., Pulung Cacutud Angeles city', '09178481104', 'dgisantos@yahoo.com', '1962-11-04', 'C8406', '0066989', '2023-11-04', 'Family Medicine ', '0066989', 'vss031536', 1, 'user', 'img/default_profile.png'),
 (768, 'Nines', 'Pinpin', 'Bautista', 'lot 15 bacilli green st Hacienda Royale San Fernando City', '09088603404', 'balatdiab@yahoo.com', '1970-10-01', 'C8659', '0086211', '2021-03-14', 'im', '0086211', 'Karlmi23Â£', 1, 'user', 'img/default_profile.png'),
-(769, 'PRINCESS', 'AMURAO', 'GUEVARRA', '3173 KATAHIMIKAN ST. BRGY, DUQUIT, DAU, MABALACAT PAMPANGA', '09173337036', 'cess_guevarra@yahoo.com', '1981-11-15', 'C-8-961', '0118748', '2021-11-15', 'INTERNAL MEDICINE', 'cessyacms', 'winsten0402', 0, 'temporary', 'img/default_profile.png');
+(769, 'PRINCESS', 'AMURAO', 'GUEVARRA', '3173 KATAHIMIKAN ST. BRGY, DUQUIT, DAU, MABALACAT PAMPANGA', '09173337036', 'cess_guevarra@yahoo.com', '1981-11-15', 'C-8-961', '0118748', '2021-11-15', 'INTERNAL MEDICINE', 'cessyacms', 'winsten0402', 0, 'temporary', 'img/default_profile.png'),
+(770, 'JANE', 'MARIA', 'DOE', 'TEMPORIBUS IUSTO EOS', '273', 'xefovyq@mailinator.com', '1992-04-03', '517', '429', '1982-10-23', 'NISI DOLORE ET VELIT', 'jane', 'test', 0, 'user', 'img/default_profile.png');
 
 -- --------------------------------------------------------
 
@@ -2005,6 +2026,13 @@ CREATE TABLE `user_payments` (
   `deleted_at` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+--
+-- Dumping data for table `user_payments`
+--
+
+INSERT INTO `user_payments` (`id`, `user_id`, `payment_id`, `amount_paid`, `proof_of_payment`, `date_of_payment`, `status`, `created_at`, `updated_at`, `deleted_at`) VALUES
+(1, 770, 3, 2000, 'ea1b5ef75babfaded17fcd9bf0300f07-2021-06-08-12:27:14.png', '2021-06-08', 'VERIFIED', '2021-06-08 12:25:55', '2021-06-08 12:32:40', NULL);
+
 -- --------------------------------------------------------
 
 --
@@ -2044,6 +2072,12 @@ INSERT INTO `user_posts` (`id`, `user_id`, `user_post`, `user_status`, `user_lon
 -- Indexes for table `candidates`
 --
 ALTER TABLE `candidates`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `certificates`
+--
+ALTER TABLE `certificates`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -2099,6 +2133,12 @@ ALTER TABLE `candidates`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
+-- AUTO_INCREMENT for table `certificates`
+--
+ALTER TABLE `certificates`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
 -- AUTO_INCREMENT for table `password_reset`
 --
 ALTER TABLE `password_reset`
@@ -2108,7 +2148,7 @@ ALTER TABLE `password_reset`
 -- AUTO_INCREMENT for table `payments`
 --
 ALTER TABLE `payments`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `tally`
@@ -2120,7 +2160,7 @@ ALTER TABLE `tally`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(12) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=770;
+  MODIFY `id` int(12) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=771;
 
 --
 -- AUTO_INCREMENT for table `user_links`
@@ -2132,7 +2172,7 @@ ALTER TABLE `user_links`
 -- AUTO_INCREMENT for table `user_payments`
 --
 ALTER TABLE `user_payments`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `user_posts`
