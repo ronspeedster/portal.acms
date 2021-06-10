@@ -84,8 +84,14 @@
                             </tbody>
                           </table>
                         </div>
-                        <div class="card-footer bg-white text-right">
-                          <button class="btn btn-sm btn-danger  text-white" data-toggle="modal" data-target="#modal_archive_payment">
+                        <div class="card-footer bg-white d-flex justify-content-end">
+                          <form action="process_payment.php" method="POST" class='align-self-start mr-2'>
+                            <button type="submit" name="mass_assign" class="btn btn-sm btn-danger text-white">
+                              <input type="hidden" name="id" value="<?=$payment['id']?>"> 
+                              Assign Payment to Available Members
+                            </button>
+                          </form>
+                          <button class="btn btn-sm btn-danger text-white mr-2" data-toggle="modal" data-target="#modal_archive_payment">
                             Archive
                           </button>
                           <button class="btn btn-sm bg-gradient-primary text-white" data-toggle="modal" data-target="#modal_edit_payment">

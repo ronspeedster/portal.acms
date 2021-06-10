@@ -5,6 +5,38 @@ require_once('authenticate_user.php');
 $currentDate = date_default_timezone_set('Asia/Manila');
 $currentDate = date('Y-m-d H:i:s');
 
+//! Mass Assignment 
+function mass_assignment($payment_id)
+{
+    global $mysqli; 
+
+    $count = 0; 
+
+    //* GET USERS 
+    $users = $mysqli->query("SELECT id FROM users WHERE level_access!='admin'"); 
+
+    foreach($users as $user)
+    {
+        $user_id = $user['id']; 
+        
+        $payment_exists = $mysqli->query("SELECT id FROM user_payments 
+                                            WHERE user_id='$user_id' 
+                                            AND payment_id='$payment_id'"
+                                        ) or die ($mysqli->error); 
+
+        if(mysqli_num_rows($payment_exists) == 0)
+        {
+            $statement  =   $mysqli->prepare("INSERT INTO user_payments (user_id, payment_id) VALUES(?, ?)") or die($mysqli->error); 
+            $statement->bind_param('ii', $user_id, $payment_id);
+            $statement->execute();
+            
+            $count++;
+        }
+    }  
+
+    return $count; 
+}
+
 function check_errors($data) 
 {
     $errors     =   0; 
@@ -45,7 +77,7 @@ function check_errors($data)
 }
 
 
-//! Payment Creation 
+//! Payment Create
 if(isset($_POST['create_payment']))
 {
     $title      =   trim(strtoupper($_POST['title'])); 
@@ -67,6 +99,16 @@ if(isset($_POST['create_payment']))
         $statement->bind_param('ssdis', $title, $category, $amount, $auto, $currentDate); 
         $statement->execute(); 
         $_SESSION['message'] = "Payment Successfully Added"; 
+
+        if(isset($_POST['assign_all'])) 
+        {
+            $payment_id = $statement->insert_id; 
+
+            $users = mass_assignment($payment_id);
+
+            $_SESSION['message'] .= ". {$users} current/pending Members succesfully assigned";
+        }
+
         header("location: payment_list.php");
     } 
 }
@@ -260,3 +302,16 @@ if(isset($_POST['verify_payment']))
 
     header("location: payment_user_view.php?user_payment_id={$id}");
 }
+
+//! Mass Assignment 
+if(isset($_POST['mass_assign']))
+{
+    $payment_id = $_POST['id']; 
+
+    $users = mass_assignment($payment_id);
+
+    $_SESSION['message'] .= "{$users} current/pending Members succesfully assigned";
+
+    header("location: payment_view.php?payment_id={$payment_id}");
+}
+
