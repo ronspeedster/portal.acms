@@ -84,8 +84,14 @@
                             </tbody>
                           </table>
                         </div>
-                        <div class="card-footer bg-white text-right">
-                          <button class="btn btn-sm btn-danger  text-white" data-toggle="modal" data-target="#modal_archive_payment">
+                        <div class="card-footer bg-white d-flex justify-content-end">
+                          <form action="process_payment.php" method="POST" class='align-self-start mr-2'>
+                            <button type="submit" name="mass_assign" class="btn btn-sm btn-danger text-white">
+                              <input type="hidden" name="id" value="<?=$payment['id']?>"> 
+                              Assign Payment to Available Members
+                            </button>
+                          </form>
+                          <button class="btn btn-sm btn-danger text-white mr-2" data-toggle="modal" data-target="#modal_archive_payment">
                             Archive
                           </button>
                           <button class="btn btn-sm bg-gradient-primary text-white" data-toggle="modal" data-target="#modal_edit_payment">
@@ -132,6 +138,7 @@
                                                 user_payments.id as user_payment_id, 
                                                 user_payments.user_id,
                                                 user_payments.status, 
+                                                user_payments.proof_of_payment,
                                                 CONCAT(users.last_name, ', ' ,users.first_name , ' ' ,users.middle_name) AS fullname  
                                                 FROM user_payments 
                                                 JOIN users ON users.id=user_payments.user_id 
@@ -149,11 +156,17 @@
                         <h6 class="m-0 font-weight-bold" style="color: white;">Users Assigned</h6>
                       </div>                   
                       <div class="card-body">
+                        <div class="d-flex justify-content-end mt-2 mb-4">
+                            <button type="button "class="btn btn-success"  data-toggle="modal" data-target="#modal_generate_excel">
+                                Generate Excel
+                            </button>
+                        </div>
                         <table id="table_user_assigned" class='table table-hover overflow-auto'>
                           <thead>
                             <tr>
                               <th>#</th>
                               <th>FULL NAME</th>
+                              <th>PROOF OF PAYMENT</th>
                               <th>STATUS</th>
                               <th></th>
                             </tr>
@@ -170,7 +183,6 @@
                               </td>
                               <?php 
                                 $textColor = null; 
-                                
                                 switch($user_payment['status'])
                                 {
                                     case "AWAITING VERIFICATION": 
@@ -187,6 +199,9 @@
                                 }
                               ?> 
                               <td class='font-weight-bold <?=$textColor?>'>
+                                <?=isset($user_payment["proof_of_payment"]) ? "YES" : "NO"?>
+                              </td>
+                              <td class='font-weight-bold <?=$textColor?>'>
                                 <?=$user_payment['status']?>
                               </td>
                               <td>
@@ -200,7 +215,7 @@
                           </tbody>
                           <tfoot>
                             <tr>
-                              <td colspan='3'></td>
+                              <td colspan='4'></td>
                               <td>
                                 <button class="btn btn-sm bg-gradient-primary text-white" data-toggle="modal" data-target="#modal_add_user_payment">
                                   <i class='fas fa-plus mr-2'></i>Add
@@ -334,6 +349,45 @@
         </div>
       </div>
        <!-- End Add User Modal-->
+
+      <!-- Excel Modal-->
+      <div class="modal fade" id="modal_generate_excel" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Generate Excel</h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">×</span>
+                </button>
+              </div>
+              <form action="process_spreadsheet.php?payment_id=<?=$payment['id']?>" method="POST">
+                  <div class="modal-body">
+                      <div class="row mt-2 mb-3">
+                          <input type="hidden" name="route" value="payment_view.php?payment_id=<?=$payment['id']?>">
+                          <div class="col-md-12 my-2">
+                              <label for="formats">File Format</label>
+                              <select class="custom-select" name="format" id="formats">
+                              <?php 
+                                  $formats = ['csv', 'ods', 'xls', 'xlsx'];
+                              ?> 
+                              <?php foreach($formats as $format): ?> 
+                              <option value="<?=$format?>">
+                                  <?=$format?> 
+                              </option>
+                              <?php endforeach ?> 
+                              </select>
+                          </div>
+                      </div>
+                  </div>
+                <div class="modal-footer">
+                  <button class="btn btn-secondary btn-sm" type="button" data-dismiss="modal">Cancel</button>
+                  <button class="btn bg-gradient-primary btn-sm text-white" name="excel_payment_view">Generate</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+       <!-- End Excel Modal-->
 
 <?php
   include('footer.php');

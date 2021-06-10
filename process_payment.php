@@ -116,7 +116,5 @@ if(isset($_POST['upload_proof_of_payment']))
         }
     }
 
-    echo "TEST";
-
     header("location: payment_show.php?user_payment_id={$id}");
 }

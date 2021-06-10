@@ -99,32 +99,43 @@
                         <div class="card-header bg-gradient-primary text-white text-center font-weight-bold">
                             Proof Of Payment
                         </div>
+                        <?php 
+                            if(isset($user_payment['proof_of_payment']) && !empty($user_payment['proof_of_payment']))
+                            {
+                                $filePath = "storage/proof_of_payment/{$user_payment['proof_of_payment']}";
+                            }
+                            else 
+                            {
+                                $filePath = "storage/misc/no-image.jpg"; 
+                            }
+                        ?> 
+                        <?php if($user_payment['status'] == "VERIFIED"): ?>
+                        <form action="process_certificate.php"" method="POST" target="_blank">
+                            <div class="card-body">
+                                <img src="<?=$filePath?>" id="preview_image" alt="" class="img-fluid w-100">
+                            </div>
+                            <div class="card-footer d-flex justify-content-end">
+                                <button type="submit" name="generate_certificate" class="btn btn-sm bg-gradient-primary text-white">
+                                    Generate Certificate
+                                </button>
+                            </div>
+                        </form>
+                        <?php else: ?> 
                         <form action="process_payment.php?id=<?=$user_payment['id']?>" method="post" enctype="multipart/form-data">
                             <div class="card-body">
-                                <?php 
-                                    if(isset($user_payment['proof_of_payment']) && !empty($user_payment['proof_of_payment']))
-                                    {
-                                        $filePath = "storage/proof_of_payment/{$user_payment['proof_of_payment']}";
-                                    }
-                                    else 
-                                    {
-                                        $filePath = "storage/misc/no-image.jpg"; 
-                                    }
-                                ?> 
                                 <img src="<?=$filePath?>" id="preview_image" alt="" class="img-fluid w-100">
                                 <div class="custom-file my-4">
                                     <input type="file" class="custom-file-input" name="proof_of_payment" id="file_proof_of_payment" aria-describedby="customFileInput">
                                     <label class="custom-file-label" for="customFileInput">Select file</label>
                                 </div>
                             </div>
-                            <?php if($user_payment['status'] != "VERIFIED"): ?> 
                             <div class="card-footer d-flex justify-content-end">
                                 <button type="submit" name="upload_proof_of_payment" class="btn btn-sm bg-gradient-primary text-white">
                                     Submit 
                                 </button>
                             </div>
-                            <?php endif ?> 
                         </form>
+                        <?php endif ?> 
                     </div>
                 </div>
                 <!--End Upload Proof OF Payment Form--> 

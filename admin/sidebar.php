@@ -117,6 +117,13 @@ a:visited {
                 <span>Status</span>
             </a>
         </li>
+         <!-- Nav Item - Dashboard -->
+         <li class="nav-item active" id="nav-item-home">
+            <a class="nav-link" href="manage_certificate.php">
+                <i class="fa fa-address-card"></i>
+                <span>Manage Certificate</span>
+            </a>
+        </li>
       <li class="nav-item active">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#payments" aria-expanded="true" aria-controls="buildings">
           <i class="fa fa-credit-card"></i>
