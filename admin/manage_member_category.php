@@ -49,7 +49,8 @@
                                   <tr>
                                       <th>#</th>
                                       <th>NAME</th>
-                                      <th>ACTIVE</th>
+                                      <th>IS ACTIVE</th>
+                                      <th>IS DEFAULT</th>
                                       <th>CREATED AT</th>
                                       <th>UPDATED AT</th>
                                       <th></th>
@@ -66,7 +67,10 @@
                                       <?=$category['name']?>
                                     </td>
                                     <td>
-                                      <?=$category['active'] == 1 ? 'YES' : 'NO'?> 
+                                      <?=$category['is_active'] == 1 ? 'YES' : 'NO'?> 
+                                    </td>
+                                    <td>
+                                      <?=$category['is_default'] == 1 ? 'YES' : 'NO'?> 
                                     </td>
                                     <td>
                                       <?=$category['created_at']?> 
@@ -85,7 +89,7 @@
                                 </tbody>
                                 <tfoot>
                                   <tr>
-                                    <td colspan='5'>
+                                    <td colspan='6'>
                                     </td>
                                     <td colspan='1'>
                                       <button class="btn btn-sm bg-gradient-primary text-white" data-toggle="modal" data-target="#modal_create_category">
@@ -130,6 +134,14 @@
                     <label for="desc">Description</label>
                     <textarea class="form-control" name="desc" placeholder="Description" id="desc" value="" required>
                     </textarea>
+                  </div>
+                </div>
+                <div class="row mt-3">
+                  <div class="col-md-12">
+                    <div class="custom-control custom-checkbox">
+                      <input type="checkbox" name="default" class="custom-control-input" id="default">
+                      <label class="custom-control-label" for="default">Assign this by default to newly registered members?</label>
+                    </div>
                   </div>
                 </div>
               </div>

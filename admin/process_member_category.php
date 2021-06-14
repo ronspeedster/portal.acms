@@ -35,6 +35,14 @@ function checkErrors($data)
     return $errors; 
 }
 
+function setCategoryByDefault($id)
+{
+    global $mysqli; 
+
+    $mysqli->query("UPDATE member_category SET is_default='0' WHERE is_default='1'") or die($mysqli->error);
+    $mysqli->query("UPDATE member_category SET is_default='1' WHERE id='$id'") or die($mysqli->error);
+}
+
 if(isset($_POST['create_category']))
 {
     $name = mysqli_escape_string($mysqli, trim(strtoupper($_POST['name'])));
@@ -46,14 +54,21 @@ if(isset($_POST['create_category']))
     {
         $statement = $mysqli->prepare("INSERT into member_category 
                                         (name, description) 
-                                        VALUES
-                                        (?, ?)"
+                                        VALUES(?, ?)"
                                     )or die($mysqli->error);
     
         $statement->bind_param('ss', $name, $desc); 
         $statement->execute(); 
-
+        
         $_SESSION['message'] = "Member Category Created Successfully";
+
+        if(isset($_POST['default']))
+        {
+            $category_id = $statement->insert_id; 
+            setCategoryByDefault($category_id);
+
+            $_SESSION['message'] .=  ". Category set by default";
+        }
     }
 
 
