@@ -59,12 +59,10 @@
                             <label class="custom-file-label" for="customFileInput">Select file</label>
                         </div>
                       </div>
-                    <!--   
                       <div class="col-md-12">
-                        <label for="president">President</label>
-                        <input type="text" id="president" class="form-control" placeholder="President" value="">                
+                        <label for="holder">Signature Holder's Name</label>
+                        <input type="text" name='holder' id="holder" class="form-control" placeholder="Holder" value="<?=$cert['holder']?>" required>                
                       </div> 
-                      -->
                     </div>
                   </div>
                   <div class="card-footer d-flex justify-content-end">

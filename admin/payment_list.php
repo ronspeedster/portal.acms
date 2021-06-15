@@ -6,7 +6,8 @@
     $getURI = $protocol . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
     $_SESSION['getURI'] = $getURI;
 
-    $payments   =   $mysqli->query("SELECT * FROM payments WHERE deleted_at is null");
+    $payments           =   $mysqli->query("SELECT * FROM payments WHERE deleted_at is null");
+    $member_categories  =   $mysqli->query("SELECT * FROM member_category WHERE is_active='1'");
 ?>
 <title>Payment List</title>
     <!-- Content Wrapper -->
@@ -142,7 +143,7 @@
                   <div class="col-md-12">
                     <div class="custom-control custom-checkbox">
                       <input type="checkbox" name="auto_assign" class="custom-control-input" id="auto_assign">
-                      <label class="custom-control-label" for="auto_assign">Automatically assign this to new members?</label>
+                      <label class="custom-control-label" for="auto_assign">Automatically Assign Payment to NEW MEMBERS</label>
                     </div>
                   </div>
                 </div>
@@ -150,10 +151,22 @@
                   <div class="col-md-12">
                     <div class="custom-control custom-checkbox">
                       <input type="checkbox" name="assign_all" class="custom-control-input" id="assign_all">
-                      <label class="custom-control-label" for="assign_all">Assign Payment to all current members?</label>
+                      <label class="custom-control-label" for="assign_all">Assign Payment to CURRENT MEMBERS</label>
                     </div>
                   </div>
                 </div>
+                <hr>
+                <h5 class="my-2">Member Category</h5>
+                <?php foreach($member_categories as $category): ?>
+                  <div class="row mt-3">
+                    <div class="col-md-12">
+                      <div class="custom-control custom-checkbox">
+                        <input type="checkbox" name="member_category[]" class="custom-control-input" id="member_<?=$category['id']?>">
+                        <label class="custom-control-label" for="member_<?=$category['id']?>">Assign Payment to <?=$category['name']?></label>
+                      </div>
+                    </div>
+                  </div>
+                <?php endforeach ?>  
               </div>
               <div class="modal-footer">
                 <button class="btn btn-secondary btn-sm" type="button" data-dismiss="modal">Cancel</button>
