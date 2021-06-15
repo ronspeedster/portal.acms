@@ -44,16 +44,18 @@
             }
         ?> 
         <div class="row">
-            <div class="col-md-6">
+            <div class="col-md-8">
               <div class="card shadow">
                 <div class="card-header">
-                  Certificate Signature with Signee Name (.png)
+                  Certificate Signature with Signee Name (.png)(200 Width x 100 Height Recommended)
                 </div>
                 <form action="process_certificate.php" method="post" enctype="multipart/form-data">
                   <div class="card-body">
                     <div class="row">
                       <div class="col-md-12">
-                        <img src="<?=$filePath?>" id="preview_image" alt="" class="img-fluid w-100">
+                        <div class="text-center">
+                          <img src="<?=$filePath?>" id="preview_image" alt="" class="text-center">
+                        </div>
                         <div class="custom-file my-4">
                             <input type="file" class="custom-file-input" name="signature" id="file_signature" aria-describedby="customFileInput">
                             <label class="custom-file-label" for="customFileInput">Select file</label>
