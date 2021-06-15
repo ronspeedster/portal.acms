@@ -110,10 +110,9 @@
       </div>
       <!-- End of Main Content -->
 
-
       <!-- Payment Create Modal-->
       <div class="modal fade" id="modal_create_payment" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
+        <div class="modal-dialog  modal-lg" role="document">
           <div class="modal-content">
             <div class="modal-header">
               <h5 class="modal-title" id="exampleModalLabel">Create Payment</h5>
@@ -143,15 +142,7 @@
                   <div class="col-md-12">
                     <div class="custom-control custom-checkbox">
                       <input type="checkbox" name="auto_assign" class="custom-control-input" id="auto_assign">
-                      <label class="custom-control-label" for="auto_assign">Automatically Assign Payment to NEW MEMBERS</label>
-                    </div>
-                  </div>
-                </div>
-                <div class="row mt-3">
-                  <div class="col-md-12">
-                    <div class="custom-control custom-checkbox">
-                      <input type="checkbox" name="assign_all" class="custom-control-input" id="assign_all">
-                      <label class="custom-control-label" for="assign_all">Assign Payment to CURRENT MEMBERS</label>
+                      <label class="custom-control-label" for="auto_assign">Automatically Assign Payment to NEWLY REGISTERED USERS</label>
                     </div>
                   </div>
                 </div>
@@ -161,7 +152,7 @@
                   <div class="row mt-3">
                     <div class="col-md-12">
                       <div class="custom-control custom-checkbox">
-                        <input type="checkbox" name="member_category[]" class="custom-control-input" id="member_<?=$category['id']?>">
+                        <input type="checkbox" name="member_category[]" class="custom-control-input" id="member_<?=$category['id']?>" value="<?=$category['id']?>">
                         <label class="custom-control-label" for="member_<?=$category['id']?>">Assign Payment to <?=$category['name']?></label>
                       </div>
                     </div>
