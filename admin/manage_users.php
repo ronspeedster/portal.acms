@@ -104,6 +104,25 @@
                             </div>
                         </div>
 
+                        <?php 
+                           $categories   =   $mysqli->query("SELECT * FROM member_category");
+                        ?> 
+
+                        <?php if($isEdit): ?> 
+                        <label style="margin-bottom: 15px !important;" class="font-weight-bold">Member Status:</label>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <select class="form-control" name="member_category" id="">
+                                    <?php foreach($categories as $category): ?> 
+                                        <option value="<?=$category['id']?>" <?=$category['id'] == $newUserInformation['member_category_id'] ? 'selected' : ''?>>
+                                            <?=$category['name']?> 
+                                        </option>
+                                    <?php endforeach ?> 
+                                </select>
+                                <br/>
+                            </div>
+                        </div>
+                        <?php endif ?> 
                       <br/>
                        <?php if(!$isEdit){ ?>
                       <button type="submit" class="btn btn-sm ml-auto float-right" style="background-color: #1b5b3a; color: white;" name="add_user">

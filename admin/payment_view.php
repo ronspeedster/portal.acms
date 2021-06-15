@@ -16,6 +16,7 @@
  
     $payment_status     = ["AWAITING VERIFICATION", "PENDING", "VERIFIED"];
     $payment_fields     = ["title", "category", "amount", "auto_assign", "created_at", "updated_at"];
+    $member_categories  =   $mysqli->query("SELECT * FROM member_category WHERE is_active='1'");
 ?>
 <title>Payment Summary</title>
     <!-- Content Wrapper -->
@@ -85,12 +86,14 @@
                           </table>
                         </div>
                         <div class="card-footer bg-white d-flex justify-content-end">
+                          <!--
                           <form action="process_payment.php" method="POST" class='align-self-start mr-2'>
                             <button type="submit" name="mass_assign" class="btn btn-sm btn-danger text-white">
                               <input type="hidden" name="id" value="<?=$payment['id']?>"> 
                               Assign Payment to Available Members
                             </button>
                           </form>
+                          -->
                           <button class="btn btn-sm btn-danger text-white mr-2" data-toggle="modal" data-target="#modal_archive_payment">
                             Archive
                           </button>
@@ -157,9 +160,9 @@
                       </div>                   
                       <div class="card-body">
                         <div class="d-flex justify-content-end mt-2 mb-4">
-                            <button type="button "class="btn btn-success"  data-toggle="modal" data-target="#modal_generate_excel">
-                                Generate Excel
-                            </button>
+                          <button type="button "class="btn btn-success"  data-toggle="modal" data-target="#modal_generate_excel">
+                              Generate Excel
+                          </button>
                         </div>
                         <table id="table_user_assigned" class='table table-hover overflow-auto'>
                           <thead>
@@ -217,8 +220,16 @@
                             <tr>
                               <td colspan='4'></td>
                               <td>
-                                <button class="btn btn-sm bg-gradient-primary text-white" data-toggle="modal" data-target="#modal_add_user_payment">
+                                <button class="btn btn-sm bg-gradient-primary text-white w-50" data-toggle="modal" data-target="#modal_add_user_payment">
                                   <i class='fas fa-plus mr-2'></i>Add
+                                </button>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td colspan='4'></td>
+                              <td>
+                                <button type="button "class="btn btn-danger btn-sm mr-4 w-50"  data-toggle="modal" data-target="#modal_mass_assign">
+                                  <i class='fas fa-plus mr-2'></i>Mass Assign
                                 </button>
                               </td>
                             </tr>
@@ -236,6 +247,40 @@
           </div>
         </div>
         <!-- /.container-fluid -->
+
+    <!-- Payment Create Modal-->
+    <div class="modal fade" id="modal_mass_assign" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLabel">Mass Assignment</h5>
+              <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">×</span>
+              </button>
+            </div>
+            <form action="process_payment.php" method="POST">
+              <div class="modal-body">
+                <input type="hidden" name="id" value="<?=$payment['id']?>">
+                <?php foreach($member_categories as $category): ?>
+                  <div class="row my-3">
+                    <div class="col-md-12">
+                      <div class="custom-control custom-checkbox">
+                        <input type="checkbox" name="member_category[]" class="custom-control-input" id="member_<?=$category['id']?>" value="<?=$category['id']?>">
+                        <label class="custom-control-label" for="member_<?=$category['id']?>">Assign Payment to <?=$category['name']?></label>
+                      </div>
+                    </div>
+                  </div>
+                <?php endforeach ?>  
+              </div>
+              <div class="modal-footer">
+                <button class="btn btn-secondary btn-sm" type="button" data-dismiss="modal">Cancel</button>
+                <button class="btn bg-gradient-primary btn-sm text-white" name="payment_mass_assign">Submit</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+      <!-- End Payment Create Modal-->
 
       <!-- Payment Edit Modal-->
       <div class="modal fade" id="modal_edit_payment" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">

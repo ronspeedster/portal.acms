@@ -6,10 +6,10 @@
     $getURI = $protocol . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
     $_SESSION['getURI'] = $getURI;
 
-    $payments           =   $mysqli->query("SELECT * FROM payments WHERE deleted_at is null");
-    $member_categories  =   $mysqli->query("SELECT * FROM member_category WHERE is_active='1'");
+    $categories   =   $mysqli->query("SELECT * FROM member_category");
 ?>
-<title>Payment List</title>
+<title>Member Category</title>
+
     <!-- Content Wrapper -->
     <div id="content-wrapper" class="d-flex flex-column">
 
@@ -41,45 +41,45 @@
                 <div class="col-md-12">
                     <div class="card shadow overflow-auto">
                         <div class="card-header bg-gradient-primary text-white font-weight-bold">
-                            Payments                        
+                            Member Category                        
                         </div>
                         <div class="card-body">
-                            <table id="table_payments" class="table table-hover text-sm">
+                            <table id="table_category" class="table table-hover text-sm">
                                 <thead>
                                   <tr>
                                       <th>#</th>
-                                      <th>TITLE</th>
-                                      <th>CATEGORY</th>
-                                      <th>AMOUNT</th>
-                                      <th>USERS</th>
+                                      <th>NAME</th>
+                                      <th>IS ACTIVE</th>
+                                      <th>IS DEFAULT</th>
                                       <th>CREATED AT</th>
+                                      <th>UPDATED AT</th>
                                       <th></th>
                                   </tr>
                                 </thead>
                                 <tbody>
                                   <?php $i=1; ?> 
-                                  <?php foreach($payments as $payment):?> 
+                                  <?php foreach($categories as $category):?> 
                                   <tr class="cursor-pointer">
                                     <td>
                                       <?=$i?>
                                     </td>
                                     <td>
-                                        <?=$payment['title']?>
+                                      <?=$category['name']?>
                                     </td>
                                     <td>
-                                      <?=$payment['category']?> 
+                                      <?=$category['is_active'] == 1 ? 'YES' : 'NO'?> 
                                     </td>
                                     <td>
-                                      <?=number_format($payment['amount'], 2)?> 
+                                      <?=$category['is_default'] == 1 ? 'YES' : 'NO'?> 
                                     </td>
                                     <td>
-                                      <?=mysqli_num_rows($mysqli->query("SELECT * FROM user_payments WHERE payment_id = {$payment['id']}"))?> 
+                                      <?=$category['created_at']?> 
                                     </td>
                                     <td>
-                                      <?=$payment['created_at']?> 
+                                      <?=$category['updated_at']?> 
                                     </td>
                                     <td>
-                                      <a href="payment_view.php?payment_id=<?=$payment['id']?>" class="btn btn-sm bg-gradient-primary text-white">
+                                      <a href="member_category_view.php?category_id=<?=$category['id']?>" class="btn btn-sm bg-gradient-primary text-white">
                                         <i class='fas fa-eye mr-2'></i>View
                                       </a>
                                     </td>
@@ -89,10 +89,10 @@
                                 </tbody>
                                 <tfoot>
                                   <tr>
-                                    <td colspan=6>
+                                    <td colspan='6'>
                                     </td>
                                     <td colspan='1'>
-                                      <button class="btn btn-sm bg-gradient-primary text-white" data-toggle="modal" data-target="#modal_create_payment">
+                                      <button class="btn btn-sm bg-gradient-primary text-white" data-toggle="modal" data-target="#modal_create_category">
                                         <i class='fas fa-plus mr-2'></i>Add
                                       </button>
                                     </td>
@@ -110,71 +110,56 @@
       </div>
       <!-- End of Main Content -->
 
-      <!-- Payment Create Modal-->
-      <div class="modal fade" id="modal_create_payment" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog  modal-lg" role="document">
+
+      <!-- Category Create Modal-->
+      <div class="modal fade" id="modal_create_category" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
           <div class="modal-content">
             <div class="modal-header">
-              <h5 class="modal-title" id="exampleModalLabel">Create Payment</h5>
+              <h5 class="modal-title" id="exampleModalLabel">Create Category</h5>
               <button class="close" type="button" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">×</span>
               </button>
             </div>
-            <form action="process_payment.php" method="POST">
+            <form action="process_member_category.php" method="POST">
               <div class="modal-body">
                 <div class="row mt-2 mb-3">
                   <div class="col-md-12">
-                    <label for="title">Title</label>
-                    <input type="text" class="form-control" name="title" placeholder="Title" id="title" value="" required>
+                    <label for="name">Name</label>
+                    <input type="text" class="form-control" name="name" placeholder="Name" id="name" value="" required>
                   </div>
                 </div>
-                <div class="row my-3">
-                  <div class="col-md-6">
-                    <label for="category">Category</label>
-                    <input type="text" class="form-control" name="category" placeholder="Category" id="category" value="" required>
-                  </div>
-                  <div class="col-md-6">
-                    <label for="amount">Amount</label>
-                    <input type="number" class="form-control" name="amount" placeholder="Amount" step="0.01" id="amount" value="" required>
+                <div class="row mt-2 mb-3">
+                  <div class="col-md-12">
+                    <label for="desc">Description</label>
+                    <textarea class="form-control" name="desc" placeholder="Description" id="desc" value="" required></textarea>
                   </div>
                 </div>
-                <div class="row my-3">
+                <div class="row mt-3">
                   <div class="col-md-12">
                     <div class="custom-control custom-checkbox">
-                      <input type="checkbox" name="auto_assign" class="custom-control-input" id="auto_assign">
-                      <label class="custom-control-label" for="auto_assign">Automatically Assign Payment to NEWLY REGISTERED USERS</label>
+                      <input type="checkbox" name="default" class="custom-control-input" id="default">
+                      <label class="custom-control-label" for="default">Assign this by default to newly registered members?</label>
                     </div>
                   </div>
                 </div>
-                <hr>
-                <h5 class="my-2">Member Category</h5>
-                <?php foreach($member_categories as $category): ?>
-                  <div class="row mt-3">
-                    <div class="col-md-12">
-                      <div class="custom-control custom-checkbox">
-                        <input type="checkbox" name="member_category[]" class="custom-control-input" id="member_<?=$category['id']?>" value="<?=$category['id']?>">
-                        <label class="custom-control-label" for="member_<?=$category['id']?>">Assign Payment to <?=$category['name']?></label>
-                      </div>
-                    </div>
-                  </div>
-                <?php endforeach ?>  
               </div>
               <div class="modal-footer">
                 <button class="btn btn-secondary btn-sm" type="button" data-dismiss="modal">Cancel</button>
-                <button class="btn bg-gradient-primary btn-sm text-white" name="create_payment">Submit</button>
+                <button class="btn bg-gradient-primary btn-sm text-white" name="create_category">Submit</button>
               </div>
             </form>
           </div>
         </div>
       </div>
-       <!-- End Payment Create Modal-->
+       <!-- End Category Create Modal-->
 <?php
   include('footer.php');
 ?>
 
 <script>
     $(document).ready(function() {
-        $('#table_payments').DataTable(
+        $('#table_category').DataTable(
             {
                 "pageLength": 50,
             }

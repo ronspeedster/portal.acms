@@ -37,6 +37,38 @@ function mass_assignment($payment_id)
     return $count; 
 }
 
+//! Assign by Member Category
+function assignByMemberCategory($category, $payment_id)
+{
+    global $mysqli; 
+
+    $count = 0; 
+
+    //* GET USERS 
+    $users = $mysqli->query("SELECT id FROM users WHERE level_access!='admin' AND member_category_id='$category'"); 
+
+    foreach($users as $user)
+    {
+        $user_id = $user['id']; 
+        
+        $payment_exists = $mysqli->query("SELECT id FROM user_payments 
+                                            WHERE user_id='$user_id' 
+                                            AND payment_id='$payment_id'"
+                                        ) or die ($mysqli->error); 
+
+        if(mysqli_num_rows($payment_exists) == 0)
+        {
+            $statement  =   $mysqli->prepare("INSERT INTO user_payments (user_id, payment_id) VALUES(?, ?)") or die($mysqli->error); 
+            $statement->bind_param('ii', $user_id, $payment_id);
+            $statement->execute();
+            
+            $count++;
+        }
+    }  
+
+    return $count; 
+} 
+
 function check_errors($data) 
 {
     $errors     =   0; 
@@ -99,18 +131,22 @@ if(isset($_POST['create_payment']))
         $statement->bind_param('ssdis', $title, $category, $amount, $auto, $currentDate); 
         $statement->execute(); 
         $_SESSION['message'] = "Payment Successfully Added"; 
-
-        if(isset($_POST['assign_all'])) 
+        
+        if(isset($_POST['member_category']))
         {
             $payment_id = $statement->insert_id; 
-
-            $users = mass_assignment($payment_id);
-
+            $users = 0; 
+    
+            foreach($_POST['member_category'] as $category)
+            {
+                $users += assignByMemberCategory($category, $payment_id);
+            }
+    
             $_SESSION['message'] .= ". {$users} current/pending Members succesfully assigned";
         }
-
+        
         header("location: payment_list.php");
-    } 
+    }
 }
 
 //! Payment Update
@@ -315,3 +351,27 @@ if(isset($_POST['mass_assign']))
     header("location: payment_view.php?payment_id={$payment_id}");
 }
 
+//! Payment assign by Category 
+if(isset($_POST['payment_mass_assign']))
+{
+    $id = $_POST['id'];
+
+    if(isset($_POST['member_category']))
+    {
+        $payment            =  mysqli_fetch_assoc($mysqli->query("SELECT * FROM payments WHERE id='$id'"));
+        $users = 0; 
+
+        foreach($_POST['member_category'] as $category)
+        {
+            $users += assignByMemberCategory($category, $payment['id']);
+        }
+
+        $_SESSION['message'] = "{$users} current/pending Members succesfully assigned";
+    }
+    else 
+    {
+        $_SESSION['errors']['category'] = "Please choose a category";
+    }
+    
+    header("location: payment_view.php?payment_id={$id}");
+}

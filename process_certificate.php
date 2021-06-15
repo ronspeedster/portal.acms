@@ -19,6 +19,7 @@ if(isset($_POST['generate_certificate']))
 
     $query      =   $mysqli->query("SELECT * from certificates WHERE name='GOOD STANDING'") or die ($mysqli->error); 
     $cert       =   $query->fetch_assoc(); 
+    $holder     =   $cert['holder'];
     $cert       =   $cert['signature'];
 
     $id         =   $_SESSION["user_id"];
@@ -80,7 +81,8 @@ if(isset($_POST['generate_certificate']))
                             </main>
                             <footer class='mt-1'>
                                 <div class='text-center'>
-                                    <img src='storage/certificate/{$cert}' width='150px' height='150px'>
+                                    <img src='../storage/certificate/{$cert}'>
+                                    <h4 class='font-weight-bold'>{$holder}</h4>
                                 </div>
                             </footer>
                         </div>

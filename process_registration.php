@@ -48,6 +48,9 @@
 		}
 		else 
 		{
+			$query 					 =  mysqli_fetch_assoc($mysqli->query("SELECT id FROM member_category WHERE is_default='1'"));
+			$default_member_category =  $query['id'];
+
 			// !Transition to Prepared Statements
 			$default_access = "temporary"; 
 			$statement 	=	$mysqli->prepare("INSERT INTO users( 
@@ -64,9 +67,12 @@
 												field_of_practice, 
 												username, 
 												password, 
-												level_access) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ") or die ($mysqli->error);
+												level_access,
+												member_category_id) 
+												VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ") 
+												or die ($mysqli->error);
 	
-			$statement->bind_param('ssssssssssssss', 
+			$statement->bind_param('ssssssssssssssi', 
 									$firstName, 
 									$middleName, 
 									$lastName, 
@@ -80,7 +86,8 @@
 									$field, 
 									$username, 
 									$password, 
-									$default_access);
+									$default_access,
+									$default_member_category);
 									
 			$statement->execute(); 
 			
@@ -98,9 +105,7 @@
 
 			$_SESSION['loginError'] = "User Account Creation Successful!";
 			header("location: login.php");
-		}
-
-		
+		}		
 	}
 
 	// Login Details for users

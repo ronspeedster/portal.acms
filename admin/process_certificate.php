@@ -12,7 +12,13 @@ function check_errors($data = [])
 {
     $max_file_size  =   500000;
     $errors = 0;
-         
+
+    if(empty($data['holder']))
+    {
+        $_SESSION['errors']['holder'] =   "Please provide the Signature Holder's Name"; 
+        $errors++;
+    }
+
     // !Check if File is empty 
     if(empty($_FILES['signature']['tmp_name']))
     {
@@ -68,6 +74,7 @@ function upload_file($fileName, $oldFile = null)
 if(isset($_POST['upload_signature']))
 {
     $query                  = $mysqli->query("SELECT * from certificates WHERE name='GOOD STANDING'"); 
+    $holder                 = mysqli_escape_string($mysqli, trim(strtoupper($_POST['holder'])));
     $exists                 = false; 
     $cert['signature']      = null; 
 
@@ -77,7 +84,7 @@ if(isset($_POST['upload_signature']))
         $cert               = $query->fetch_assoc();
     }
     
-    $errors =   check_errors(); 
+    $errors =   check_errors(compact('holder')); 
 
     if($errors == 0)
     {
@@ -89,19 +96,20 @@ if(isset($_POST['upload_signature']))
             if($exists)
             {
                 $statement = $mysqli->prepare("UPDATE certificates SET
-                                                signature=?
+                                                signature=?, 
+                                                holder=?
                                                 WHERE name='GOOD STANDING'"
                                                 ) or die ($mysqli->error);
                 
-                $statement->bind_param('s', $fileName); 
+                $statement->bind_param('ss', $fileName, $holder); 
                 $statement->execute();  
                
             }
             else 
             {
                 $statement = $mysqli->prepare("INSERT INTO certificates 
-                                        (name, signature)      
-                                        VALUES('GOOD STANDING', ?)" 
+                                        (name, signature, holder)      
+                                        VALUES('GOOD STANDING', ?, '')" 
                                     ) or die ($mysqli->error); 
 
                 $statement->bind_param('s', $fileName); 
@@ -131,6 +139,7 @@ if(isset($_POST['check_certificate']))
 
     $query      =   $mysqli->query("SELECT * from certificates WHERE name='GOOD STANDING'") or die ($mysqli->error); 
     $cert       =   $query->fetch_assoc(); 
+    $holder     =   $cert['holder'];
     $cert       =   $cert['signature'];
 
     $id         =   $_SESSION["user_id"];
@@ -191,7 +200,8 @@ if(isset($_POST['check_certificate']))
                             <br>
                             <footer class='mt-5'>
                                 <div class='text-center'>
-                                    <img src='../storage/certificate/{$cert}' width='150px' height='150px'>
+                                    <img src='../storage/certificate/{$cert}'>
+                                    <h4 class='font-weight-bold'>{$holder}</h4>
                                 </div>
                             </footer>
                         </div>

@@ -117,13 +117,7 @@ a:visited {
                 <span>Status</span>
             </a>
         </li>
-         <!-- Nav Item - Dashboard -->
-         <li class="nav-item active" id="nav-item-home">
-            <a class="nav-link" href="manage_certificate.php">
-                <i class="fa fa-address-card"></i>
-                <span>Manage Certificate</span>
-            </a>
-        </li>
+
       <li class="nav-item active">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#payments" aria-expanded="true" aria-controls="buildings">
           <i class="fa fa-credit-card"></i>
@@ -153,6 +147,19 @@ a:visited {
             <a class="collapse-item" href="view_voter_status.php"><i class="fas fa-eye"></i> View Voter's Status</a>
             <a class="collapse-item" href="view_election_status.php"><i class="fas fa-eye"></i> View Election status</a>
             <a class="collapse-item" href="view_election_status_cross_check.php"><i class="fas fa-eye"></i> View Vote's Liquidation (Cross Check)</a>
+          </div>
+        </div>
+      </li>
+      <li class="nav-item active">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#settings" aria-expanded="true" aria-controls="buildings">
+          <i class="fas fa-cogs"></i>
+          <span>Settings</span>
+        </a>
+        <div id="settings" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+          <div class="bg-white py-2 collapse-inner rounded">
+            <h6 class="collapse-header">Manage Settings</h6>
+            <a class="collapse-item" href="manage_certificate.php"><i class="fas fa-address-card"></i> Manage Certificate Signature</a>
+            <a class="collapse-item" href="manage_member_category.php"><i class="fas fa-address-book"></i> Manage Member Category</a>
           </div>
         </div>
       </li>
