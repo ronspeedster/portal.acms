@@ -132,8 +132,7 @@
                 <div class="row mt-2 mb-3">
                   <div class="col-md-12">
                     <label for="desc">Description</label>
-                    <textarea class="form-control" name="desc" placeholder="Description" id="desc" value="" required>
-                    </textarea>
+                    <textarea class="form-control" name="desc" placeholder="Description" id="desc" value="" required></textarea>
                   </div>
                 </div>
                 <div class="row mt-3">

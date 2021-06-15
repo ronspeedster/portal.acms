@@ -55,6 +55,7 @@
         $prc_number= mysqli_real_escape_string($mysqli, $_POST['prc_number']);
         $expiration_date = mysqli_real_escape_string($mysqli, $_POST['expiration_date']);
         $field_of_practice = mysqli_real_escape_string($mysqli, $_POST['field_of_practice']);
+        $member_category = mysqli_real_escape_string($mysqli, $_POST['member_category']);
 
         $password = substr($prc_number, -4);
 
@@ -76,7 +77,8 @@
         pma_number = '$pma_number',
         prc_number = '$prc_number',
         expiration_date = '$expiration_date',
-        field_of_practice = '$field_of_practice'
+        field_of_practice = '$field_of_practice', 
+        member_category_id = '$member_category' 
         WHERE id = '$user_id' ") or die ($mysqli->error);
 //        UPDATE `users` SET `field_of_practice` = '1' WHERE `users`.`id` = 8;
 
