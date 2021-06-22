@@ -5,7 +5,7 @@ if(!isset($_SESSION))
         session_start();
     }
     
-	$production = true; 
+	$production = false; 
 
 	if($production)
 	{

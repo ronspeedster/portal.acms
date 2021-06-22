@@ -160,6 +160,7 @@ a:visited {
             <h6 class="collapse-header">Manage Settings</h6>
             <a class="collapse-item" href="manage_certificate.php"><i class="fas fa-address-card"></i> Manage Certificate Signature</a>
             <a class="collapse-item" href="manage_member_category.php"><i class="fas fa-address-book"></i> Manage Member Category</a>
+            <a class="collapse-item" href="manage_email_settings.php"><i class="fas fa-envelope"></i> Manage Email Settings</a>
           </div>
         </div>
       </li>
