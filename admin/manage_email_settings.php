@@ -132,7 +132,7 @@
                 <div class="row my-2 mb-3">
                     <div class="col-md-12">
                         <?php 
-                            $hosts = ['smtp.mailtrap.io', 'smtp.gmail.com']
+                            $hosts = ['smtp.mailtrap.io', 'smtp.gmail.com', 'mail.acms.org.ph'];
                         ?> 
                         <label for="host">Host</label>
                         <select class="form-control" name="host" id="host">

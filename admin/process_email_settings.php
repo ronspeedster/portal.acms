@@ -164,13 +164,13 @@ if(isset($_POST['test_setting']))
 {
     $id = mysqli_escape_string($mysqli, trim(strtoupper($_POST['id']))); 
 
-    $setting = mysqli_fetch_assoc($mysqli->query("SELECT * FROM settings_email where is_default='1'")) or die($mysqli->error);
+    $setting = mysqli_fetch_assoc($mysqli->query("SELECT * FROM settings_email where id='$id'")) or die($mysqli->error);
 
     //! Instantiation and passing `true` enables exceptions
     $mail = new PHPMailer(true);
 
     //* Enable verbose debug output
-    $mail->SMTPDebug = false;                    
+    $mail->SMTPDebug = 2;                    
     
     //* Send using SMTP
     $mail->isSMTP();                                           
@@ -200,9 +200,8 @@ if(isset($_POST['test_setting']))
     $mail->Body    = "<h1>Hello, {$_SESSION['full_name']}! This a test email</h1>";
 
     $mail->send();
-
-    header("location: view_email_setting.php?setting_id={$id}");
-
+    
     $_SESSION['message'] = "Email sent to {$_SESSION['email']}"; 
 
+    header("location: view_email_setting.php?setting_id={$id}");
 }
