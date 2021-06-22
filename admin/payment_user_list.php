@@ -275,45 +275,7 @@
   include('footer.php');
 ?>
 
-<script>
-$(document).ready(function()
-    {
-        $('#date').on('change', function()
-            {
-                toggleDateField($(this).val());
-            }
-        );  
-
-        function toggleDateField(value)
-        {
-            $('.date-field').each(function(index, field)
-                {
-                    field.classList.add('d-none');          
-                }
-            );
-
-            switch(value)
-            {
-                case 'from and to':
-                    $('.date-field.date-range').removeClass('d-none') 
-                    break;
-
-                case 'month': 
-                    $('.date-field.date-month').removeClass('d-none') 
-                    break;
-
-                case 'year': 
-                    $('.date-field.date-year').removeClass('d-none') 
-                    break;  
-
-                default: 
-                    break; 
-            }
-        }
-    }
-);
-</script>
-
+<script src="./generate_excel.js"></script>
 <script>
     $(document).ready(function() {
         $('#table_user_payments').DataTable(

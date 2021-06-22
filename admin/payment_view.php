@@ -395,48 +395,95 @@
       </div>
        <!-- End Add User Modal-->
 
-      <!-- Excel Modal-->
-      <div class="modal fade" id="modal_generate_excel" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-          <div class="modal-dialog" role="document">
-            <div class="modal-content">
-              <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Generate Excel</h5>
-                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-                  <span aria-hidden="true">×</span>
-                </button>
-              </div>
-              <form action="process_spreadsheet.php?payment_id=<?=$payment['id']?>" method="POST">
-                  <div class="modal-body">
-                      <div class="row mt-2 mb-3">
-                          <input type="hidden" name="route" value="payment_view.php?payment_id=<?=$payment['id']?>">
-                          <div class="col-md-12 my-2">
-                              <label for="formats">File Format</label>
-                              <select class="custom-select" name="format" id="formats">
-                              <?php 
-                                  $formats = ['csv', 'ods', 'xls', 'xlsx'];
-                              ?> 
-                              <?php foreach($formats as $format): ?> 
-                              <option value="<?=$format?>">
-                                  <?=$format?> 
-                              </option>
-                              <?php endforeach ?> 
-                              </select>
-                          </div>
-                      </div>
-                  </div>
-                <div class="modal-footer">
-                  <button class="btn btn-secondary btn-sm" type="button" data-dismiss="modal">Cancel</button>
-                  <button class="btn bg-gradient-primary btn-sm text-white" name="excel_payment_view">Generate</button>
-                </div>
-              </form>
+       <!-- Excel Modal-->
+    <div class="modal fade" id="modal_generate_excel" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLabel">Generate Excel</h5>
+              <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">×</span>
+              </button>
             </div>
+            <form action="process_spreadsheet.php" method="POST">
+                <div class="modal-body">
+                    <input type="hidden" name="route"      value="payment_view.php?payment_id=<?=$payment['id']?>">
+                    <input type="hidden" name="payment_id" value="<?=$payment['id']?>">
+                    <div class="row my-2 mb-3">
+                        <div class="col-md-12 my-2">
+                            <label for="formats">File Format</label>
+                            <select class="custom-select" name="format" id="formats">
+                            <?php 
+                                $formats = ['csv', 'ods', 'xls', 'xlsx'];
+                            ?> 
+                            <?php foreach($formats as $format): ?> 
+                            <option value="<?=$format?>">
+                                <?=$format?> 
+                            </option>
+                            <?php endforeach ?> 
+                            </select>
+                        </div>
+                        <div class="col-md-12 my-2">
+                            <label for="date">Generate by: </label>
+                            <select class="custom-select" name="date" id="date">
+                            <?php 
+                                $dates = ['all', 'from and to', 'today', 'month', 'year'];
+                            ?> 
+                            <?php foreach($dates as $date): ?> 
+                            <option value="<?=$date?>">
+                                <?=strtoupper($date)?> 
+                            </option>
+                            <?php endforeach ?> 
+                            </select>
+                        </div>
+                        <div class="col-md-12 my-2 date-field date-range border-top pt-3 d-none">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <label for="date_from">From</label>
+                                    <input class='form-control' type="date" name="date_from" id="date_from">                                
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="date_to">To</label>
+                                    <input class='form-control' type="date" name="date_to" id="date_to">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-12 my-2 date-field date-month border-top pt-3 d-none">
+                            <label for="month">Month: </label>
+                            <select class="custom-select" name="month" id="month">
+                            <?php 
+                                $months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+                            ?> 
+                            <?php foreach($months as $month): ?> 
+                            <option value="<?=$month?>">
+                                <?=strtoupper($month)?> 
+                            </option>
+                            <?php endforeach ?> 
+                            </select>
+                        </div>
+                        <div class="col-md-12 my-2 date-field date-year border-top pt-3 d-none">
+                            <label for="year">Year: </label>
+                            <input type="number" class='form-control' name="year" id="year" placeholder="Year">
+                        </div>
+                    </div>
+                </div>
+              <div class="modal-footer">
+                <button class="btn btn-secondary btn-sm" type="button" data-dismiss="modal">Cancel</button>
+                <button class="btn bg-gradient-primary btn-sm text-white" name="excel_user_payment_list">Generate</button>
+              </div>
+            </form>
           </div>
         </div>
+      </div>
        <!-- End Excel Modal-->
+
 
 <?php
   include('footer.php');
-  ?>
+?>
+
+<script src="./generate_excel.js"></script>
+
   <script>
    $(document).ready(function() {
        $('#table_user_assigned').DataTable(
