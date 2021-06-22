@@ -138,8 +138,8 @@
                           </form>
                           <form action="process_email_settings.php" method="POST" class='align-self-start mr-2'>
                             <input type="hidden" name="id" value="<?=$setting['id']?>"> 
-                            <button type="submit" name="test_setting" class="btn btn-sm btn-danger text-white">
-                                Delete
+                            <button type="submit" name="test_setting" class="btn btn-sm btn-info text-white">
+                                Test
                             </button>
                           </form>
                           <button class="btn btn-sm bg-gradient-primary text-white" data-toggle="modal" data-target="#modal_edit_setting">

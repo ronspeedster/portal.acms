@@ -154,7 +154,7 @@ if(isset($_POST['delete_setting']))
     
     $mysqli->query("DELETE FROM settings_email WHERE id='$id'") or die($mysqli->error);
 
-    $_SESSION['message'] =  "Setting Deleted";
+    $_SESSION['message'] =  "Email Setting Deleted";
 
     header("location: manage_email_settings.php");
   
@@ -162,5 +162,47 @@ if(isset($_POST['delete_setting']))
 
 if(isset($_POST['test_setting']))
 {
-    // TODO Send Email to Self 
+    $id = mysqli_escape_string($mysqli, trim(strtoupper($_POST['id']))); 
+
+    $setting = mysqli_fetch_assoc($mysqli->query("SELECT * FROM settings_email where is_default='1'")) or die($mysqli->error);
+
+    //! Instantiation and passing `true` enables exceptions
+    $mail = new PHPMailer(true);
+
+    //* Enable verbose debug output
+    $mail->SMTPDebug = false;                    
+    
+    //* Send using SMTP
+    $mail->isSMTP();                                           
+    
+    //* Set the SMTP server to send through
+    $mail->Host       = $setting['host'];                     
+    
+    //* Enable SMTP authentication
+    $mail->SMTPAuth   = $setting['auth'] == 1 ? true : false;                                 
+    
+    //* SMTP username && password
+    $mail->Username =  $setting['username'];
+    $mail->Password =  $setting['password'];                      
+
+    //* TCP port to connect to, use 465 for `PHPMailer::ENCRYPTION_SMTPS` above
+    $mail->Port     = $setting['port'];                                  
+    
+    //* Enable TLS encryption; `PHPMailer::ENCRYPTION_SMTPS` encouraged
+    $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;    
+
+    //* Recipients
+    $mail->setFrom('1972acms@gmail.com', 'ACMS');
+
+    $mail->addAddress($_SESSION['email'], $_SESSION['full_name']);
+    $mail->isHTML(true);                              
+    $mail->Subject = 'ACMS Test Email';
+    $mail->Body    = "<h1>Hello, {$_SESSION['full_name']}! This a test email</h1>";
+
+    $mail->send();
+
+    header("location: view_email_setting.php?setting_id={$id}");
+
+    $_SESSION['message'] = "Email sent to {$_SESSION['email']}"; 
+
 }
