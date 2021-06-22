@@ -7,6 +7,9 @@ use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\SMTP;
 use PHPMailer\PHPMailer\Exception;
 
+$currentDate = date_default_timezone_set('Asia/Manila');
+$currentDate = date('Y-m-d H:i:s');
+
 function checkErrors($data)
 {
     $errors = 0; 
@@ -97,7 +100,52 @@ if(isset($_POST['create_setting']))
 
 if(isset($_POST['update_setting']))
 {
+    $name       = mysqli_escape_string($mysqli, trim(strtolower($_POST['name'])));
+    $host       = mysqli_escape_string($mysqli, trim(strtolower($_POST['host'])));
+    $username   = mysqli_escape_string($mysqli, trim($_POST['username']));
+    $password   = mysqli_escape_string($mysqli, trim($_POST['password']));
+    $port       = mysqli_escape_string($mysqli, trim($_POST['port']));
+    $id         = mysqli_escape_string($mysqli, trim($_POST['id']));
 
+
+    $errors     = CheckErrors(compact(
+                            'name', 
+                            'host', 
+                            'username', 
+                            'password', 
+                            'port')
+                    );
+
+    if($errors == 0)
+    {
+        $statement = $mysqli->prepare("UPDATE settings_email SET 
+                                            name=?, 
+                                            host=?, 
+                                            username=?, 
+                                            password=?, 
+                                            port=?, 
+                                            auth=?,
+                                            updated_at=? 
+                                        WHERE 
+                                            id = ?"
+                                     ) or die($mysqli->error);
+
+        $auth   = isset($_POST['auth']) ? true : false; 
+
+        $statement->bind_param('ssssiisi', $name, $host, $username, $password, $port, $auth, $currentDate, $id); 
+        $statement->execute(); 
+        
+        $_SESSION['message'] = "Setting Updated Successfully";
+
+        if(isset($_POST['default']))
+        {
+            setSettingByDefault($id);
+
+            $_SESSION['message'] .=  ". Setting Set by default";
+        }
+    }
+
+    header("location: view_email_setting.php?setting_id={$id}");
 }
 
 if(isset($_POST['delete_setting']))

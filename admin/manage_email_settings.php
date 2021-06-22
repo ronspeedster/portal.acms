@@ -111,7 +111,7 @@
       <!-- End of Main Content -->
 
 
-      <!-- Category Create Modal-->
+      <!-- Setting Create Modal-->
       <div class="modal fade" id="modal_create_category" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
           <div class="modal-content">
@@ -153,7 +153,7 @@
                 <div class="row my-2 mb-3">
                     <div class="col-md-12">
                         <label for="password">Password</label>
-                        <input type="password" class="form-control" name="password" placeholder="Password" id="password" value="" required>
+                        <input type="text" class="form-control" name="password" placeholder="Password" id="password" value="" required>
                     </div>
                 </div>
                 <div class="row my-2 mb-3">
@@ -194,7 +194,7 @@
           </div>
         </div>
       </div>
-       <!-- End Category Create Modal-->
+       <!-- End Setting Create Modal-->
 <?php
   include('footer.php');
 ?>

@@ -136,7 +136,13 @@
                                 Delete
                             </button>
                           </form>
-                          <button class="btn btn-sm bg-gradient-primary text-white" data-toggle="modal" data-target="#modal_edit_category">
+                          <form action="process_email_settings.php" method="POST" class='align-self-start mr-2'>
+                            <input type="hidden" name="id" value="<?=$setting['id']?>"> 
+                            <button type="submit" name="test_setting" class="btn btn-sm btn-danger text-white">
+                                Delete
+                            </button>
+                          </form>
+                          <button class="btn btn-sm bg-gradient-primary text-white" data-toggle="modal" data-target="#modal_edit_setting">
                             Edit
                           </button>
                         </div>
@@ -149,7 +155,89 @@
         </div>
 
         <!-- Edit Setting Modal-->
-   
+        <div class="modal fade" id="modal_edit_setting" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLabel">Edit Email Setting</h5>
+              <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">×</span>
+              </button>
+            </div>
+            <form action="process_email_settings.php" method="POST">
+              <div class="modal-body">
+                <div class="row my-2 mb-3">
+                    <input type="hidden" name="id" value="<?=$setting['id']?>">
+                    <div class="col-md-12">
+                        <label for="name">Name</label>
+                        <input type="text" class="form-control" name="name" placeholder="Name" id="name" value="<?=$setting['name']?>" required>
+                    </div>
+                </div>
+                <div class="row my-2 mb-3">
+                    <div class="col-md-12">
+                        <?php 
+                            $hosts = ['smtp.mailtrap.io', 'smtp.gmail.com']
+                        ?> 
+                        <label for="host">Host</label>
+                        <select class="form-control" name="host" id="host">
+                            <?php foreach($hosts as $host): ?> 
+                                <option value="<?=$host?>" <?=$setting['host'] == $host ? 'selected' : '' ?>>
+                                    <?=$host?>
+                                </option>
+                            <?php endforeach ?> 
+                        </select>
+                    </div>
+                </div>
+                <div class="row my-2 mb-3">
+                  <div class="col-md-12">
+                    <label for="username">Username</label>
+                    <input type="text" class="form-control" name="username" placeholder="Username" id="username" value="<?=$setting['username']?>" required>
+                  </div>
+                </div>
+                <div class="row my-2 mb-3">
+                    <div class="col-md-12">
+                        <label for="password">Password</label>
+                        <input type="text" class="form-control" name="password" placeholder="Password" id="password" value="<?=$setting['password']?>" required>
+                    </div>
+                </div>
+                <div class="row my-2 mb-3">
+                    <div class="col-md-12">
+                    <?php 
+                        $ports  = [465, 587, 2525]; 
+                    ?>
+                        <label for="port">Port</label>            
+                        <select class="form-control" name="port" id="port">
+                            <?php foreach($ports as $port): ?> 
+                                <option value="<?=$port?>" <?=$setting['port'] == $port ? 'selected' : '' ?>>
+                                    <?=$port?>
+                                </option>
+                            <?php endforeach ?> 
+                        </select>
+                    </div>
+                </div>
+                <div class="row mt-3">
+                  <div class="col-md-6 my-2">
+                    <div class="custom-control custom-checkbox">
+                      <input type="checkbox" name="auth" class="custom-control-input" id="auth" <?=$setting['auth'] == 1 ? 'checked' : '' ?>>
+                      <label class="custom-control-label" for="auth">Enable Auth</label>
+                    </div>
+                  </div>
+                  <div class="col-md-6 my-2">
+                    <div class="custom-control custom-checkbox">
+                      <input type="checkbox" name="default" class="custom-control-input" id="default" <?=$setting['is_default'] == 1 ? 'checked' : '' ?>>
+                      <label class="custom-control-label" for="default">Make Default</label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="modal-footer">
+                <button class="btn btn-secondary btn-sm" type="button" data-dismiss="modal">Cancel</button>
+                <button class="btn bg-gradient-primary btn-sm text-white" name="update_setting">Submit</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
         <!-- End Edit Setting Modal-->
         <!-- /.container-fluid -->
 
