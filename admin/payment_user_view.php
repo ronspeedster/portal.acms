@@ -124,13 +124,21 @@
                         </div>
                         <?php if((isset($user_payment['proof_of_payment']) && !empty($user_payment['proof_of_payment']))): ?> 
                         <div class="card-footer d-flex justify-content-end">
-                            <button type="submit" class="btn btn-sm bg-gradient-primary text-white"  data-toggle="modal" data-target="#modal_verify_payment">
+                            <button type="button" class="btn btn-sm bg-gradient-primary text-white"  data-toggle="modal" data-target="#modal_verify_payment">
                                 <?php if($user_payment['status'] != "VERIFIED"): ?> 
                                     Verify Payment
                                 <?php else: ?> 
                                     Modify Payment
                                 <?php endif ?> 
                             </button>
+                            <?php if($user_payment['status'] == "VERIFIED"): ?>
+                                <form action="process_email.php" method="post">
+                                    <input type="hidden" name="id" value="<?=$user_payment['id']?>">
+                                    <button type="submit" name="verify_payment_certificate" class="btn btn-sm btn-info ml-2">
+                                        Send Email with Certificate
+                                    </button>     
+                                </form>
+                            <?php endif ?> 
                         </div>
                         <?php endif ?> 
                     </div>
