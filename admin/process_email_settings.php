@@ -102,10 +102,17 @@ if(isset($_POST['update_setting']))
 
 if(isset($_POST['delete_setting']))
 {
+    $id = mysqli_escape_string($mysqli, trim(strtoupper($_POST['id']))); 
     
+    $mysqli->query("DELETE FROM settings_email WHERE id='$id'") or die($mysqli->error);
+
+    $_SESSION['message'] =  "Setting Deleted";
+
+    header("location: manage_email_settings.php");
+  
 }
 
 if(isset($_POST['test_setting']))
 {
-
+    // TODO Send Email to Self 
 }
