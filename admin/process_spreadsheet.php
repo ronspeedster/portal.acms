@@ -28,6 +28,50 @@ function check_errors($data)
         $errors++;  
     }
 
+    if(empty($data['date']))
+    {
+        $_SESSION['errors']['generate'] = "Generate by is Empty";
+        $errors++;  
+    }
+    else 
+    {
+        switch($data['date'])
+        {
+            case 'month': 
+                if(empty($_POST['month']))
+                {
+                    $_SESSION['errors']['generate'] = "Please provide a month";
+                    $errors++;
+                }
+                break; 
+
+            case 'from and to': 
+                if(empty($_POST['date_from']))
+                {   
+                    $_SESSION['errors']['date_from'] = "Date From is empty";
+                    $errors++;
+                }
+    
+                if(empty($_POST['date_to']))
+                {   
+                    $_SESSION['errors']['date_to'] = "Date To is empty";
+                    $errors++;
+                }
+                break; 
+
+            case 'year':
+                if(empty($_POST['year']))
+                {   
+                    $_SESSION['errors']['generate'] = "Please provide a Year";
+                    $errors++;
+                }
+                break; 
+    
+            default: 
+                break; 
+        }
+    }
+
     return $errors; 
 }
 
@@ -57,32 +101,145 @@ function get_excel_type($spreadsheet, $format)
     return $writer; 
 }
 
-if(isset($_POST['excel_user_payment_list']))
+function getQuery($date) 
 {
-    $format     =   $_POST['format']; 
-    $route      =   $_POST['route'];
+    global $mysqli; 
 
-    $errors     =   check_errors(compact('format', 'route'));
+    $query = null; 
 
-    if($errors == 0)
+    switch($date)
     {
-        //! Query 
-        $user_payments    =   $mysqli->query("SELECT 
+        case 'today':
+            $query          =   "SELECT 
                                     user_payments.id, 
                                     user_payments.status,
                                     user_payments.amount_paid,  
                                     user_payments.proof_of_payment,
-                                    user_payments.date_of_payment, 
+                                    user_payments.date_of_payment,
+                                    user_payments.created_at,  
                                     payments.title, 
                                     payments.amount, 
                                     users.email, 
                                     users.contact_num,
                                     CONCAT(users.last_name, ', ' ,users.first_name , ' ' ,users.middle_name) AS fullname 
                                     FROM user_payments 
-                                    JOIN payments ON payments.id=user_payments.payment_id 
-                                    JOIN users ON users.id=user_payments.user_id 
-                                    WHERE payments.deleted_at is NULL"
-                                ) or die(mysqli_error($mysqli)); 
+                                JOIN payments ON payments.id=user_payments.payment_id 
+                                JOIN users ON users.id=user_payments.user_id 
+                                WHERE payments.deleted_at is NULL 
+                                    AND CAST(user_payments.created_at as DATE)=CURRENT_DATE";
+            break; 
+
+            
+            case 'from and to': 
+
+                $date_from  =   $_POST['date_from'];
+                $date_to    =   $_POST['date_to'];
+                
+            
+                $query      =   "SELECT 
+                                    user_payments.id, 
+                                    user_payments.status,
+                                    user_payments.amount_paid,  
+                                    user_payments.proof_of_payment,
+                                    user_payments.date_of_payment,
+                                    user_payments.created_at,  
+                                    payments.title, 
+                                    payments.amount, 
+                                    users.email, 
+                                    users.contact_num,
+                                    CONCAT(users.last_name, ', ' ,users.first_name , ' ' ,users.middle_name) AS fullname 
+                                FROM user_payments 
+                                JOIN payments ON payments.id=user_payments.payment_id 
+                                JOIN users ON users.id=user_payments.user_id 
+                                WHERE payments.deleted_at is NULL 
+                                    AND CAST(user_payments.created_at as DATE)  
+                                    BETWEEN '$date_from' AND '$date_to'";  
+          
+            break; 
+            
+        case 'month': 
+            
+            $month  =       $_POST['month']; 
+            $query  =       "SELECT 
+                                user_payments.id, 
+                                user_payments.status,
+                                user_payments.amount_paid,  
+                                user_payments.proof_of_payment,
+                                user_payments.date_of_payment,
+                                user_payments.created_at,  
+                                payments.title, 
+                                payments.amount, 
+                                users.email, 
+                                users.contact_num,
+                                CONCAT(users.last_name, ', ' ,users.first_name , ' ' ,users.middle_name) AS fullname 
+                            FROM user_payments 
+                            JOIN payments ON payments.id=user_payments.payment_id 
+                            JOIN users ON users.id=user_payments.user_id 
+                            WHERE payments.deleted_at is NULL 
+                                AND MONTHNAME(user_payments.created_at)='$month'";   
+            break; 
+
+        case 'year':
+            
+            $year       =   $_POST['year']; 
+            $query      =   "SELECT 
+                                user_payments.id, 
+                                user_payments.status,
+                                user_payments.amount_paid,  
+                                user_payments.proof_of_payment,
+                                user_payments.date_of_payment,
+                                user_payments.created_at,  
+                                payments.title, 
+                                payments.amount, 
+                                users.email, 
+                                users.contact_num,
+                                CONCAT(users.last_name, ', ' ,users.first_name , ' ' ,users.middle_name) AS fullname 
+                            FROM user_payments 
+                            JOIN payments ON payments.id=user_payments.payment_id 
+                            JOIN users ON users.id=user_payments.user_id 
+                            WHERE payments.deleted_at is NULL 
+                                AND YEAR(user_payments.created_at)='$year'";
+                                
+            break; 
+
+        default: 
+            $query      =   "SELECT 
+                                user_payments.id, 
+                                user_payments.status,
+                                user_payments.amount_paid,  
+                                user_payments.proof_of_payment,
+                                user_payments.date_of_payment, 
+                                user_payments.created_at,  
+                                payments.title, 
+                                payments.amount, 
+                                users.email, 
+                                users.contact_num,
+                                CONCAT(users.last_name, ', ' ,users.first_name , ' ' ,users.middle_name) AS fullname 
+                            FROM user_payments 
+                            JOIN payments ON payments.id=user_payments.payment_id 
+                            JOIN users ON users.id=user_payments.user_id 
+                            WHERE payments.deleted_at is NULL"; 
+            break; 
+    }
+
+    $query      =   $mysqli->query($query) or die(mysqli_error($mysqli));
+
+    return $query; 
+}
+
+
+if(isset($_POST['excel_user_payment_list']))
+{
+    $format     =   $_POST['format']; 
+    $route      =   $_POST['route'];
+    $date       =   $_POST['date']; 
+
+    $errors     =   check_errors(compact('format', 'route', 'date'));
+
+    if($errors == 0)
+    {
+        //! Query 
+        $user_payments    =   getQuery($date);
 
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
@@ -96,8 +253,9 @@ if(isset($_POST['excel_user_payment_list']))
         $sheet->setCellValue('H1', 'PROOF OF PAYMENT');
         $sheet->setCellValue('I1', 'DATE OF PAYMENT');
         $sheet->setCellValue('J1', 'PAYMENT STATUS');
+        $sheet->setCellValue('K1', 'CREATED AT');
 
-        $columns = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J"];
+        $columns = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K"];
 
         foreach($columns as $column)
         {
@@ -120,6 +278,7 @@ if(isset($_POST['excel_user_payment_list']))
             $sheet->setCellValue('H' . $row, isset($data['proof_of_payment']) ? 'YES' : 'N/A');
             $sheet->setCellValue('I' . $row, $data['date_of_payment'] ?? "N/A" );
             $sheet->setCellValue('J' . $row, $data['status']);
+            $sheet->setCellValue('K' . $row, $data['created_at']);
             $row++; 
         } 
 
@@ -145,7 +304,9 @@ if(isset($_POST['excel_payment_view']))
     $route      =   $_POST['route'];
     $payment_id =   $_GET['payment_id'];
 
-    $errors     =   check_errors(compact('format', 'route'));
+    $date       =   $_POST['date']; 
+
+    $errors     =   check_errors(compact('format', 'route', 'date'));
 
     if($errors == 0)
     {
@@ -183,8 +344,9 @@ if(isset($_POST['excel_payment_view']))
         $sheet->setCellValue('H1', 'PROOF OF PAYMENT');
         $sheet->setCellValue('I1', 'DATE OF PAYMENT');
         $sheet->setCellValue('J1', 'PAYMENT STATUS');
+        $sheet->setCellValue('K1', 'CREATED AT');
 
-        $columns = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J"];
+        $columns = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K"];
 
         foreach($columns as $column)
         {
@@ -207,6 +369,7 @@ if(isset($_POST['excel_payment_view']))
             $sheet->setCellValue('H' . $row, isset($data['proof_of_payment']) ? 'YES' : 'N/A');
             $sheet->setCellValue('I' . $row, $data['date_of_payment'] ?? "N/A" );
             $sheet->setCellValue('J' . $row, $data['status']);
+            $sheet->setCellValue('K' . $row, $data['created_at']);
             $row++; 
         } 
 
