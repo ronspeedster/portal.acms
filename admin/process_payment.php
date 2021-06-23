@@ -258,7 +258,15 @@ if(isset($_POST['delete_payment']))
 
     if($errors == 0)
     {
-        $statement = $mysqli->prepare("SELECT * FROM user_payments WHERE payment_id=?") or die ($mysqli->error);
+        $statement = $mysqli->prepare(  "SELECT 
+                                        * 
+                                        FROM 
+                                            user_payments 
+                                        WHERE 
+                                            payment_id=?
+                                        AND 
+                                            status IN ('AWAITING VERIFICATION', 'VERIFIED')
+                                        ") or die ($mysqli->error);
 
         $statement->bind_param('i', $id); 
         $statement->execute(); 
@@ -268,7 +276,7 @@ if(isset($_POST['delete_payment']))
 
         if($rows >= 1)
         {
-            $_SESSION['errors']['delete'] = "Payment cannot be deleted. There are currently {$rows} users assigned."; 
+            $_SESSION['errors']['delete'] = "Payment cannot be deleted. There are currently {$rows} users with status AWAITING VERIFICATION and VERIFIED assigned."; 
         }
         else 
         {
