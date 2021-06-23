@@ -151,6 +151,18 @@ a:visited {
         </div>
       </li>
       <li class="nav-item active">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#certificate" aria-expanded="true" aria-controls="buildings">
+          <i class="fas fa-certificate"></i>
+          <span>Certificate</span>
+        </a>
+        <div id="certificate" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+          <div class="bg-white py-2 collapse-inner rounded">
+            <h6 class="collapse-header">Manage Certificate</h6>
+            <a class="collapse-item" href="certificate_send_list.php"><i class="fas fa-certificate"></i> Send Certificate</a>
+          </div>
+        </div>
+      </li>
+      <li class="nav-item active">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#settings" aria-expanded="true" aria-controls="buildings">
           <i class="fas fa-cogs"></i>
           <span>Settings</span>

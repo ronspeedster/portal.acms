@@ -17,6 +17,8 @@ if(mysqli_num_rows($query) == 0 )
     header("location: manage_email_settings.php");    
 }
 
+$setting = $query->fetch_assoc();
+
 try 
 {
     //! Instantiation and passing `true` enables exceptions
@@ -84,21 +86,12 @@ if(isset($_POST['verify_payment_certificate']))
 {
     $id = $_POST['id'];
 
-    $user       =    mysqli_fetch_assoc($mysqli->query("SELECT 
-                        user_payments.id, 
-                        user_payments.status, 
-                        user_payments.user_id, 
-                        payments.title, payments.category, 
-                        payments.amount, 
-                        users.level_access, 
-                        users.pma_number,
-                        users.email,
-                        users.id as user_id, 
-                        CONCAT(users.last_name, ', ' ,users.first_name , ' ' ,users.middle_name) AS fullname 
-                    FROM user_payments 
-                    JOIN payments ON user_payments.payment_id=payments.id 
-                    JOIN users ON users.id=user_payments.user_id 
-                    WHERE user_payments.id='$id'")
+    $user       =    mysqli_fetch_assoc($mysqli->query("SELECT   
+                        pma_number,
+                        email,
+                        CONCAT(last_name, ', ' ,users.first_name , ' ' ,users.middle_name) AS fullname 
+                    FROM users
+                    WHERE id='$id'")
                     ) or die($mysqli->error); 
 
     $cert       =   mysqli_fetch_assoc($mysqli->query("SELECT * from certificates WHERE name='GOOD STANDING'")) or die ($mysqli->error);  
@@ -182,5 +175,5 @@ if(isset($_POST['verify_payment_certificate']))
     }
 
 
-    header("location: payment_user_view.php?user_payment_id={$id}");
+    header("location: certificate_send_list.php");
 }
