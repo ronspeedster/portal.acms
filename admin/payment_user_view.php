@@ -133,7 +133,7 @@
                             </button>
                             <?php if($user_payment['status'] == "VERIFIED"): ?>
                                 <form action="process_email.php" method="post">
-                                    <input type="hidden" name="id" value="<?=$user_payment['id']?>">
+                                    <input type="hidden" name="id" value="<?=$user_payment['user_id']?>">
                                     <button type="submit" name="verify_payment_certificate" class="btn btn-sm btn-info ml-2">
                                         Send Email with Certificate
                                     </button>     
