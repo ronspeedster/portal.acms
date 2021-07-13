@@ -7,6 +7,8 @@ use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\SMTP;
 use PHPMailer\PHPMailer\Exception;
 
+$currentDate = date_default_timezone_set('Asia/Manila');
+$currentDate = date('Y-m-d H:i:s');
 
 $query = $mysqli->query("SELECT * FROM settings_email where is_default='1'") or die($mysqli->error);
 
@@ -46,40 +48,56 @@ try
     //* Enable TLS encryption; `PHPMailer::ENCRYPTION_SMTPS` encouraged
     $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;    
 
-
     //* Recipients
     $mail->setFrom('1972acms@gmail.com', 'ACMS');
-
-    //* Add a recipient
-    //$mail->addAddress('joe@example.net', 'Joe User');     
-
-    //* Name is optional
-    //$mail->addAddress('ellen@example.com');             
-    //$mail->addReplyTo('info@example.com', 'Information');
-    //$mail->addCC('cc@example.com');
-    //$mail->addBCC('bcc@example.com');
-
-    //! Attachments
-    
-    //* Add attachments
-    //$mail->addAttachment('/var/tmp/file.tar.gz');        
-    
-    //* Optional name
-    //$mail->addAttachment('/tmp/image.jpg', 'new.jpg');    
-
-    //! Content
-
-    //* Set email format to HTML
-    //$mail->isHTML(true);                              
-    //$mail->Subject = 'Here is the subject';
-    //$mail->Body    = 'This is the HTML message body <b>in bold!</b>';
-    //$mail->AltBody = 'This is the body in plain text for non-HTML mail clients';
-
-    //$mail->send();
 } 
-catch (Exception $e) 
+catch (\Exception $e) 
 {
     echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
+}
+
+function generateCertificate($member, $pma, $signatureHolder)
+{
+    global $currentDate;
+
+    $directory          =   './certificate/';
+    $filename           =   "{$member}_certificate_{$currentDate}"; 
+    $targetDirectory    =    $directory . $filename; 
+
+
+    $font               =   './certificate/times-new-roman.ttf'; 
+    $image              =   imagecreatefromjpeg('./certificate/template.jpg') or die('Cannot Initialize new GD image stream'); 
+    $color              =   imagecolorallocate($image, 40, 90, 10); 
+    $title              =   "CERTIFICATE"; 
+    $type               =   "OF GOOD STANDING";
+    $present            =   "THIS CERTIFICATE IS PRESENTED TO"; 
+    $person             =   $member; 
+    $detailLine1        =   "of the ANGELES CITY MEDICAL SOCIETY, a component of the PHILIPPINE MEDICAL ASSOCIATION, with";
+    $detailLine2        =   "PMA No. {$pma} is a bonafide MEMBER IN GOOD STANDING  and is entitled to all the rights and";
+    $detailLine3        =   "privileges appertaining thereof.";
+    $detailLine4        =   "Membership dues for 2021-2022 have been settled and this certification is valid until May 31, 2022.";
+    $dateValue          =   date('d F, Y');
+    $date               =   "DATE"; 
+    $signatureValue     =   $signatureHolder; 
+    $signature          =   "SIGNATURE"; 
+
+    imagettftext($image, 82, 0, 700, 200, $color, $font, $title); 
+    imagettftext($image, 44, 0, 1200, 280, $color, $font, $type); 
+    imagettftext($image, 26, 0, 900, 350, $color, $font, $present); 
+    imagettftext($image, 52, 0, 800, 475, $color, $font, $person); 
+    imagettftext($image, 18, 0, 750, 550, $color, $font, $detailLine1); 
+    imagettftext($image, 18, 0, 750, 600, $color, $font, $detailLine2); 
+    imagettftext($image, 18, 0, 750, 650, $color, $font, $detailLine3); 
+    imagettftext($image, 18, 0, 750, 750, $color, $font, $detailLine4); 
+    imagettftext($image, 18, 0, 800, 900, $color, $font, strtoupper($dateValue)); 
+    imagettftext($image, 18, 0, 850, 950, $color, $font, $date); 
+    imagettftext($image, 18, 0, 1450, 900, $color, $font, $signatureValue); 
+    imagettftext($image, 18, 0, 1450, 950, $color, $font, $signature); 
+
+    imagejpeg($image, $targetDirectory, 100); 
+    imagedestroy($image); 
+
+    return $targetDirectory;
 }
 
 if(isset($_POST['verify_payment_certificate']))
@@ -102,70 +120,21 @@ if(isset($_POST['verify_payment_certificate']))
 
     if(!empty($user['email']))
     {
+        //$file   =   generateCertificate($user['fullname'], $user['pma_number'], $cert['holder']);
+
+        $filename   =   generateCertificate($user['fullname'], $user['pma_number'], $holder);
         $mail->addAddress($user['email'], $user['fullname']);
-        
-        $mail->AddEmbeddedImage('../pdf/acms.png', 'acms_logo');
-        $mail->AddEmbeddedImage('../pdf/pma.png', 'pma_logo');
-        $mail->AddEmbeddedImage("../storage/certificate/{$cert}", 'cert_signature');
-    
-        $css = file_get_contents("../css/sb-admin-2.min.css"); 
         $mail->isHTML(true);                              
         $mail->Subject = 'Verified Payment Certificate';
-        $mail->Body    = "<!DOCTYPE html>
-                            <html lang='en'>
-                            <head>
-                                <meta charset='UTF-8'>
-                                <meta http-equiv='X-UA-Compatible' content='IE=edge'>
-                                <meta name='viewport' content='width=device-width, initial-scale=1.0'>
-                                <title>CERTIFICATE OF GOOD STANDING</title>
-                                <style>
-                                    {$css}
-                                </style>
-                            </head>
-                            <body>
-                            <div class='m-4 p-2'>
-                                <header class='h-25 mb-2'>
-                                    <div class='d-flex justify-content-between'>
-                                        <span>
-                                            <img src='cid:acms_logo' width='150px' height='150px'>
-                                        </span>
-                                        <div class='text-center'>
-                                            <h2 class='font-weight-bold'>ANGELES CITY MEDICAL SOCIETY</h2>
-                                            <p>Founded in 1972</p>
-                                            <p>Component Society of the Philippine Medical Association</p>
-                                        </div>
-                                        <span class='float-right'>
-                                            <img src='cid:pma_logo' width='150px' height='150px'>
-                                        </span>
-                                    </div>
-                                </header>
-                                <hr>
-                                <main class='my-5'>
-                                    <h2 class='text-center font-weight-bold mb-2'>CERTIFICATE OF GOOD STANDING</h2>
-                                    <br>
-                                    <p class='text-justify text-height-5 mt-4'>
-                                        This is to certify that <strong class='font-weight-bold'>{$user['fullname']} </strong> of the Angeles City Medical Society, 
-                                        a component of the <strong class='font-weight-bold'>PHILIPPINE MEDICAL ASSOCIATION</strong>
-                                        , with PMA No. <strong class='font-weight-bold'>{$user['pma_number']}</strong> is a bonafide 
-                                        <strong class='font-weight-bold'>MEMBER IN GOOD STANDING</strong> and is entitled 
-                                        to all the rights and privileges appertaining thereof. 
-                                    </p>
-                                    <p class='text-justify text-height-5'>
-                                        Membership dues for 2021-2022 have been settled and this certification is valid until  <strong class='font-weight-bold'>May 31, 2022</strong>.
-                                    </p>
-                                </main>
-                                <br>
-                                <footer class='mt-5'>
-                                    <div class='text-center'>
-                                        <img src='cid:cert_signature'>
-                                        <h4 class='font-weight-bold'>{$holder}</h4>
-                                    </div>
-                                </footer>
-                            </div>
-                        </body>
-                        </html>";
+        $mail->Body    = "Greetings <strong>{$user['fullname']}</strong>, <br><br> Your Certificate of Good Standing is attached in this email.";
+        $mail->addAttachment($filename, 'certificate.jpg');
     
         $mail->send();
+
+        if(file_exists($filename))
+        {
+            unlink($filename); 
+        }
         
         $_SESSION['message'] = "Email sent to {$user['email']}"; 
     }
