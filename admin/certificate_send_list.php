@@ -80,7 +80,7 @@
                                         <tr class="cursor-pointer">
                                             <td><?=$i?></td>
                                             <td>
-                                                <?=$user['fullname']?> 
+                                                <?=strtoupper($user['fullname'])?> 
                                             </td>
                                             <td>
                                                 <?=$user['email']?> 
