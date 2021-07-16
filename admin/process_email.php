@@ -77,7 +77,7 @@ function generateCertificate($member, $pma, $signatureHolder)
     $detailLine5        =   "May 31, 2022.";
     $dateValue          =   date('d F, Y');
     $date               =   "DATE"; 
-    $signatureValue     =   $signatureHolder; 
+    $signatureValue     =   $signatureHolder . " M.D"; 
     $signature          =   "PRESIDENT"; 
 
     $personFontSize     =  68;
