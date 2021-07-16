@@ -64,45 +64,45 @@ function generateCertificate($member, $pma, $signatureHolder)
     $filename           =   "{$member}_certificate_{$currentDate}"; 
     $targetDirectory    =    $directory . $filename; 
 
-
     $font               =   './certificate/times-new-roman.ttf'; 
     $image              =   imagecreatefromjpeg('./certificate/template.jpg') or die('Cannot Initialize new GD image stream'); 
     $color              =   imagecolorallocate($image, 40, 90, 10); 
     $title              =   "CERTIFICATE OF GOOD STANDING"; 
     $present            =   "THIS CERTIFICATE IS PRESENTED TO"; 
     $person             =   strtoupper($member); 
-    $detailLine1        =   "of the ANGELES CITY MEDICAL SOCIETY, a component of the PHILIPPINE MEDICAL ASSOCIATION, with";
-    $detailLine2        =   "PMA No. {$pma} is a bonafide MEMBER IN GOOD STANDING  and is entitled to all the rights and";
-    $detailLine3        =   "privileges appertaining thereof.";
-    $detailLine4        =   "Membership dues for 2021-2022 have been settled and this certification is valid until May 31, 2022.";
+    $detailLine1        =   "of the ANGELES CITY MEDICAL SOCIETY, a component of the PHILIPPINE MEDICAL";
+    $detailLine2        =   "ASSOCIATION, with PMA No. {$pma} is a bonafide MEMBER IN GOOD STANDING";
+    $detailLine3        =   "and is entitled to all the rights and privileges appertaining thereof.";
+    $detailLine4        =   "Membership dues for 2021-2022 have been settled and this certification is valid until";
+    $detailLine5        =   "May 31, 2022.";
     $dateValue          =   date('d F, Y');
     $date               =   "DATE"; 
     $signatureValue     =   $signatureHolder; 
     $signature          =   "PRESIDENT"; 
 
-    $personFontSize     =  64;
+    $personFontSize     =  68;
 
     if(strlen($person) >= 10)
     {
-        $personFontSize = 56; 
+        $personFontSize = 60; 
     }
 
     if(strlen($person) >= 20)
     {
-        $personFontSize = 48; 
+        $personFontSize = 52; 
     }
     
     if(strlen($person) >= 30)
     {
-        $personFontSize = 40; 
+        $personFontSize = 44; 
     }
     
     if(strlen($person) >= 40)
     {
-        $personFontSize = 34; 
+        $personFontSize = 38; 
     }
     
-    $signatureXPosition = 1460; 
+    $signatureXPosition = 1450; 
     
     if(strlen($signatureValue) >= 10)
     {
@@ -125,16 +125,17 @@ function generateCertificate($member, $pma, $signatureHolder)
     }
     
     imagettftext($image, 70, 0, 200, 200, $color, $font, $title); 
-    imagettftext($image, 26, 0, 725, 300, $color, $font, $present); 
+    imagettftext($image, 32, 0, 725, 300, $color, $font, $present); 
     imagettftext($image, $personFontSize, 0, 725, 425, $color, $font, $person); 
-    imagettftext($image, 18, 0, 725, 525, $color, $font, $detailLine1); 
-    imagettftext($image, 18, 0, 725, 575, $color, $font, $detailLine2); 
-    imagettftext($image, 18, 0, 725, 625, $color, $font, $detailLine3); 
-    imagettftext($image, 18, 0, 725, 725, $color, $font, $detailLine4); 
-    imagettftext($image, 18, 0, 800, 900, $color, $font, strtoupper($dateValue)); 
-    imagettftext($image, 18, 0, 850, 950, $color, $font, $date); 
-    imagettftext($image, 18, 0, $signatureXPosition, 900, $color, $font, $signatureValue); 
-    imagettftext($image, 18, 0, 1450, 950, $color, $font, $signature); 
+    imagettftext($image, 22, 0, 725, 525, $color, $font, $detailLine1); 
+    imagettftext($image, 22, 0, 725, 575, $color, $font, $detailLine2); 
+    imagettftext($image, 22, 0, 725, 625, $color, $font, $detailLine3); 
+    imagettftext($image, 22, 0, 725, 700, $color, $font, $detailLine4); 
+    imagettftext($image, 22, 0, 725, 750, $color, $font, $detailLine5); 
+    imagettftext($image, 22, 0, 800, 900, $color, $font, strtoupper($dateValue)); 
+    imagettftext($image, 22, 0, 850, 950, $color, $font, $date); 
+    imagettftext($image, 22, 0, $signatureXPosition, 900, $color, $font, $signatureValue); 
+    imagettftext($image, 22, 0, 1450, 950, $color, $font, $signature); 
 
     imagejpeg($image, $targetDirectory, 100); 
     imagedestroy($image); 

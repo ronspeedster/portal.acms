@@ -3,6 +3,7 @@ admin/dbh.php
 dbh.php
 storage/proof_of_payment/*
 /admin/vendor
+gencert.php
 
 # Do NOT Ignore
 !storage/proof_of_payment/index.html
