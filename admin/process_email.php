@@ -69,7 +69,7 @@ function generateCertificate($member, $pma, $holder, $holderSignature)
     $color              =   imagecolorallocate($image, 40, 90, 10); 
     $title              =   "CERTIFICATE OF GOOD STANDING"; 
     $present            =   "THIS CERTIFICATE IS PRESENTED TO"; 
-    $person             =   strtoupper($member+ ', M.D.') ; 
+    $person             =   strtoupper($member . ", M.D.") ; 
     $detailLine1        =   "of the ANGELES CITY MEDICAL SOCIETY, a component society of the PHILIPPINE MEDICAL";
     $detailLine2        =   "ASSOCIATION, with PMA No. {$pma} for being a bonafide MEMBER IN GOOD";
     $detailLine3        =   "STANDING and is entitled to all the rights and privileges appertaining thereof.";
