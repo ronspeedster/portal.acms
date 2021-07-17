@@ -162,7 +162,7 @@ if(isset($_POST['verify_payment_certificate']))
     $signature  =   $cert['signature'];
 
     // $fullname   =  strtoupper($user['first_name'] . ' ' . substr($user['middle_name'], 0, 1) . '.' . ' ' . $user['last_name']);
-    $fullname   =  strtoupper($user['first_name'] . ' ' . $user['middle_name'] . '.' . ' ' . $user['last_name']);
+    $fullname   =  strtoupper($user['first_name'] . ' ' . $user['middle_name'] . ' ' . $user['last_name']);
     //* Add a recipient
 
     if(!empty($user['email']))
