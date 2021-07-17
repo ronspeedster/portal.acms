@@ -219,7 +219,7 @@
                                     <?php if($_SESSION['level_access'] == "temporary"): ?> 
                                         For New Members: your account may be verified if this payment is successfully resolved. An Email will be sent to notify you after we have carefully verify your provided proof of payment. 
                                     <?php else: ?> 
-                                        An Email will be sent to notify you after we have carefully verify your provided proof of payment. 
+                                        Your Certificate of Good Standing will be sent to your email once your proof of payment has been verified.
                                     <?php endif ?> 
                                 <?php endif ?> 
                             </div> 
