@@ -56,7 +56,7 @@ catch (\Exception $e)
     echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
 }
 
-function generateCertificate($member, $pma, $signatureHolder)
+function generateCertificate($member, $pma, $holder, $holderSignature)
 {
     global $currentDate;
 
@@ -77,8 +77,9 @@ function generateCertificate($member, $pma, $signatureHolder)
     $detailLine5        =   "May 31, 2022.";
     $dateValue          =   date('d F, Y');
     $date               =   "DATE"; 
-    $signatureValue     =   $signatureHolder . " M.D"; 
-    $signature          =   "PRESIDENT"; 
+    $signature          =    imagecreatefrompng("../storage/certificate/{$holderSignature}");
+    $signatureHolder    =    $holder . " M.D"; 
+    $signatureTitle     =   "PRESIDENT"; 
 
     $personFontSize     =  68;
 
@@ -104,26 +105,26 @@ function generateCertificate($member, $pma, $signatureHolder)
     
     $signatureXPosition = 1450; 
     
-    if(strlen($signatureValue) >= 10)
+    if(strlen($signatureHolder) >= 10)
     {
         $signatureXPosition = 1440; 
     }
     
-    if(strlen($signatureValue) >= 20)
+    if(strlen($signatureHolder) >= 20)
     {
         $signatureXPosition = 1350; 
     }
     
-    if(strlen($signatureValue) >= 30)
+    if(strlen($signatureHolder) >= 30)
     {
         $signatureXPosition = 1300; 
     }
     
-    if(strlen($signatureValue) >= 40)
+    if(strlen($signatureHolder) >= 40)
     {
         $signatureXPosition = 1250; 
     }
-    
+
     imagettftext($image, 70, 0, 200, 200, $color, $font, $title); 
     imagettftext($image, 32, 0, 725, 300, $color, $font, $present); 
     imagettftext($image, $personFontSize, 0, 725, 425, $color, $font, $person); 
@@ -134,8 +135,9 @@ function generateCertificate($member, $pma, $signatureHolder)
     imagettftext($image, 22, 0, 725, 750, $color, $font, $detailLine5); 
     imagettftext($image, 22, 0, 800, 900, $color, $font, strtoupper($dateValue)); 
     imagettftext($image, 22, 0, 850, 950, $color, $font, $date); 
-    imagettftext($image, 22, 0, $signatureXPosition, 900, $color, $font, $signatureValue); 
-    imagettftext($image, 22, 0, 1450, 950, $color, $font, $signature); 
+    imagecopy($image, $signature, 1450, 800, 0, 0, imagesx($signature), imagesy($signature));
+    imagettftext($image, 22, 0, $signatureXPosition, 900, $color, $font, $signatureHolder); 
+    imagettftext($image, 22, 0, 1450, 950, $color, $font, $signatureTitle); 
 
     imagejpeg($image, $targetDirectory, 100); 
     imagedestroy($image); 
@@ -157,7 +159,7 @@ if(isset($_POST['verify_payment_certificate']))
 
     $cert       =   mysqli_fetch_assoc($mysqli->query("SELECT * from certificates WHERE name='GOOD STANDING'")) or die ($mysqli->error);  
     $holder     =   $cert['holder'];
-    $cert       =   $cert['signature'];
+    $signature  =   $cert['signature'];
 
     //* Add a recipient
 
@@ -165,7 +167,7 @@ if(isset($_POST['verify_payment_certificate']))
     {
         //$file   =   generateCertificate($user['fullname'], $user['pma_number'], $cert['holder']);
 
-        $filename   =   generateCertificate($user['fullname'], $user['pma_number'], $holder);
+        $filename   =   generateCertificate($user['fullname'], $user['pma_number'], $holder, $signature);
         $mail->addAddress($user['email'], $user['fullname']);
         $mail->isHTML(true);                              
         $mail->Subject = 'Verified Payment Certificate';
