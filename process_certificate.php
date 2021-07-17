@@ -1,11 +1,6 @@
 <?php
 
-require_once('admin/vendor/autoload.php');
 require_once('dbh.php');
-
-// reference the Dompdf namespace
-use Dompdf\Dompdf;
-use Dompdf\Options;
 
 if(isset($_POST['generate_certificate']))
 {    
@@ -28,13 +23,6 @@ if(isset($_POST['generate_certificate']))
     $statement->execute(); 
 
     $user       = $statement->get_result()->fetch_assoc();
-
-    // instantiate and use the dompdf class
-    // $options = new Options();
-    // $options->setChroot(realpath(__DIR__));
-    // $options->setIsHtml5ParserEnabled(true);
-    // $options->isRemoteEnabled(true);
-    // $dompdf = new Dompdf($options);
 
     $html   =       "<!DOCTYPE html>
                         <html lang='en'>
@@ -88,18 +76,6 @@ if(isset($_POST['generate_certificate']))
                         </div>
                     </body>
                     </html>";
-
-    //$dompdf->loadHtml($html);
-    //$dompdf->loadHtmlFile(realpath(__DIR__) . "/pdf/index.html");
-    
-    // (Optional) Setup the paper size and orientation
-    //$dompdf->setPaper('A4', 'landscape');
-    
-    // Render the HTML as PDF
-    //$dompdf->render();
-    
-    // Output the generated PDF to Browser
-    //$dompdf->stream();
 
     echo $html;
     

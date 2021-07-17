@@ -1,14 +1,131 @@
-<?php
 
-require_once('admin/vendor/autoload.php');
-require_once('dbh.php');
+<?php 
+require_once('dbh.php'); 
 
-// reference the Dompdf namespace
-use Dompdf\Dompdf;
-use Dompdf\Options;
+$currentDate = date_default_timezone_set('Asia/Manila');
+$currentDate = date('Y-m-d H:i:s');
 
-if(isset($_POST['generate_certificate']))
-{    
+function check_errors($data = [])
+{
+    $max_file_size  =   500000;
+    $errors = 0;
+
+    if(empty($data['holder']))
+    {
+        $_SESSION['errors']['holder'] =   "Please provide the Signature Holder's Name"; 
+        $errors++;
+    }
+
+    // !Check if File is empty 
+    if(empty($_FILES['signature']['tmp_name']))
+    {
+        $_SESSION['errors']['file'] =   "Please provide the Holder's Signature"; 
+        $errors++; 
+    }
+    else
+    {
+        $imageFileType = strtolower(pathinfo(basename($_FILES["signature"]["name"]), PATHINFO_EXTENSION));
+    
+        $check = getimagesize($_FILES["signature"]["tmp_name"]);
+    
+        if(!$check) 
+        {
+            $_SESSION['errors']['file'] =   "File Uploaded is not an image"; 
+            $errors++;
+        }
+    
+        if($_FILES["signature"]["size"] > $max_file_size) 
+        {
+            $_SESSION['errors']['file'] =   "Sorry, your file is too large.";
+            $errors++;
+        }
+        
+        if(!in_array($imageFileType, array('png'))) 
+        {
+            $_SESSION['errors']['file'] =   "Sorry, your file type '.{$imageFileType}' is invalid ";
+            $errors++;
+        } 
+    } 
+
+    return $errors; 
+}
+
+function upload_file($fileName, $oldFile = null) 
+{
+    $target_dir    = "../storage/certificate/";
+    $target_file   = $target_dir . $fileName;
+     
+    if (move_uploaded_file($_FILES["signature"]["tmp_name"], $target_file)) 
+    {
+        if(isset($oldFile) && !empty($oldFile))
+        {
+            unlink($target_dir . $oldFile);
+        }
+
+        return true; 
+    }
+
+    return false; 
+}
+
+if(isset($_POST['upload_signature']))
+{
+    $query                  = $mysqli->query("SELECT * from certificates WHERE name='GOOD STANDING'"); 
+    $holder                 = mysqli_escape_string($mysqli, trim(strtoupper($_POST['holder'])));
+    $exists                 = false; 
+    $cert['signature']      = null; 
+
+    if(mysqli_num_rows($query) == 1)
+    {
+        $exists             = true;
+        $cert               = $query->fetch_assoc();
+    }
+    
+    $errors =   check_errors(compact('holder')); 
+
+    if($errors == 0)
+    {
+        $imageFileType = strtolower(pathinfo(basename($_FILES["signature"]["name"]), PATHINFO_EXTENSION));
+        $fileName      =  str_replace(' ', '-', md5($_FILES["signature"]["name"]) .'-'.$currentDate . ".{$imageFileType}");    
+        
+        if(upload_file($fileName, $cert['signature']))
+        {
+            if($exists)
+            {
+                $statement = $mysqli->prepare("UPDATE certificates SET
+                                                signature=?, 
+                                                holder=?
+                                                WHERE name='GOOD STANDING'"
+                                                ) or die ($mysqli->error);
+                
+                $statement->bind_param('ss', $fileName, $holder); 
+                $statement->execute();  
+               
+            }
+            else 
+            {
+                $statement = $mysqli->prepare("INSERT INTO certificates 
+                                        (name, signature, holder)      
+                                        VALUES('GOOD STANDING', ?, '')" 
+                                    ) or die ($mysqli->error); 
+
+                $statement->bind_param('s', $fileName); 
+                $statement->execute();  
+            }
+
+            $_SESSION['message'] = "Signature Uploaded Successfully, Please Check first"; 
+        }
+        else 
+        {
+            $_SESSION['errors']['sql'] =   "Something went wrong";
+        }
+    }
+
+    header("location: manage_certificate.php");
+}
+
+if(isset($_POST['check_certificate']))
+{
     //* GET USER
     $statement  =   $mysqli->prepare("SELECT 
                         CONCAT(last_name, ', ' ,first_name , ' ' ,middle_name) AS fullname, 
@@ -29,14 +146,8 @@ if(isset($_POST['generate_certificate']))
 
     $user       = $statement->get_result()->fetch_assoc();
 
-    // instantiate and use the dompdf class
-    // $options = new Options();
-    // $options->setChroot(realpath(__DIR__));
-    // $options->setIsHtml5ParserEnabled(true);
-    // $options->isRemoteEnabled(true);
-    // $dompdf = new Dompdf($options);
-
-    $html   =       "<!DOCTYPE html>
+   
+    $html       =       "<!DOCTYPE html>
                         <html lang='en'>
                         <head>
                             <meta charset='UTF-8'>
@@ -68,12 +179,12 @@ if(isset($_POST['generate_certificate']))
                                 <p class='text-justify text-height-5 mt-4'>
                                     This is to certify that 
                                     <strong class='font-weight-bold'>{$user['fullname']} </strong> 
-                                    of the ANGELES CITY MEDICAL SOCIETY, a component society of the  
+                                    of the Angeles City Medical Society, a component of the 
                                     <strong class='font-weight-bold'>PHILIPPINE MEDICAL ASSOCIATION</strong>, with PMA No. 
                                     <strong class='font-weight-bold'>{$user['pma_number']}</strong> 
-                                    for being a bonafide 
+                                    is a bonafide 
                                     <strong class='font-weight-bold'>MEMBER IN GOOD STANDING</strong> 
-                                    and is entitled to all the rights and privileges appertaing thereof.
+                                    and is entitled to all the rights and privileges appertaining thereof.  
                                 </p>
                                 <p class='text-justify text-height-5'>
                                     Membership dues for 2021-2022 have been settled and this certification is valid until  <strong class='font-weight-bold'>May 31, 2022</strong>.
@@ -89,18 +200,5 @@ if(isset($_POST['generate_certificate']))
                     </body>
                     </html>";
 
-    //$dompdf->loadHtml($html);
-    //$dompdf->loadHtmlFile(realpath(__DIR__) . "/pdf/index.html");
-    
-    // (Optional) Setup the paper size and orientation
-    //$dompdf->setPaper('A4', 'landscape');
-    
-    // Render the HTML as PDF
-    //$dompdf->render();
-    
-    // Output the generated PDF to Browser
-    //$dompdf->stream();
-
-    echo $html;
-    
+    echo $html; 
 }
