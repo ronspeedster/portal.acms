@@ -172,7 +172,7 @@ if(isset($_POST['verify_payment_certificate']))
         $mail->addAddress($user['email'], $fullname);
         $mail->isHTML(true);                              
         $mail->Subject = 'Verified Payment & Certificate';
-        $mail->Body    = "Thank you for your payment, <strong>{$fullname}</strong>! <br><br> Attached in this email is your Certificate of Good Standing.";
+        $mail->Body    = "Thank you for your payment, <strong>Dr. {$fullname}, M.D.</strong>! <br><br> Attached in this email is your Certificate of Good Standing.";
         $mail->addAttachment($filename, 'certificate.jpg');
     
         $mail->send();
