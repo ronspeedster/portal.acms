@@ -150,7 +150,9 @@ if(isset($_POST['verify_payment_certificate']))
     $user       =    mysqli_fetch_assoc($mysqli->query("SELECT   
                         pma_number,
                         email,
-                        CONCAT(last_name, ', ' ,users.first_name , ' ' ,users.middle_name) AS fullname 
+                        last_name, 
+                        first_name, 
+                        middle_name  
                     FROM users
                     WHERE id='$id'")
                     ) or die($mysqli->error); 
@@ -159,17 +161,18 @@ if(isset($_POST['verify_payment_certificate']))
     $holder     =   $cert['holder'];
     $signature  =   $cert['signature'];
 
+    $fullname   =  strtoupper($user['first_name'] . ' ' . substr($user['middle_name'], 0, 1) . '.' . ' ' . $user['last_name']);
     //* Add a recipient
 
     if(!empty($user['email']))
     {
         //$file   =   generateCertificate($user['fullname'], $user['pma_number'], $cert['holder']);
 
-        $filename   =   generateCertificate($user['fullname'], $user['pma_number'], $holder, $signature);
-        $mail->addAddress($user['email'], $user['fullname']);
+        $filename   =   generateCertificate($fullname, $user['pma_number'], $holder, $signature);
+        $mail->addAddress($user['email'], $fullname);
         $mail->isHTML(true);                              
         $mail->Subject = 'Verified Payment & Certificate';
-        $mail->Body    = "Thank you for your payment, <strong>{$user['fullname']}</strong>! <br><br> Attached in this email is your Certificate of Good Standing.";
+        $mail->Body    = "Thank you for your payment, <strong>{$fullname}</strong>! <br><br> Attached in this email is your Certificate of Good Standing.";
         $mail->addAttachment($filename, 'certificate.jpg');
     
         $mail->send();
