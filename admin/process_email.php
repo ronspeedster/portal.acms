@@ -70,8 +70,8 @@ function generateCertificate($member, $pma, $signatureHolder)
     $title              =   "CERTIFICATE OF GOOD STANDING"; 
     $present            =   "THIS CERTIFICATE IS PRESENTED TO"; 
     $person             =   strtoupper($member); 
-    $detailLine1        =   "of the ANGELES CITY MEDICAL SOCIETY, a component of the PHILIPPINE MEDICAL";
-    $detailLine2        =   "ASSOCIATION, with PMA No. {$pma} is a bonafide MEMBER IN GOOD STANDING";
+    $detailLine1        =   "of the ANGELES CITY MEDICAL SOCIETY, a component society of the PHILIPPINE MEDICAL";
+    $detailLine2        =   "ASSOCIATION, with PMA No. {$pma} for being a bonafide MEMBER IN GOOD STANDING";
     $detailLine3        =   "and is entitled to all the rights and privileges appertaining thereof.";
     $detailLine4        =   "Membership dues for 2021-2022 have been settled and this certification is valid until";
     $detailLine5        =   "May 31, 2022.";
