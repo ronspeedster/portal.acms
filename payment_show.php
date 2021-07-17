@@ -115,9 +115,9 @@
                                 <img src="<?=$filePath?>" id="preview_image" alt="" class="img-fluid w-100">
                             </div>
                             <div class="card-footer d-flex justify-content-end">
-                                <button type="submit" name="generate_certificate" class="btn btn-sm bg-gradient-primary text-white">
+                                <!-- <button type="submit" name="generate_certificate" class="btn btn-sm bg-gradient-primary text-white">
                                     Generate Certificate
-                                </button>
+                                </button> -->
                             </div>
                         </form>
                         <?php else: ?> 
