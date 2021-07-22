@@ -157,7 +157,7 @@
                                     </span>
                                 </div>
                             </div>
-                            <div class="row border-bottom py-3">
+                            <div class="row border-bottom py-3" style="display: none">
                                 <div class="col-md-6 text-center">
                                     Payment
                                 </div>

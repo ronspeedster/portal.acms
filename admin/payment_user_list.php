@@ -11,7 +11,8 @@
                                         user_payments.status, 
                                         payments.title, 
                                         payments.category, 
-                                        payments.amount, 
+                                        payments.amount,
+                                        user_payments.amount_paid,
                                         CONCAT(users.last_name, ', ' ,users.first_name , ' ' ,users.middle_name) AS fullname 
                                         FROM user_payments 
                                         JOIN payments ON payments.id=user_payments.payment_id 
@@ -87,7 +88,7 @@
                                             <?=$payment['title']?> 
                                         </td>
                                         <td>
-                                            <?=number_format($payment['amount'], 2)?> 
+                                            <?=number_format(($payment['amount_paid']-$payment['amount']), 2)?> 
                                         </td>
                                         <?php 
                                             $textColor = null; 

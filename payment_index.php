@@ -60,7 +60,7 @@
                     <h5><b>Settle your dues by depositing the amount to this account, then upload proof of payment here.</b></h5>
                     Eastwest Bank Angeles City Branch<br>
                     Account Name: Angeles City Medical Society<br>
-                    Account Number: 200019295574<br>
+                    Account Number: 200019295744<br>
 
                     </div>
                     </div>
@@ -92,7 +92,7 @@
                                         <td>
                                             <?=$payment['category']?> 
                                         </td>
-                                        <td>
+                                        <td style="display: none">
                                             <?=number_format($payment['amount'], 2)?> 
                                         </td>
                                         <?php 

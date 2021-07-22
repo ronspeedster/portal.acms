@@ -50,7 +50,7 @@
                                       <th>#</th>
                                       <th>TITLE</th>
                                       <th>CATEGORY</th>
-                                      <th>AMOUNT</th>
+                                      <th style="display: none">AMOUNT</th>
                                       <th>USERS</th>
                                       <th>CREATED AT</th>
                                       <th></th>
@@ -66,7 +66,7 @@
                                     <td>
                                         <?=$payment['title']?>
                                     </td>
-                                    <td>
+                                    <td style="display: none">
                                       <?=$payment['category']?> 
                                     </td>
                                     <td>
@@ -89,7 +89,7 @@
                                 </tbody>
                                 <tfoot>
                                   <tr>
-                                    <td colspan=6>
+                                    <td colspan=5>
                                     </td>
                                     <td colspan='1'>
                                       <button class="btn btn-sm bg-gradient-primary text-white" data-toggle="modal" data-target="#modal_create_payment">
