@@ -11,8 +11,34 @@
           <!-- Topbar Navbar -->
           <ul class="navbar-nav ml-auto">
 
+            <!-- Nav Item - Notifications -->
+            <li class="nav-item dropdown no-arrow">
+             <a class="nav-link dropdown-toggle text-success" href="#" id="notificationDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+               <span class="fas fa-bell mr-2"></span> 
+               <span>Notifications</span> 
+               <span class="badge badge-pill badge-danger mx-2">2</span>
+               <!-- <i class="fas fa-user text-gray-800"></i> -->
+             </a>
+             <!-- Dropdown - Notifications -->
+             <div class="dropdown-list dropdown-menu dropdown-menu-right shadow-lg animated--grow-in" style="max-height:550px; overflow:auto" aria-labelledby="notificationDropdown">
+
+                <?php 
+                  $testMessages = ["JOHN DOE HAS PAYED 4000 TO ACMS MEMBERSHIPS", "JANE DOE HAS PAYED 6000 TO ACMS MEMBERSHIPS"]
+                ?>
+
+                <ul class="list-group list-group-flush">
+
+                  <?php foreach($testMessages as $msg): ?> 
+                    <li class="list-group-item">
+                      <?=$msg?>
+                    </li>
+                    <?php endforeach ?>
+                </ul>
+                  </div>
+            </li>
 
             <div class="topbar-divider d-none d-sm-block"></div>
+
 
             <!-- Nav Item - User Information -->
             <li class="nav-item dropdown no-arrow">
