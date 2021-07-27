@@ -11,26 +11,36 @@
           <!-- Topbar Navbar -->
           <ul class="navbar-nav ml-auto">
 
+            <?php 
+              $id = $_SESSION['user_id']; 
+              $notifications = $mysqli->query("SELECT * FROM user_notifications WHERE user_id='$id' ORDER BY is_read ASC"); 
+              $unread       = mysqli_num_rows( $mysqli->query("SELECT * FROM user_notifications WHERE user_id='$id' AND is_read=0"));
+            ?>
+
             <!-- Nav Item - Notifications -->
             <li class="nav-item dropdown no-arrow">
              <a class="nav-link dropdown-toggle text-success" href="#" id="notificationDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                <span class="fas fa-bell mr-2"></span> 
                <span>Notifications</span> 
-               <span class="badge badge-pill badge-danger mx-2">2</span>
+               <span class="badge badge-pill badge-danger mx-2">
+                 <?=$unread?> 
+               </span>
                <!-- <i class="fas fa-user text-gray-800"></i> -->
              </a>
              <!-- Dropdown - Notifications -->
              <div class="dropdown-list dropdown-menu dropdown-menu-right shadow-lg animated--grow-in" style="max-height:550px; overflow:auto" aria-labelledby="notificationDropdown">
 
-                <?php 
-                  $testMessages = ["JOHN DOE HAS PAYED 4000 TO ACMS MEMBERSHIPS", "JANE DOE HAS PAYED 6000 TO ACMS MEMBERSHIPS"]
-                ?>
+             
 
+                <div class="d-block px-2 pt-2 pb-3">
+                  <form action="./process_notification.php" method="post">
+                    <button type="submit" class="btn btn-danger btn-sm d-block w-100" name="mark_read">Mark as Read</button>
+                  </form>
+                </div>
                 <ul class="list-group list-group-flush">
-
-                  <?php foreach($testMessages as $msg): ?> 
-                    <li class="list-group-item">
-                      <?=$msg?>
+                  <?php foreach($notifications as $notification): ?>  
+                    <li class="list-group-item text-justify font-weight-bold <?=$notification['is_read'] == 1 ? 'text-black': 'text-danger'?>">
+                      <?=$notification['notification']?> at  <?=$notification['created_at']?>
                     </li>
                     <?php endforeach ?>
                 </ul>
@@ -53,9 +63,9 @@
                   Information
                 </h6>
                 <div style="background-color: white;">
-                  <div style="text-align: center;"><a href="profile.php" class="text-gray-800"><?php echo strtoupper($_SESSION['email']); ?></a></div>
+                  <div style="text-align: center;"><a href="profile.php" class="text-gray-800"><?php echo strtolower($_SESSION['email']); ?></a></div>
                   <div style="text-align: center;"><hr/>
-                    <a style="color: #5D4037;" class="btn btn-sm btn-warning" href="#" data-toggle="modal" data-target="#logoutModal">
+                    <a style="color: #5D4037;" class="btn btn-sm btn-danger text-white" href="#" data-toggle="modal" data-target="#logoutModal">
                     <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2"></i>
                     Logout
                   </a>
