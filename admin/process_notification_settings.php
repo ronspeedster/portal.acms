@@ -111,3 +111,56 @@ if(isset($_POST['delete_setting']))
     header("location: manage_notification_settings.php");
 
 }
+
+if(isset($_POST['test_setting']))
+{
+    $id         =   mysqli_escape_string($mysqli, trim(strtoupper($_POST['id']))); 
+
+    $setting    =   mysqli_fetch_assoc($mysqli->query("SELECT * FROM settings_email where is_default='1'")) or die($mysqli->error);
+    $email      =   mysqli_fetch_assoc($mysqli->query("SELECT * FROM settings_notification where id='$id'")) or die($mysqli->error); 
+
+    if($email['email_to'] != null && $email['is_active'] != 0)
+    {
+        $mail = new PHPMailer(true);
+        $mail->SMTPDebug = 2;                    
+        $mail->isSMTP();                                           
+        
+        $mail->Host       = $setting['host'];                     
+        
+        $mail->SMTPAuth   = $setting['auth'] == 1 ? true : false;                                 
+        
+        $mail->Username =  $setting['username'];
+        $mail->Password =  $setting['password'];                      
+    
+        $mail->Port     = $setting['port'];                                  
+        
+        $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;    
+    
+        $mail->setFrom('1972acms@gmail.com', 'ACMS');
+    
+        $mail->addAddress($email['email_to']);
+        $mail->isHTML(true);                              
+        $mail->Subject = "Test {$email['name']} Email Notification";
+        $mail->Body    = "Hello This is a test notification email sent to the 'email to' address that you provided";
+    
+        $_SESSION['message'] = "Email sent to {$email['email_to']}, Test Notifications sent to Admins";
+        
+        $admins     = $mysqli->query("SELECT id FROM users WHERE level_access='admin'"); 
+
+        $message    = "An admin tested the notification system";
+
+        foreach($admins as $admin)
+        {
+            $user_id = $admin['id'];
+            $mysqli->query("INSERT INTO user_notifications (user_id, notification) VALUES ('$user_id', '$message')") or die($mysqli->error);
+        }
+
+        $mail->send();
+    }
+    else 
+    {
+        $_SESSION['errors']['email'] = "Email to is Empty or Setting is not set to Active"; 
+    }
+
+    header("location: view_notification_setting.php?setting_id={$id}");
+}

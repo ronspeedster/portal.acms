@@ -13,7 +13,7 @@
 
             <?php 
               $id = $_SESSION['user_id']; 
-              $notifications = $mysqli->query("SELECT * FROM user_notifications WHERE user_id='$id' ORDER BY is_read ASC"); 
+              $notifications = $mysqli->query("SELECT * FROM user_notifications WHERE user_id='$id' ORDER BY created_at DESC"); 
               $unread       = mysqli_num_rows( $mysqli->query("SELECT * FROM user_notifications WHERE user_id='$id' AND is_read=0"));
             ?>
 
