@@ -178,8 +178,12 @@
                                 </div>
                                 <div class="col-md-6 text-center">
                                     <span class="bg-success text-white rounded px-2 py-1">
-                                        <?php 
-                                            $balance = number_format(($user_payment['amount'] - $user_payment['amount_paid']) ,2)
+                                        <?php
+                                            $balance = number_format(($user_payment['amount'] - $user_payment['amount_paid']) ,2);
+                                            //Make Balance 0 if balance is less than 0
+                                            if($balance<0){
+                                                $balance = number_format((0) ,2);
+                                            }                                            
                                         ?> 
                                         <?=$balance?> 
                                     </span>
