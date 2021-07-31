@@ -62,6 +62,25 @@
 <!--  <script src="js/demo/chart-area-demo.js"></script>-->
 <!--  <script src="js/demo/chart-pie-demo.js"></script>-->
   <script src="../js/demo/datatables-demo.js"></script>
+
+  <script>
+      $(document).ready(function() 
+        {
+          $('#notifications_mark').on('click', function()
+            {
+              $('#notifications_mark_form').submit();
+            }
+          ); 
+
+          $('#notifications_clear').on('click', function()
+            {
+              $('#notifications_clear_form').submit();
+            }
+          ); 
+        } 
+      );
+  </script>
+
 </body>
 
 </html>
