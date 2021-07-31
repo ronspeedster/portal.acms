@@ -32,21 +32,40 @@
 
              
 
-                <div class="d-block px-2 pt-2 pb-3">
-                  <form action="./process_notification.php" method="post">
-                    <button type="submit" class="btn btn-danger btn-sm d-block w-100" name="mark_read">Mark as Read</button>
-                  </form>
+                <div class="d-flex justify-content-between px-3 pb-2">
+                  <span id="notifications_clear" class="text-danger font-weight-bold" style="cursor:pointer;">
+                    Clear All 
+                  </span>
+                  <span id="notifications_mark" class="font-weight-bolder" style="cursor:pointer;">
+                    Mark As Read
+                  </span>
                 </div>
                 <ul class="list-group list-group-flush">
-                  <?php foreach($notifications as $notification): ?>  
-                    <li class="list-group-item text-justify font-weight-bold <?=$notification['is_read'] == 1 ? 'text-black': 'text-danger'?>">
-                      <?=$notification['notification']?> at  <?=$notification['created_at']?>
-                    </li>
+                  <?php if(mysqli_num_rows($notifications) == 0 ): ?> 
+                      <li class="list-group-item text-center font-weight-bold">
+                        No New Notifications
+                      </li>
+                  <?php else: ?> 
+                    <?php foreach($notifications as $notification): ?>  
+                      <li class="list-group-item text-justify font-weight-bold <?=$notification['is_read'] == 1 ? 'text-black': 'text-info'?>">
+                        <?=$notification['notification']?> at  <?=$notification['created_at']?>
+                      </li>
                     <?php endforeach ?>
+                  <?php endif ?> 
                 </ul>
                   </div>
             </li>
 
+            <!-- Logic is in footer.php -->
+            <form id="notifications_clear_form" action="./process_notification.php" method="post">
+              <input type="hidden" name="clear_all">
+            </form>
+
+            <form id="notifications_mark_form" action="./process_notification.php" method="post">
+              <input type="hidden" name="mark_read">
+            </form>
+
+              
             <div class="topbar-divider d-none d-sm-block"></div>
 
 

@@ -79,11 +79,13 @@
                     <button type="submit" class="btn btn-success btn-block" name="login">Login</button>
                   </form>
                   <hr>
-                  <div class="text-center">
-<!--                    <a class="small" href="forgot-password.php">Forgot Password?</a>-->
-                  </div>
-                  <div class="text-center">
-                      <a class="small" href="register.php">Register an Account!</a>
+                  <div class="d-flex justify-content-between">
+                    <div class="text-center">
+                      <a class="small" href="password_forgot.php">Forgot Password?</a>
+                    </div>
+                    <div class="text-center">
+                        <a class="small" href="register.php">Register an Account!</a>
+                    </div>
                   </div>
                 </div>
               </div>

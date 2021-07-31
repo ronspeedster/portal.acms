@@ -16,12 +16,12 @@
   <meta name="description" content="">
   <meta name="author" content="">
 
-  <title>LIBYAN NTDMP - Forgot Password</title>
+  <title>ACMS - Forgot Password</title>
 
   <!-- Custom fonts for this template-->
   <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
   <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
-  <link rel="icon" href="img/logo.png" sizes="16x16"> 
+  <link rel="icon" href="img/logo/acms.png" sizes="16x16">
   <!-- Custom styles for this template-->
   <link href="css/sb-admin-2.min.css" rel="stylesheet">
 <style>
@@ -44,20 +44,25 @@
       <div class="col-xl-10 col-lg-12 col-md-9">
 
         <div class="card o-hidden border-0 shadow-lg my-5">
+          
           <!-- Alert Here -->
-          <?php
-            if(isset($_SESSION['registerError'])){
-          ?>
-          <div class="alert alert-danger alert-dismissible">
-            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-            <?php
-              echo $_SESSION['registerError'];
-              unset($_SESSION['registerError']);
-            ?>
-          </div>
-          <?php
-            }
-          ?>
+          <?php if(isset($_SESSION['errors'])): ?>
+            <?php foreach($_SESSION['errors'] as $error): ?> 
+              <div class="alert alert-danger alert-dismissible">
+                <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                <?=$error?> 
+              </div>
+            <?php endforeach ?> 
+            <?php unset($_SESSION['errors'])?> 
+          <?php endif ?> 
+          
+          <?php if(isset($_SESSION['message'])): ?>
+              <div class="alert alert-success alert-dismissible">
+                <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                <?=$_SESSION['message']?> 
+              </div>
+          <?php unset($_SESSION['message'])?> 
+          <?php endif ?> 
           <!-- End Alert Here -->          
           <div class="card-body p-0">
             <!-- Nested Row within Card Body -->
@@ -67,20 +72,17 @@
                 <div class="p-5">
                   <div class="text-center">
                     <h1 class="h4 text-gray-900 mb-2">Forgot Your Password?</h1>
-                    <p class="mb-4">We get it, stuff happens. Just enter your email address below and we'll send you a link to reset your password!</p>
+                    <p class="mb-4">Enter your email address below and we'll send you a link to reset your password</p>
                   </div>
-                  <form class="user" action="process_registration.php" method="POST">
-                    <div class="form-group">
+                  <form class="user" action="process_forgot_password.php" method="POST">
+                    <div class="form-group"> 
                       <input type="email" class="form-control form-control" id="exampleInputEmail" aria-describedby="emailHelp" placeholder="Enter Email Address..." name="email" required>
                     </div>
-                    <button class="btn btn-success btn-block" name="reset_password">
+                    <button class="btn btn-success btn-block" name="forgot_password">
                       Reset Password
                     </button>
                   </form>
                   <hr>
-                  <div class="text-center">
-<!--                    <a class="small" href="register.php">Create an Account!</a>-->
-                  </div>
                   <div class="text-center">
                     <a class="small" href="login.php">Already have an account? Login!</a>
                   </div>

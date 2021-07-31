@@ -10,3 +10,12 @@ if(isset($_POST['mark_read']))
 
     header("location: index.php"); 
 }
+
+if(isset($_POST['clear_all']))
+{
+    $user_id    =   $_SESSION['user_id']; 
+    
+    $mysqli->query("DELETE FROM user_notifications WHERE user_id='$user_id'") or die($mysqli->error); 
+    
+    header("location: index.php"); 
+}
