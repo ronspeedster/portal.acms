@@ -1,16 +1,14 @@
 <?php
   require_once 'process_registration.php';
 
-  if(isset($_SESSION['email'])){
-        header('location: index.php');
-    }
-
-  if(isset($_GET['token'])){
+  if(isset($_GET['token']))
+  {
     $token = $_GET['token'];
   }
-  else{
+  else
+  {
     header("location: index.php");
-  }
+  } 
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -23,7 +21,7 @@
   <meta name="description" content="">
   <meta name="author" content="">
 
-  <title>LIBYAN NTDMP - Reset Password</title>
+  <title>ACMS - Reset Password</title>
 
   <!-- Custom fonts for this template-->
   <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">

@@ -5,7 +5,7 @@ if(!isset($_SESSION))
         session_start();
     }
     
-	$production = true; 
+	$production = false; 
 
 	if($production)
 	{
@@ -13,6 +13,8 @@ if(!isset($_SESSION))
 		$username = 'acmsorgp_admin';
 		$password = 'UUd=!l,1ZZK{';
 		$database = 'acmsorgp_acms';
+
+		$siteUrl  = 'http://member.acms.org.ph/';
 	}
 	else 
 	{
@@ -20,6 +22,9 @@ if(!isset($_SESSION))
 		$username = 'root';
 		$password = 'root';
 		$database = 'acmsorgp_acms';
+
+		$siteUrl  = 'http://localhost/portal.acms/';
+
 	}
 
 	$mysqli = new mysqli($host,$username,$password,$database) or die(mysqli_error($mysqli));
