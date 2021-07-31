@@ -5,7 +5,7 @@ if(!isset($_SESSION))
         session_start();
     }
     
-	$production = false; 
+	$production = true; 
 
 	if($production)
 	{
@@ -23,7 +23,7 @@ if(!isset($_SESSION))
 		$password = 'root';
 		$database = 'acmsorgp_acms';
 
-		$siteUrl  = 'localhost/portal.acms/';
+		$siteUrl  = 'http://localhost/portal.acms/';
 	}
 
 	$mysqli = new mysqli($host,$username,$password,$database) or die(mysqli_error($mysqli));
