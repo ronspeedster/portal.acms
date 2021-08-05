@@ -65,7 +65,8 @@
                                     <?php foreach($users as $user): ?> 
                                     <?php 
                                         $pending_payments = $mysqli->query("SELECT 
-                                                                                * 
+                                                                                payments.id, 
+                                                                                user_payments.payment_id  
                                                                             FROM 
                                                                                 user_payments 
                                                                             JOIN 
@@ -88,8 +89,13 @@
                                             <td>
                                             <form action="process_email.php" method="post">
                                                 <input type="hidden" name="id" value="<?=$user['id']?>">
-                                                <button type="submit" name="verify_payment_certificate" class="btn btn-sm btn-info ml-2">
-                                                    Send Email with Certificate
+
+                                                <?php 
+                                                    $user_id = $user['id']; 
+                                                    $exists  =mysqli_num_rows($mysqli->query("SELECT id  FROM certificates_sent WHERE user_id='$user_id'")); 
+                                                ?>  
+                                                <button type="submit" name="verify_payment_certificate" class="btn btn-sm <?=$exists >= 1 ? 'btn-danger' : 'btn-info' ?> ml-2">
+                                                    <?=$exists >= 1 ? 'Resend Email with Certificate' : 'Send Email with Certificate' ?> 
                                                 </button>     
                                             </form>
                                             </td>

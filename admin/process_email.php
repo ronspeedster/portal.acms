@@ -143,6 +143,13 @@ function generateCertificate($member, $pma, $holder, $holderSignature)
     return $targetDirectory;
 }
 
+function addCertificateSentRecord($user_id, $cert_id)
+{
+    global $mysqli; 
+
+    $mysqli->query("INSERT INTO certificates_sent (user_id, certificate_id) VALUES ('$user_id', '$cert_id')") or die($mysqli->error); 
+}
+
 if(isset($_POST['verify_payment_certificate']))
 {
     $id = $_POST['id'];
@@ -183,6 +190,8 @@ if(isset($_POST['verify_payment_certificate']))
             unlink($filename); 
         }
         
+        addCertificateSentRecord($id, $cert['id']); 
+
         $_SESSION['message'] = "Email sent to {$user['email']}"; 
     }
     else 
