@@ -84,7 +84,7 @@
                       <a class="small" href="password_forgot.php">Forgot Password?</a>
                     </div>
                     <div class="text-center">
-                        <a class="small" href="register.php">Register an Account!</a>
+<!--                        <a class="small" href="register.php">Register an Account!</a>-->
                     </div>
                   </div>
                 </div>
